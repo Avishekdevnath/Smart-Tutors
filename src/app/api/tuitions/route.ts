@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
     
     const body = await request.json();
     const { 
+      code, // Optional manual tuition code
       guardianName,
       guardianNumber,
       guardianAddress,
@@ -81,6 +82,7 @@ export async function POST(request: NextRequest) {
 
     // Create the Tuition Record
     const tuition = new Tuition({
+      code, // This will be used if provided, otherwise auto-generated
       guardianName,
       guardianNumber,
       guardianAddress,

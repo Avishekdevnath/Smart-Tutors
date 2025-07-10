@@ -7,6 +7,9 @@ import { Plus, Copy, Check, ArrowLeft, X } from 'lucide-react';
 import CreatableSelect from 'react-select/creatable';
 
 interface TuitionFormData {
+  // Tuition Code (optional - manual entry)
+  tuitionCode?: string;
+  
   // Guardian Information
   guardianName: string;
   guardianNumber: string;
@@ -30,6 +33,7 @@ interface TuitionFormData {
 export default function AddTuitionPage() {
   const router = useRouter();
   const [formData, setFormData] = useState<TuitionFormData>({
+    tuitionCode: '', // Optional manual tuition code
     guardianName: '',
     guardianNumber: '',
     address: '',
@@ -189,6 +193,7 @@ Location: ${address}
       setError('');
 
       const tuitionData = {
+        code: formData.tuitionCode || undefined, // Include manual code if provided
         ...formData,
         guardianAddress: formData.address, // Map to guardianAddress for backend
         location: formData.address, // Map to location for backend
@@ -258,6 +263,30 @@ Location: ${address}
       )}
 
       <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Tuition Code (Optional) */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+          <h2 className="text-xl font-bold text-gray-900 mb-6">Tuition Code (Optional)</h2>
+          
+          <div className="max-w-md">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Manual Tuition Code
+            </label>
+            <div className="flex items-center gap-2">
+              <span className="text-gray-500 font-medium">ST</span>
+              <input
+                type="text"
+                value={formData.tuitionCode}
+                onChange={(e) => handleInputChange('tuitionCode', e.target.value)}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                placeholder="e.g., 135 (leave empty for auto-generation)"
+              />
+            </div>
+            <p className="text-sm text-gray-500 mt-2">
+              Leave empty to auto-generate the next sequential code, or enter a specific number to skip codes.
+            </p>
+          </div>
+        </div>
+
         {/* Guardian Information */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Guardian Information</h2>

@@ -20,10 +20,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Override dark mode for form elements and important text */
+/* Only fix form elements in dark mode */
 @media (prefers-color-scheme: dark) {
-  /* Form elements - always maintain light theme */
-  input, textarea, select, option {
+  /* Form elements - ensure they remain readable */
+  input, textarea, select {
     color: #171717 !important;
     background-color: #ffffff !important;
   }
@@ -33,56 +33,21 @@ body {
     color: #6b7280 !important;
   }
   
-  /* Card backgrounds and text */
+  /* Modal content - ensure text is readable */
   .bg-white {
     background-color: #ffffff !important;
   }
   
-  /* Ensure text in white backgrounds is dark */
-  .bg-white .text-gray-900,
-  .bg-white .text-gray-800,
-  .bg-white .text-gray-700,
-  .bg-white .text-gray-600,
-  .bg-white .text-gray-500,
-  .bg-white .text-gray-400 {
-    color: #171717 !important;
-  }
-  
-  /* Modal and form text */
+  /* Text inside white backgrounds should be dark */
   .bg-white h1, .bg-white h2, .bg-white h3, .bg-white h4, .bg-white h5, .bg-white h6,
   .bg-white p, .bg-white span, .bg-white div {
     color: #171717 !important;
   }
   
-  /* Labels and form text */
-  label, .text-gray-700, .text-gray-600 {
+  /* Form labels */
+  label {
     color: #374151 !important;
   }
-  
-  /* Button text - maintain original colors */
-  .text-white {
-    color: #ffffff !important;
-  }
-  
-  .text-blue-600, .text-green-600, .text-red-600, .text-yellow-600 {
-    color: inherit !important;
-  }
-}
-
-/* Ensure form elements maintain proper colors */
-input, textarea, select {
-  color: #171717 !important;
-  background-color: #ffffff !important;
-}
-
-/* Ensure buttons maintain proper text colors */
-button {
-  color: inherit;
-}
-
-/* Ensure text in cards and containers is visible */
-.text-gray-900, .text-gray-800, .text-gray-700, .text-gray-600 {
-  color: inherit !important;
 }
 
 /* Custom line-clamp utilities */

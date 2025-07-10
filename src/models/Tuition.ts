@@ -52,11 +52,11 @@ const TuitionSchema = new Schema({
   }
 }, { timestamps: true });
 
-// Auto-generating Tuition Code (ST100, ST101...)
+// Auto-generating Tuition Code (only if no code provided)
 TuitionSchema.pre('validate', async function (next) {
   if (!this.code) {
     const lastTuition = await mongoose.model('Tuition').findOne().sort({ createdAt: -1 });
-    const nextCode = lastTuition ? `ST${parseInt(lastTuition.code.substring(2)) + 1}` : "ST100";
+    const nextCode = lastTuition ? `ST${parseInt(lastTuition.code.substring(2)) + 1}` : "ST150";
     this.code = nextCode;
   }
   next();
