@@ -1,0 +1,44 @@
+we are a tution media platform. where guardian post for tuition for their children. we want to list the tuitions in our website. on the other hand we want to post in social media pages too manually wich will be generated automatically. tutors registered in our platform can directly apply  to thouse tuitions. and we will check their qualification and share the qualified tutors profile with guardian. without contact details. Then guardians can take demo class and then finalize or reject tutor and try anotther one... 
+
+
+If any tutor gets selected he/she have to provide us 60% of the tution fee of first month within 7-10 days of tuition confirmation. we will take concent before confirming any tutor to our website. and it is negotiable. 
+
+and for auto generated tuition post we have some short and detailed post formats and some group list too to post spacific groups for tuitions.
+
+
+
+for gurdian form
+
+Smart Tutors এ আপনাকে স্বাগতম। আপনার ফোন নাম্বারটি আমাদের inbox করে দিন। আর এই Format এ Student এর জন্য Tutor Requirement দিন।
+
+কেমন শিক্ষক/শিক্ষিকা দরকারঃ
+Student Class:
+Version:
+Subject:
+সপ্তাহে কয়দিন, কয়ঘন্টা পড়াতে হবেঃ
+Salary: 
+Location:
+কোন মাস থেকে tutor দরকারঃ
+Guardian Number(important):
+
+
+
+for tutor form
+please provide your full cv in this format. for guardian
+
+এই format এ আপনার CV টা দিন।
+
+Name:
+Address:
+Version :EM/BM/EV
+Group : Science/Arts/ Commerce
+SSC/O-levels Result:
+HSC/A-levels Result:
+University/College Name:
+Department:
+Year & Semester:
+Phone:
+Father's number:
+Student Id photo:
+NID photo:
+Experience (if any) :z

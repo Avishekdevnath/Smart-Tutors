@@ -1,0 +1,234 @@
+Smart Tutors Platform - Developer Reference Instructions
+=====================================================
+
+Overview:
+---------
+Smart Tutors is a tuition media platform where guardians (parents) can post tuition requirements for their children. The platform facilitates matching tutors to these tuitions, manages the application and selection process, and provides transparency for guardians throughout the process.
+
+Workflow:
+---------
+1. **Guardian Tuition Submission**
+   - Guardians fill out a tuition requirement form (see form format below).
+   - Submission is initially set to a 'pending' or 'unverified' status.
+
+2. **Verification**
+   - Admins review and verify the guardian's submission.
+   - Once verified, the tuition post status is updated to 'published' and becomes visible on the platform.
+
+3. **Tutor Application**
+   - Registered tutors can view published tuitions and apply directly.
+   - Tutors must submit their CV in the required format (see below).
+
+4. **Qualification Check**
+   - Admins review tutor applications and select qualified tutors.
+   - Qualified tutor profiles (without contact details) are shared with the guardian.
+
+5. **Demo Class & Finalization**
+   - Guardians can arrange demo classes with shortlisted tutors.
+   - Guardians finalize or reject tutors. If rejected, the process repeats with other candidates.
+
+6. **Fee Collection**
+   - Upon tutor selection, the tutor must pay 60% of the first month's tuition fee to Smart Tutors within 7-10 days of confirmation (negotiable, with prior consent).
+
+7. **Guardian Status Tracking**
+   - Each guardian receives a unique link (with a token) to track their tuition post status:
+     - 'searching' (actively looking for tutors)
+     - 'match found' (qualified tutor profiles shared)
+     - 'finalized' (tutor selected, full details provided)
+
+8. **Social Media Posting**
+   - The platform can auto-generate short and detailed tuition post formats for manual sharing on social media and in specific groups.
+
+Form Formats:
+-------------
+
+Guardian Tuition Requirement Form (Bangla):
+-------------------------------------------
+Smart Tutors এ আপনাকে স্বাগতম। আপনার ফোন নাম্বারটি আমাদের inbox করে দিন। আর এই Format এ Student এর জন্য Tutor Requirement দিন।
+
+কেমন শিক্ষক/শিক্ষিকা দরকারঃ
+Student Class:
+Version:
+Subject:
+সপ্তাহে কয়দিন, কয়ঘন্টা পড়াতে হবেঃ
+Salary:
+Location:
+কোন মাস থেকে tutor দরকারঃ
+Guardian Number (important):
+
+Tutor CV Submission Format (Bangla/English):
+--------------------------------------------
+এই format এ আপনার CV টা দিন।
+
+Name:
+Address:
+Version: EM/BM/EV
+Group: Science/Arts/Commerce
+SSC/O-levels Result:
+HSC/A-levels Result:
+University/College Name:
+Department:
+Year & Semester:
+Phone:
+Father's number:
+Student Id photo:
+NID photo:
+Experience (if any):
+
+Notes:
+------
+- All sensitive contact details are withheld from guardians until a tutor is finalized.
+- The admin team manages verification, qualification checks, and fee collection.
+- The process is designed for transparency, security, and ease of use for both guardians and tutors. 
+
+Latest Implementation Notes:
+---------------------------
+- **Admin Authentication System:**
+  - **Location:** `/admin/login` - Professional admin login page
+  - **Security Features:**
+    - JWT-based authentication with HTTP-only cookies
+    - Password hashing with bcrypt (12 salt rounds)
+    - Account lockout after 5 failed attempts (2-hour lock)
+    - Session management with 24-hour token expiration
+    - Role-based access control (admin/super_admin)
+  - **Components:**
+    - `AdminAuthProvider` context for client-side state management
+    - `ProtectedRoute` component for route protection
+    - `DashboardLayout` automatically protects all dashboard pages
+    - Middleware protects all `/dashboard` and `/api/admin` routes
+  - **Default Admin Credentials:**
+  - Username: `admin` or Email: `admin@smarttutors.com`
+  - Password: `admin123`
+  - Role: `super_admin`
+- **Setup:** Run `node scripts/create-admin.js` to create the first admin user
+- **Environment Variables:** Set `JWT_SECRET` for production security
+- **Password Management:**
+  - **Location:** `/dashboard/settings` - Admin can change their password
+  - **Security Features:**
+    - Current password verification required
+    - Password strength validation (minimum 6 characters)
+    - Confirmation field to prevent typos
+    - Show/hide password toggles for better UX
+    - Success/error feedback messages
+  - **API Endpoint:** `POST /api/admin/auth/change-password`
+  - **Validation:** Current password must be correct, new passwords must match and meet criteria
+- **Email Management:**
+  - **Location:** `/dashboard/settings` - Admin can change their email address
+  - **Security Features:**
+    - Current password verification required for email changes
+    - Email format validation
+    - Duplicate email prevention (checks if email already exists)
+    - Email uniqueness validation
+    - Real-time validation feedback
+  - **API Endpoint:** `POST /api/admin/auth/change-email`
+  - **Validation:** Current password must be correct, new email must be valid format and not in use
+
+- **Username Management:**
+  - **Location:** `/dashboard/settings` - Admin can change their username
+  - **Security Features:**
+    - Current password verification required for username changes
+    - Username format validation (3-30 characters, alphanumeric, underscore, hyphen)
+    - Duplicate username prevention (case-insensitive check)
+    - Username uniqueness validation
+    - Real-time validation feedback
+  - **API Endpoint:** `POST /api/admin/auth/change-username`
+  - **Validation:** Current password must be correct, new username must be valid format and not in use
+
+- **Tutor Registration:**
+  - Tutors register via a form collecting name, phone, academic info, and password (for now, password can be defaulted for testing).
+  - Registration creates both a Tutor profile and a linked User account (userType: 'tutor').
+  - Tutors log in using their phone number as the username (for testing purposes).
+
+- **Frontend Tutor Registration:**
+  - The tutor registration form will be implemented as a separate page at `/tutors/register` (not as a modal).
+  - This page will collect all required tutor information and submit it to the backend API.
+
+- **Guardian Registration:**
+  - Guardians register via a form collecting name, phone, and other details.
+  - Registration creates both a Guardian profile and a linked User account (userType: 'guardian').
+  - Guardians log in using their phone number as the username (for testing purposes).
+
+- **Authentication:**
+  - NextAuth credentials provider is used for login.
+  - Phone number is used as the username for both tutors and guardians during development/testing.
+  - This approach will be updated before public launch to ensure security and best practices.
+
+- **Modal Component Implementation:**
+  - **Location:** `src/components/Modal.tsx`
+  - **Key Features:** View Details, Edit, Delete confirmation for tuition management
+  - **Technical Solution:** 
+    - Uses direct DOM rendering (not React Portal) for better compatibility
+    - Inline styles for background overlay: `backgroundColor: 'rgba(0, 0, 0, 0.5)'`
+    - Backdrop filter for blur effect: `backdropFilter: 'blur(2px)'`
+    - Z-index: `z-50` for proper layering
+    - Body scroll lock when modal is open
+    - Click outside to close functionality
+  - **Usage:** Import and use in any client component with props: `isOpen`, `onClose`, `title`, `children`, `actions`, `size`
+  - **Lessons Learned:** 
+    - React Portal can cause rendering issues in certain Next.js setups
+    - Inline styles are more reliable than Tailwind classes for critical overlay properties
+    - Direct DOM manipulation for body scroll lock is more reliable than CSS-only solutions
+    - Always test modals on both simple and complex page layouts
+
+- **Tuition Management Dashboard:**
+  - **Location:** `src/app/dashboard/tuitions/page.tsx`
+  - **Features:** 
+    - View all tuitions with filtering and sorting
+    - Modal-based actions (View Details, Edit, Delete)
+    - Default sorting: latest tuitions first
+    - Search by code, class, subjects, guardian info, location
+    - Filter by status, version, class
+  - **Modal Integration:** All CRUD operations use the Modal component for better UX
+  - **Dependencies:** Requires `react-hook-form` for edit forms
+
+- **Guardian Data Model (Simplified):**
+  - **Location:** `src/models/Guardian.ts` - Simplified to essential fields only
+  - **Fields:**
+    - `name` (required) - Guardian's full name
+    - `number` (required, unique) - Guardian's phone number (10-15 digits)
+    - `address` (required) - Guardian's complete address
+    - `createdAt` & `updatedAt` (automatic timestamps)
+  - **Copy Functionality:**
+    - **Component:** `src/components/CopyButton.tsx` - Reusable copy button with clipboard functionality
+    - **Guardian-specific:** `CopyGuardianInfo` component copies name and phone in formatted text
+    - **Usage:** Available in both guardian management cards and tuition cards
+    - **Features:** Visual feedback (copied state), multiple sizes/variants, error handling
+  - **Guardian Management:**
+    - **Location:** `/dashboard/guardians` - Simplified dashboard with essential info only
+    - **Features:** Search by name/phone/address, sort options, tuition count display
+    - **Copy Integration:** One-click copy of guardian contact info in both list and detail views
+  - **Tuition Integration:**
+    - **Copy Button:** Added to tuition cards in guardian information section
+    - **Quick Access:** Admins can instantly copy guardian details while managing tuitions
+    - **Format:** "Name: [Name]\nPhone: [Number]" for easy sharing/reference
+  - **API Updates:**
+    - Guardian API routes updated to handle simplified model
+    - Added tuition count aggregation in guardian listings
+    - Fixed Next.js 15 params awaiting issues in dynamic routes
+    - Proper validation for required fields (name, number, address)
+
+- **Facebook Groups Management:**
+  - **Location:** `/dashboard/facebook-groups` - Manage collections of Facebook groups
+  - **Features:** 
+    - Create, edit, and delete collections
+    - Add multiple groups to collections
+    - Search and filter collections by name, location, member count
+    - Sort collections by various criteria
+    - View detailed information about each collection
+    - **Individual Group Management:**
+      - Add new groups to existing collections via "Add Group" button
+      - Edit individual groups within collections (name, link, member count, locations)
+      - Delete individual groups from collections
+      - Edit/delete buttons appear on each group card in detailed view
+  - **Data Model:** Collections contain multiple Facebook groups with name, link, member count, and locations
+  - **API Endpoints:** 
+    - Full CRUD operations for collections
+    - `POST /api/facebook-groups/[id]/groups` - Add group to collection
+    - `PUT /api/facebook-groups/[id]/groups/[groupId]` - Update group in collection
+    - `DELETE /api/facebook-groups/[id]/groups/[groupId]` - Delete group from collection
+
+- **Next Steps:**
+  - Complete tutor registration and login flow (backend and frontend).
+  - Complete guardian registration and login flow (backend and frontend).
+  - After successful login, users should see a basic dashboard or welcome page based on their role.
+  - Continue to update this file as new requirements or technical decisions are made. 
