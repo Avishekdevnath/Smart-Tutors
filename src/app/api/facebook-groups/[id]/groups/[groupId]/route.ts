@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/mongodb';
+import { dbConnect } from '@/lib/mongodb';
 import { FacebookGroupCollection } from '@/models/FacebookGroup';
 
 export async function PUT(
@@ -26,7 +26,7 @@ export async function PUT(
       );
     }
 
-    await connectToDatabase();
+    await dbConnect();
 
     // Find collection and update the specific group
     const collection = await FacebookGroupCollection.findById(id);
@@ -79,7 +79,7 @@ export async function DELETE(
   try {
     const { id, groupId } = await params;
 
-    await connectToDatabase();
+    await dbConnect();
 
     // Find collection and remove the specific group
     const collection = await FacebookGroupCollection.findById(id);

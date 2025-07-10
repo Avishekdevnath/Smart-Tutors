@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/mongodb';
+import { dbConnect } from '@/lib/mongodb';
 import { FacebookGroupCollection } from '@/models/FacebookGroup';
 
 export async function POST(
@@ -26,7 +26,7 @@ export async function POST(
       );
     }
 
-    await connectToDatabase();
+    await dbConnect();
 
     // Check if collection exists
     const collection = await FacebookGroupCollection.findById(id);
