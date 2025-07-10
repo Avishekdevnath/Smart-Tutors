@@ -148,20 +148,22 @@ export default function GuardianManagementDashboard() {
       title="Guardian Management" 
       description="Manage and monitor all guardians in the system"
     >
-      {/* Header with Add Button */}
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Guardian Management</h1>
-          <p className="text-gray-600 mt-1">Total: {guardians.length} guardians</p>
+      {/* Header with Add Button - Mobile Responsive */}
+      <div className="mb-6">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Guardian Management</h1>
+            <p className="text-sm sm:text-base text-gray-600 mt-1">Total: {guardians.length} guardians</p>
+          </div>
+          
+          <Link
+            href="/dashboard/guardians/add"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium touch-target"
+          >
+            <PlusIcon className="h-5 w-5 mr-2" />
+            Add Guardian
+          </Link>
         </div>
-        
-        <Link
-          href="/dashboard/guardians/add"
-          className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-        >
-          <PlusIcon className="h-5 w-5 mr-2" />
-          Add Guardian
-        </Link>
       </div>
 
       {/* Search and Sort Bar */}
@@ -183,9 +185,9 @@ export default function GuardianManagementDashboard() {
         </div>
       ) : (
         <>
-          {/* Guardian Cards */}
+          {/* Guardian Cards - Mobile Responsive */}
           {filteredGuardians.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="text-center py-12 px-4">
               <UserIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No guardians found</h3>
               <p className="text-gray-500">
@@ -194,7 +196,7 @@ export default function GuardianManagementDashboard() {
               {!searchTerm && (
                 <Link
                   href="/dashboard/guardians/add"
-                  className="inline-flex items-center px-4 py-2 mt-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  className="inline-flex items-center px-4 py-3 mt-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium touch-target"
                 >
                   <PlusIcon className="h-5 w-5 mr-2" />
                   Add First Guardian
@@ -202,73 +204,75 @@ export default function GuardianManagementDashboard() {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredGuardians.map((guardian) => (
                 <div key={guardian._id} className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow">
-                  <div className="p-6">
-                    {/* Header with Actions */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center">
-                        <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center">
-                          <UserIcon className="h-6 w-6 text-green-600" />
+                  <div className="p-4 sm:p-6">
+                    {/* Header with Actions - Mobile Responsive */}
+                    <div className="flex flex-col space-y-3 sm:flex-row sm:items-start sm:justify-between sm:space-y-0 mb-4">
+                      <div className="flex items-center min-w-0 flex-1">
+                        <div className="h-10 w-10 sm:h-12 sm:w-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                          <UserIcon className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
                         </div>
-                        <div className="ml-3">
-                          <h3 className="text-lg font-semibold text-gray-900">{guardian.name}</h3>
-                          <p className="text-sm text-gray-500">
+                        <div className="ml-3 min-w-0 flex-1">
+                          <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{guardian.name}</h3>
+                          <p className="text-xs sm:text-sm text-gray-500">
                             {guardian.tuitionCount || 0} tuition{(guardian.tuitionCount || 0) !== 1 ? 's' : ''}
                           </p>
                         </div>
                       </div>
                       
                       {/* Copy Button */}
-                      <CopyGuardianInfo
-                        guardianName={guardian.name}
-                        guardianNumber={guardian.number}
-                        size="sm"
-                        variant="primary"
-                      />
+                      <div className="flex justify-center sm:justify-end">
+                        <CopyGuardianInfo
+                          guardianName={guardian.name}
+                          guardianNumber={guardian.number}
+                          size="sm"
+                          variant="primary"
+                        />
+                      </div>
                     </div>
 
-                    {/* Guardian Info */}
+                    {/* Guardian Info - Mobile Responsive */}
                     <div className="space-y-3 mb-4">
                       <div className="flex items-center text-sm text-gray-600">
-                        <PhoneIcon className="h-4 w-4 mr-2 text-gray-400" />
-                        {guardian.number}
+                        <PhoneIcon className="h-4 w-4 mr-2 text-gray-400 flex-shrink-0" />
+                        <span className="break-all">{guardian.number}</span>
                       </div>
                       
                       <div className="flex items-start text-sm text-gray-600">
-                        <MapPinIcon className="h-4 w-4 mr-2 text-gray-400 mt-0.5" />
-                        <span className="line-clamp-2">{guardian.address}</span>
+                        <MapPinIcon className="h-4 w-4 mr-2 text-gray-400 mt-0.5 flex-shrink-0" />
+                        <span className="break-words line-clamp-3">{guardian.address}</span>
                       </div>
                     </div>
 
-                    {/* Actions */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                      <span className="text-xs text-gray-500">
+                    {/* Actions - Mobile Responsive */}
+                    <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 pt-4 border-t border-gray-200">
+                      <span className="text-xs text-gray-500 text-center sm:text-left">
                         Added {new Date(guardian.createdAt).toLocaleDateString()}
                       </span>
                       
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center justify-center sm:justify-end space-x-1">
                         <button
                           onClick={() => setViewModal(guardian)}
-                          className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                          className="p-2 sm:p-3 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors touch-target"
                           title="View Details"
                         >
-                          <EyeIcon className="h-4 w-4" />
+                          <EyeIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                         </button>
                         <button
                           onClick={() => onEdit(guardian)}
-                          className="p-2 text-gray-400 hover:text-green-600 transition-colors"
+                          className="p-2 sm:p-3 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors touch-target"
                           title="Edit"
                         >
-                          <PencilIcon className="h-4 w-4" />
+                          <PencilIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                         </button>
                         <button
                           onClick={() => setDeleteModal(guardian)}
-                          className="p-2 text-gray-400 hover:text-red-600 transition-colors"
+                          className="p-2 sm:p-3 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors touch-target"
                           title="Delete"
                         >
-                          <TrashIcon className="h-4 w-4" />
+                          <TrashIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                         </button>
                       </div>
                     </div>
@@ -280,7 +284,7 @@ export default function GuardianManagementDashboard() {
         </>
       )}
 
-      {/* View Modal */}
+      {/* View Modal - Mobile Responsive */}
       <Modal
         isOpen={!!viewModal}
         onClose={() => setViewModal(null)}
@@ -291,11 +295,11 @@ export default function GuardianManagementDashboard() {
           <div className="space-y-4">
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="font-semibold text-gray-900 mb-3">Basic Information</h3>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
+              <div className="space-y-3">
+                <div className="flex flex-col space-y-1 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                   <span className="text-sm text-gray-600">Name:</span>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm font-medium">{viewModal.name}</span>
+                    <span className="text-sm font-medium break-words">{viewModal.name}</span>
                     <CopyGuardianInfo
                       guardianName={viewModal.name}
                       guardianNumber={viewModal.number}
@@ -303,19 +307,19 @@ export default function GuardianManagementDashboard() {
                     />
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col space-y-1 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                   <span className="text-sm text-gray-600">Phone:</span>
-                  <span className="text-sm font-medium">{viewModal.number}</span>
+                  <span className="text-sm font-medium break-all">{viewModal.number}</span>
                 </div>
-                <div className="flex items-start justify-between">
+                <div className="flex flex-col space-y-1 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
                   <span className="text-sm text-gray-600">Address:</span>
-                  <span className="text-sm font-medium text-right max-w-xs">{viewModal.address}</span>
+                  <span className="text-sm font-medium break-words sm:text-right sm:max-w-xs">{viewModal.address}</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col space-y-1 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                   <span className="text-sm text-gray-600">Tuitions Posted:</span>
                   <span className="text-sm font-medium">{viewModal.tuitionCount || 0}</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col space-y-1 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                   <span className="text-sm text-gray-600">Joined:</span>
                   <span className="text-sm font-medium">
                     {new Date(viewModal.createdAt).toLocaleDateString()}
@@ -344,22 +348,22 @@ export default function GuardianManagementDashboard() {
         )}
       </Modal>
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Confirmation Modal - Mobile Responsive */}
       <Modal
         isOpen={!!deleteModal}
         onClose={() => setDeleteModal(null)}
         title="Delete Guardian"
         actions={
-          <div className="flex justify-end space-x-3">
+          <div className="flex flex-col space-y-2 sm:flex-row sm:justify-end sm:space-y-0 sm:space-x-3">
             <button
               onClick={() => setDeleteModal(null)}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 touch-target"
             >
               Cancel
             </button>
             <button
               onClick={onDelete}
-              className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700"
+              className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 touch-target"
             >
               Delete
             </button>
@@ -367,7 +371,7 @@ export default function GuardianManagementDashboard() {
         }
       >
         {deleteModal && (
-          <div className="sm:flex sm:items-start">
+          <div className="flex flex-col sm:flex-row sm:items-start">
             <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
               <TrashIcon className="h-6 w-6 text-red-600" />
             </div>
@@ -377,7 +381,7 @@ export default function GuardianManagementDashboard() {
               </h3>
               <div className="mt-2">
                 <p className="text-sm text-gray-500">
-                  Are you sure you want to delete <strong>{deleteModal.name}</strong>? 
+                  Are you sure you want to delete <strong className="break-words">{deleteModal.name}</strong>? 
                   This action cannot be undone.
                 </p>
               </div>
@@ -393,6 +397,19 @@ export default function GuardianManagementDashboard() {
         isVisible={toast.isVisible}
         onClose={hideToast}
       />
+
+      <style jsx>{`
+        .touch-target {
+          min-height: 44px;
+          min-width: 44px;
+        }
+        .line-clamp-3 {
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      `}</style>
     </DashboardLayout>
   );
 } 

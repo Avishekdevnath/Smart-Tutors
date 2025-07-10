@@ -200,14 +200,14 @@ export default function FacebookGroupsPage() {
 
       if (result.success) {
         setSuccess('Collection created successfully!');
+        setCollections(result.data);
         setShowCreateModal(false);
         resetForm();
-        fetchCollections();
       } else {
         setError(result.error || 'Failed to create collection');
       }
     } catch (error) {
-      setError('An error occurred while creating the collection');
+      setError('An error occurred while creating collection');
     } finally {
       setSubmitting(false);
     }
@@ -234,15 +234,15 @@ export default function FacebookGroupsPage() {
 
       if (result.success) {
         setSuccess('Collection updated successfully!');
+        setCollections(result.data);
         setShowEditModal(false);
         setEditingCollection(null);
         resetForm();
-        fetchCollections();
       } else {
         setError(result.error || 'Failed to update collection');
       }
     } catch (error) {
-      setError('An error occurred while updating the collection');
+      setError('An error occurred while updating collection');
     } finally {
       setSubmitting(false);
     }
@@ -262,12 +262,12 @@ export default function FacebookGroupsPage() {
 
       if (result.success) {
         setSuccess('Collection deleted successfully!');
-        fetchCollections();
+        setCollections(result.data);
       } else {
         setError(result.error || 'Failed to delete collection');
       }
     } catch (error) {
-      setError('An error occurred while deleting the collection');
+      setError('An error occurred while deleting collection');
     }
   };
 
@@ -344,44 +344,44 @@ export default function FacebookGroupsPage() {
       title="Facebook Group Collections" 
       description="Manage collections of Facebook groups for social media posting"
     >
-      {/* Success/Error Messages */}
+      {/* Success/Error Messages - Mobile Responsive */}
       {success && (
-        <div className="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 px-6 py-4 rounded-xl shadow-sm">
+        <div className="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 px-4 sm:px-6 py-4 rounded-xl shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="font-medium">{success}</span>
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse flex-shrink-0"></div>
+            <span className="font-medium text-sm sm:text-base">{success}</span>
           </div>
         </div>
       )}
       {error && (
-        <div className="mb-6 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-800 px-6 py-4 rounded-xl shadow-sm">
+        <div className="mb-6 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-800 px-4 sm:px-6 py-4 rounded-xl shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-            <span className="font-medium">{error}</span>
+            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse flex-shrink-0"></div>
+            <span className="font-medium text-sm sm:text-base">{error}</span>
           </div>
         </div>
       )}
 
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 p-6 mb-8">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Facebook Group Collections</h1>
-            <p className="text-gray-600 mb-3">
+      {/* Header - Mobile Responsive */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 p-4 sm:p-6 mb-8">
+        <div className="flex flex-col space-y-4 lg:flex-row lg:justify-between lg:items-start lg:space-y-0 lg:gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Facebook Group Collections</h1>
+            <p className="text-sm sm:text-base text-gray-600 mb-3">
               Manage and organize Facebook groups for targeted social media posting
             </p>
-            <div className="flex items-center gap-4 text-sm">
-              <span className="bg-white px-3 py-1 rounded-full border border-blue-200 text-blue-700 font-medium">
+            <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:gap-4 sm:space-y-0 text-sm">
+              <span className="bg-white px-3 py-1 rounded-full border border-blue-200 text-blue-700 font-medium inline-block w-fit">
                 {collections.length} Collections
               </span>
-              <span className="bg-white px-3 py-1 rounded-full border border-green-200 text-green-700 font-medium">
+              <span className="bg-white px-3 py-1 rounded-full border border-green-200 text-green-700 font-medium inline-block w-fit">
                 {filteredCollections.length} Showing
               </span>
             </div>
           </div>
           <button 
             onClick={() => setShowCreateModal(true)}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 flex items-center gap-2 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+            className="w-full sm:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2 font-medium shadow-lg hover:shadow-xl transition-all duration-200 touch-target"
           >
             <Plus size={20} />
             Create Collection
@@ -413,16 +413,16 @@ export default function FacebookGroupsPage() {
         onMinMemberCountChange={setMinMemberCount}
       />
 
-      {/* Collections Grid */}
+      {/* Collections Grid - Mobile Responsive */}
       {filteredCollections.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 sm:p-12 text-center">
           <div className="text-gray-400 mb-6">
             <Users size={80} className="mx-auto opacity-50" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-3">
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
             {collections.length === 0 ? 'No collections found' : 'No collections match your filters'}
           </h3>
-          <p className="text-gray-600 mb-6 max-w-md mx-auto">
+          <p className="text-sm sm:text-base text-gray-600 mb-6 max-w-md mx-auto">
             {collections.length === 0 
               ? 'Get started by creating your first Facebook group collection to organize your social media posting strategy.'
               : 'Try adjusting your search or filter criteria to find the collections you\'re looking for.'
@@ -431,14 +431,14 @@ export default function FacebookGroupsPage() {
           {collections.length === 0 && (
             <button 
               onClick={() => setShowCreateModal(true)}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium shadow-lg hover:shadow-xl transition-all duration-200 touch-target"
             >
               Create First Collection
             </button>
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredCollections.map((collection) => (
             <CollectionCard
               key={collection._id}
@@ -451,34 +451,34 @@ export default function FacebookGroupsPage() {
         </div>
       )}
 
-      {/* Create Modal */}
+      {/* Create Modal - Mobile Responsive */}
       <Modal 
         isOpen={showCreateModal} 
         onClose={() => { setShowCreateModal(false); resetForm(); }} 
         title="Create New Collection"
         size="lg"
         actions={
-          <>
+          <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-3">
             <button
               type="button"
               onClick={() => { setShowCreateModal(false); resetForm(); }}
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"
+              className="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 touch-target"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 touch-target"
               onClick={handleCreate}
             >
               {submitting ? 'Creating...' : 'Create Collection'}
             </button>
-          </>
+          </div>
         }
       >
-        <form onSubmit={handleCreate}>
-          <div className="mb-4">
+        <form onSubmit={handleCreate} className="space-y-4">
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Collection Name *
             </label>
@@ -486,19 +486,19 @@ export default function FacebookGroupsPage() {
               type="text"
               value={formData.collectionName}
               onChange={(e) => setFormData(prev => ({ ...prev, collectionName: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
               placeholder="e.g., Mirpur, All Top Groups"
               required
             />
           </div>
           
-          <div className="mb-4">
-            <div className="flex justify-between items-center mb-2">
+          <div>
+            <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center sm:space-y-0 mb-2">
               <label className="block text-sm font-medium text-gray-700">Groups</label>
               <button
                 type="button"
                 onClick={addGroup}
-                className="text-blue-600 text-sm hover:underline"
+                className="text-blue-600 text-sm hover:underline w-fit touch-target px-2 py-1"
               >
                 + Add Group
               </button>
@@ -506,13 +506,13 @@ export default function FacebookGroupsPage() {
             
             {formData.groups.map((group, index) => (
               <div key={index} className="border rounded-lg p-3 mb-3 bg-gray-50">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <input
                     type="text"
                     placeholder="Group Name *"
                     value={group.name}
                     onChange={(e) => updateGroup(index, 'name', e.target.value)}
-                    className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
                     required
                   />
                   <input
@@ -520,7 +520,7 @@ export default function FacebookGroupsPage() {
                     placeholder="Group Link *"
                     value={group.link}
                     onChange={(e) => updateGroup(index, 'link', e.target.value)}
-                    className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
                     required
                   />
                   <input
@@ -528,7 +528,7 @@ export default function FacebookGroupsPage() {
                     placeholder="Member Count *"
                     value={group.memberCount}
                     onChange={(e) => updateGroup(index, 'memberCount', parseInt(e.target.value) || 0)}
-                    className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
                     required
                   />
                   <input
@@ -536,13 +536,13 @@ export default function FacebookGroupsPage() {
                     placeholder="Locations (comma-separated)"
                     value={group.locations.join(', ')}
                     onChange={(e) => updateGroupLocations(index, e.target.value)}
-                    className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
                   />
                 </div>
                 <button
                   type="button"
                   onClick={() => removeGroup(index)}
-                  className="text-red-600 text-sm mt-2 hover:underline"
+                  className="text-red-600 text-sm mt-2 hover:underline touch-target px-2 py-1"
                 >
                   Remove Group
                 </button>
@@ -552,107 +552,113 @@ export default function FacebookGroupsPage() {
         </form>
       </Modal>
 
-      {/* Edit Modal */}
+      {/* Edit Modal - Mobile Responsive */}
       <Modal 
         isOpen={showEditModal} 
         onClose={() => { setShowEditModal(false); setEditingCollection(null); resetForm(); }} 
         title="Edit Collection"
         size="lg"
         actions={
-          <>
+          <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-3">
             <button
               type="button"
               onClick={() => { setShowEditModal(false); setEditingCollection(null); resetForm(); }}
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"
+              className="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 touch-target"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 touch-target"
               onClick={handleEdit}
             >
               {submitting ? 'Updating...' : 'Update Collection'}
             </button>
-          </>
+          </div>
         }
       >
-        {editingCollection && (
-          <form onSubmit={handleEdit}>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Collection Name *
-              </label>
-              <input
-                type="text"
-                value={formData.collectionName}
-                onChange={(e) => setFormData(prev => ({ ...prev, collectionName: e.target.value }))}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
+        <form onSubmit={handleEdit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Collection Name *
+            </label>
+            <input
+              type="text"
+              value={formData.collectionName}
+              onChange={(e) => setFormData(prev => ({ ...prev, collectionName: e.target.value }))}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+              placeholder="e.g., Mirpur, All Top Groups"
+              required
+            />
+          </div>
+          
+          <div>
+            <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center sm:space-y-0 mb-2">
+              <label className="block text-sm font-medium text-gray-700">Groups</label>
+              <button
+                type="button"
+                onClick={addGroup}
+                className="text-blue-600 text-sm hover:underline w-fit touch-target px-2 py-1"
+              >
+                + Add Group
+              </button>
             </div>
             
-            <div className="mb-4">
-              <div className="flex justify-between items-center mb-2">
-                <label className="block text-sm font-medium text-gray-700">Groups</label>
+            {formData.groups.map((group, index) => (
+              <div key={index} className="border rounded-lg p-3 mb-3 bg-gray-50">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <input
+                    type="text"
+                    placeholder="Group Name *"
+                    value={group.name}
+                    onChange={(e) => updateGroup(index, 'name', e.target.value)}
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
+                    required
+                  />
+                  <input
+                    type="url"
+                    placeholder="Group Link *"
+                    value={group.link}
+                    onChange={(e) => updateGroup(index, 'link', e.target.value)}
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
+                    required
+                  />
+                  <input
+                    type="number"
+                    placeholder="Member Count *"
+                    value={group.memberCount}
+                    onChange={(e) => updateGroup(index, 'memberCount', parseInt(e.target.value) || 0)}
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
+                    required
+                  />
+                  <input
+                    type="text"
+                    placeholder="Locations (comma-separated)"
+                    value={group.locations.join(', ')}
+                    onChange={(e) => updateGroupLocations(index, e.target.value)}
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
+                  />
+                </div>
                 <button
                   type="button"
-                  onClick={addGroup}
-                  className="text-blue-600 text-sm hover:underline"
+                  onClick={() => removeGroup(index)}
+                  className="text-red-600 text-sm mt-2 hover:underline touch-target px-2 py-1"
                 >
-                  + Add Group
+                  Remove Group
                 </button>
               </div>
-              
-              {formData.groups.map((group, index) => (
-                <div key={index} className="border rounded-lg p-3 mb-3 bg-gray-50">
-                  <div className="grid grid-cols-2 gap-3">
-                    <input
-                      type="text"
-                      placeholder="Group Name *"
-                      value={group.name}
-                      onChange={(e) => updateGroup(index, 'name', e.target.value)}
-                      className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                    <input
-                      type="url"
-                      placeholder="Group Link *"
-                      value={group.link}
-                      onChange={(e) => updateGroup(index, 'link', e.target.value)}
-                      className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                    <input
-                      type="number"
-                      placeholder="Member Count *"
-                      value={group.memberCount}
-                      onChange={(e) => updateGroup(index, 'memberCount', parseInt(e.target.value) || 0)}
-                      className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                    <input
-                      type="text"
-                      placeholder="Locations (comma-separated)"
-                      value={group.locations.join(', ')}
-                      onChange={(e) => updateGroupLocations(index, e.target.value)}
-                      className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => removeGroup(index)}
-                    className="text-red-600 text-sm mt-2 hover:underline"
-                  >
-                    Remove Group
-                  </button>
-                </div>
-              ))}
-            </div>
-          </form>
-        )}
+            ))}
+          </div>
+        </form>
       </Modal>
+
+      <style jsx>{`
+        .touch-target {
+          min-height: 44px;
+          min-width: 44px;
+        }
+      `}</style>
     </DashboardLayout>
   );
 } 
