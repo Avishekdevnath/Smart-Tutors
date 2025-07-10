@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
 import { Plus, Edit, Trash2, ExternalLink, Users, X, Search, Filter, ArrowLeft } from 'lucide-react';
 import FacebookGroupCard from '@/components/FacebookGroupCard';
@@ -30,33 +31,17 @@ interface FormData {
   groups: Omit<FacebookGroup, '_id'>[];
 }
 
-interface GroupFormData {
-  name: string;
-  link: string;
-  memberCount: number;
-  locations: string;
-}
-
 export default function FacebookGroupsPage() {
   const [collections, setCollections] = useState<FacebookGroupCollection[]>([]);
   const [filteredCollections, setFilteredCollections] = useState<FacebookGroupCollection[]>([]);
-  const [selectedCollection, setSelectedCollection] = useState<FacebookGroupCollection | null>(null);
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [showAddGroupModal, setShowAddGroupModal] = useState(false);
-  const [showEditGroupModal, setShowEditGroupModal] = useState(false);
   const [editingCollection, setEditingCollection] = useState<FacebookGroupCollection | null>(null);
-  const [editingGroup, setEditingGroup] = useState<{ group: FacebookGroup; index: number } | null>(null);
   const [formData, setFormData] = useState<FormData>({
     collectionName: '',
     groups: []
-  });
-  const [groupFormData, setGroupFormData] = useState<GroupFormData>({
-    name: '',
-    link: '',
-    memberCount: 0,
-    locations: ''
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -198,34 +183,31 @@ export default function FacebookGroupsPage() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.collectionName.trim()) {
-      setError('Collection name is required');
-      return;
-    }
+    setSubmitting(true);
+    setError('');
+    setSuccess('');
 
     try {
-      setSubmitting(true);
-      setError('');
-      
       const response = await fetch('/api/facebook-groups', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(formData)
       });
-      
+
       const result = await response.json();
+
       if (result.success) {
-        setShowCreateModal(false);
-        setFormData({ collectionName: '', groups: [] });
         setSuccess('Collection created successfully!');
+        setShowCreateModal(false);
+        resetForm();
         fetchCollections();
-        setTimeout(() => setSuccess(''), 3000);
       } else {
         setError(result.error || 'Failed to create collection');
       }
     } catch (error) {
-      console.error('Error creating collection:', error);
-      setError('Failed to create collection');
+      setError('An error occurred while creating the collection');
     } finally {
       setSubmitting(false);
     }
@@ -233,35 +215,34 @@ export default function FacebookGroupsPage() {
 
   const handleEdit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editingCollection || !formData.collectionName.trim()) {
-      setError('Collection name is required');
-      return;
-    }
+    if (!editingCollection) return;
+
+    setSubmitting(true);
+    setError('');
+    setSuccess('');
 
     try {
-      setSubmitting(true);
-      setError('');
-      
       const response = await fetch(`/api/facebook-groups/${editingCollection._id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(formData)
       });
-      
+
       const result = await response.json();
+
       if (result.success) {
+        setSuccess('Collection updated successfully!');
         setShowEditModal(false);
         setEditingCollection(null);
-        setFormData({ collectionName: '', groups: [] });
-        setSuccess('Collection updated successfully!');
+        resetForm();
         fetchCollections();
-        setTimeout(() => setSuccess(''), 3000);
       } else {
         setError(result.error || 'Failed to update collection');
       }
     } catch (error) {
-      console.error('Error updating collection:', error);
-      setError('Failed to update collection');
+      setError('An error occurred while updating the collection');
     } finally {
       setSubmitting(false);
     }
@@ -273,22 +254,20 @@ export default function FacebookGroupsPage() {
     }
 
     try {
-      setError('');
       const response = await fetch(`/api/facebook-groups/${id}`, {
         method: 'DELETE'
       });
-      
+
       const result = await response.json();
+
       if (result.success) {
         setSuccess('Collection deleted successfully!');
         fetchCollections();
-        setTimeout(() => setSuccess(''), 3000);
       } else {
         setError(result.error || 'Failed to delete collection');
       }
     } catch (error) {
-      console.error('Error deleting collection:', error);
-      setError('Failed to delete collection');
+      setError('An error occurred while deleting the collection');
     }
   };
 
@@ -309,12 +288,7 @@ export default function FacebookGroupsPage() {
   const addGroup = () => {
     setFormData(prev => ({
       ...prev,
-      groups: [...prev.groups, {
-        name: '',
-        link: '',
-        memberCount: 0,
-        locations: []
-      }]
+      groups: [...prev.groups, { name: '', link: '', memberCount: 0, locations: [] }]
     }));
   };
 
@@ -335,17 +309,12 @@ export default function FacebookGroupsPage() {
   };
 
   const updateGroupLocations = (index: number, locations: string) => {
-    setFormData(prev => ({
-      ...prev,
-      groups: prev.groups.map((group, i) => 
-        i === index ? { ...group, locations: locations.split(',').map(l => l.trim()).filter(Boolean) } : group
-      )
-    }));
+    const locationArray = locations.split(',').map(loc => loc.trim()).filter(loc => loc.length > 0);
+    updateGroup(index, 'locations', locationArray);
   };
 
   const resetForm = () => {
     setFormData({ collectionName: '', groups: [] });
-    setError('');
   };
 
   const clearFilters = () => {
@@ -359,256 +328,11 @@ export default function FacebookGroupsPage() {
     setMinMemberCount('');
   };
 
-  // Group management functions
-  const openAddGroupModal = () => {
-    setGroupFormData({
-      name: '',
-      link: '',
-      memberCount: 0,
-      locations: ''
-    });
-    setShowAddGroupModal(true);
-    setError('');
-  };
-
-  const openEditGroupModal = (group: FacebookGroup, index: number) => {
-    setEditingGroup({ group, index });
-    setGroupFormData({
-      name: group.name,
-      link: group.link,
-      memberCount: group.memberCount,
-      locations: group.locations.join(', ')
-    });
-    setShowEditGroupModal(true);
-    setError('');
-  };
-
-  const handleAddGroup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!groupFormData.name.trim() || !groupFormData.link.trim()) {
-      setError('Group name and link are required');
-      return;
-    }
-
-    try {
-      setSubmitting(true);
-      setError('');
-      
-      const newGroup = {
-        name: groupFormData.name.trim(),
-        link: groupFormData.link.trim(),
-        memberCount: groupFormData.memberCount,
-        locations: groupFormData.locations.split(',').map(l => l.trim()).filter(Boolean)
-      };
-
-      const response = await fetch(`/api/facebook-groups/${selectedCollection!._id}/groups`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newGroup)
-      });
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        setSuccess('Group added successfully');
-        setShowAddGroupModal(false);
-        fetchCollections();
-        // Update selected collection with new data
-        const updatedCollection = collections.find(c => c._id === selectedCollection!._id);
-        if (updatedCollection) {
-          setSelectedCollection(updatedCollection);
-        }
-      } else {
-        setError(result.error || 'Failed to add group');
-      }
-    } catch (error) {
-      console.error('Error adding group:', error);
-      setError('Failed to add group');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleEditGroup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!groupFormData.name.trim() || !groupFormData.link.trim()) {
-      setError('Group name and link are required');
-      return;
-    }
-
-    try {
-      setSubmitting(true);
-      setError('');
-      
-      const updatedGroup = {
-        name: groupFormData.name.trim(),
-        link: groupFormData.link.trim(),
-        memberCount: groupFormData.memberCount,
-        locations: groupFormData.locations.split(',').map(l => l.trim()).filter(Boolean)
-      };
-
-      const response = await fetch(`/api/facebook-groups/${selectedCollection!._id}/groups/${editingGroup!.group._id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedGroup)
-      });
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        setSuccess('Group updated successfully');
-        setShowEditGroupModal(false);
-        setEditingGroup(null);
-        fetchCollections();
-        // Update selected collection with new data
-        const updatedCollection = collections.find(c => c._id === selectedCollection!._id);
-        if (updatedCollection) {
-          setSelectedCollection(updatedCollection);
-        }
-      } else {
-        setError(result.error || 'Failed to update group');
-      }
-    } catch (error) {
-      console.error('Error updating group:', error);
-      setError('Failed to update group');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleDeleteGroup = async (groupId: string) => {
-    if (!confirm('Are you sure you want to delete this group?')) {
-      return;
-    }
-
-    try {
-      setSubmitting(true);
-      setError('');
-      
-      const response = await fetch(`/api/facebook-groups/${selectedCollection!._id}/groups/${groupId}`, {
-        method: 'DELETE'
-      });
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        setSuccess('Group deleted successfully');
-        fetchCollections();
-        // Update selected collection with new data
-        const updatedCollection = collections.find(c => c._id === selectedCollection!._id);
-        if (updatedCollection) {
-          setSelectedCollection(updatedCollection);
-        }
-      } else {
-        setError(result.error || 'Failed to delete group');
-      }
-    } catch (error) {
-      console.error('Error deleting group:', error);
-      setError('Failed to delete group');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const resetGroupForm = () => {
-    setGroupFormData({
-      name: '',
-      link: '',
-      memberCount: 0,
-      locations: ''
-    });
-    setEditingGroup(null);
-    setError('');
-  };
-
   if (loading) {
     return (
-      <DashboardLayout title="Facebook Groups" description="Manage Facebook group collections">
-        <div className="flex items-center justify-center min-h-screen">
+      <DashboardLayout title="Facebook Groups" description="Loading...">
+        <div className="flex items-center justify-center min-h-96">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-        </div>
-      </DashboardLayout>
-    );
-  }
-
-  // Show collection detail view
-  if (selectedCollection) {
-    return (
-      <DashboardLayout 
-        title={selectedCollection.collectionName} 
-        description="Collection details and groups"
-      >
-        {/* Back button */}
-        <div className="mb-6">
-          <button 
-            onClick={() => setSelectedCollection(null)}
-            className="flex items-center gap-3 text-blue-600 hover:text-blue-800 mb-4 group"
-          >
-            <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">Back to Collections</span>
-          </button>
-        </div>
-
-        {/* Collection header */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 p-8 mb-8">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{selectedCollection.collectionName}</h1>
-              <p className="text-gray-600 mb-3">/{selectedCollection.slug}</p>
-              <p className="text-sm text-gray-500 mb-4">
-                Created {new Date(selectedCollection.createdAt).toLocaleDateString()}
-              </p>
-              <div className="flex gap-4">
-                <div className="bg-white rounded-lg px-4 py-2 border border-blue-200">
-                  <div className="text-lg font-bold text-blue-700">{selectedCollection.groups.length}</div>
-                  <div className="text-sm text-blue-600">Groups</div>
-                </div>
-                <div className="bg-white rounded-lg px-4 py-2 border border-green-200">
-                  <div className="text-lg font-bold text-green-700">
-                    {(selectedCollection.groups.reduce((sum, group) => sum + group.memberCount, 0) / 1000).toFixed(1)}K
-                  </div>
-                  <div className="text-sm text-green-600">Total Members</div>
-                </div>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <button 
-                onClick={openAddGroupModal}
-                className="bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition-colors"
-                title="Add Group"
-              >
-                <Plus size={18} />
-              </button>
-              <button 
-                onClick={() => openEditModal(selectedCollection)}
-                className="bg-yellow-500 text-white p-3 rounded-lg hover:bg-yellow-600 transition-colors"
-                title="Edit Collection"
-              >
-                <Edit size={18} />
-              </button>
-              <button 
-                onClick={() => handleDelete(selectedCollection._id)}
-                className="bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 transition-colors"
-                title="Delete Collection"
-              >
-                <Trash2 size={18} />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Groups list */}
-        <div className="grid gap-6">
-          {selectedCollection.groups.map((group, index) => (
-            <FacebookGroupCard 
-              key={group._id} 
-              group={group} 
-              variant="detailed"
-              showLocations={true}
-              onEdit={() => openEditGroupModal(group, index)}
-              onDelete={() => handleDeleteGroup(group._id)}
-            />
-          ))}
         </div>
       </DashboardLayout>
     );
@@ -719,9 +443,9 @@ export default function FacebookGroupsPage() {
             <CollectionCard
               key={collection._id}
               collection={collection}
+              onView={(collection) => router.push(`/dashboard/facebook-groups/${collection._id}`)}
               onEdit={openEditModal}
               onDelete={handleDelete}
-              onClick={setSelectedCollection}
             />
           ))}
         </div>
@@ -928,171 +652,6 @@ export default function FacebookGroupsPage() {
             </div>
           </form>
         )}
-      </Modal>
-
-      {/* Add Group Modal */}
-      <Modal 
-        isOpen={showAddGroupModal} 
-        onClose={() => { setShowAddGroupModal(false); resetGroupForm(); }} 
-        title="Add New Group"
-        size="md"
-        actions={
-          <>
-            <button
-              type="button"
-              onClick={() => { setShowAddGroupModal(false); resetGroupForm(); }}
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
-              onClick={handleAddGroup}
-            >
-              {submitting ? 'Adding...' : 'Add Group'}
-            </button>
-          </>
-        }
-      >
-        <form onSubmit={handleAddGroup}>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Group Name *
-            </label>
-            <input
-              type="text"
-              value={groupFormData.name}
-              onChange={(e) => setGroupFormData(prev => ({ ...prev, name: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="e.g., Mirpur Tuition Groups"
-              required
-            />
-          </div>
-          
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Group Link *
-            </label>
-            <input
-              type="url"
-              value={groupFormData.link}
-              onChange={(e) => setGroupFormData(prev => ({ ...prev, link: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="https://facebook.com/groups/..."
-              required
-            />
-          </div>
-          
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Member Count *
-            </label>
-            <input
-              type="number"
-              value={groupFormData.memberCount}
-              onChange={(e) => setGroupFormData(prev => ({ ...prev, memberCount: parseInt(e.target.value) || 0 }))}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="1000"
-              required
-            />
-          </div>
-          
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Locations
-            </label>
-            <input
-              type="text"
-              value={groupFormData.locations}
-              onChange={(e) => setGroupFormData(prev => ({ ...prev, locations: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Mirpur, Dhaka, Bangladesh (comma-separated)"
-            />
-          </div>
-        </form>
-      </Modal>
-
-      {/* Edit Group Modal */}
-      <Modal 
-        isOpen={showEditGroupModal} 
-        onClose={() => { setShowEditGroupModal(false); resetGroupForm(); }} 
-        title="Edit Group"
-        size="md"
-        actions={
-          <>
-            <button
-              type="button"
-              onClick={() => { setShowEditGroupModal(false); resetGroupForm(); }}
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-              onClick={handleEditGroup}
-            >
-              {submitting ? 'Updating...' : 'Update Group'}
-            </button>
-          </>
-        }
-      >
-        <form onSubmit={handleEditGroup}>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Group Name *
-            </label>
-            <input
-              type="text"
-              value={groupFormData.name}
-              onChange={(e) => setGroupFormData(prev => ({ ...prev, name: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-          
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Group Link *
-            </label>
-            <input
-              type="url"
-              value={groupFormData.link}
-              onChange={(e) => setGroupFormData(prev => ({ ...prev, link: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-          
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Member Count *
-            </label>
-            <input
-              type="number"
-              value={groupFormData.memberCount}
-              onChange={(e) => setGroupFormData(prev => ({ ...prev, memberCount: parseInt(e.target.value) || 0 }))}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-          
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Locations
-            </label>
-            <input
-              type="text"
-              value={groupFormData.locations}
-              onChange={(e) => setGroupFormData(prev => ({ ...prev, locations: e.target.value }))}
-              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Mirpur, Dhaka, Bangladesh (comma-separated)"
-            />
-          </div>
-        </form>
       </Modal>
     </DashboardLayout>
   );

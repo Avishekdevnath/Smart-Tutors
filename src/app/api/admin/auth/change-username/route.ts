@@ -6,18 +6,10 @@ import { verifyAdminToken } from '@/lib/adminAuth';
 export async function POST(request: NextRequest) {
   try {
     // Verify admin authentication
-    const token = request.cookies.get('adminToken')?.value;
-    if (!token) {
+    const admin = await verifyAdminToken(request);
+    if (!admin) {
       return NextResponse.json(
         { error: 'Authentication required' },
-        { status: 401 }
-      );
-    }
-
-    const decoded = await verifyAdminToken(token);
-    if (!decoded) {
-      return NextResponse.json(
-        { error: 'Invalid or expired token' },
         { status: 401 }
       );
     }
@@ -51,8 +43,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Get current admin
-    const admin = await Admin.findById(decoded.adminId);
-    if (!admin) {
+    const currentAdmin = await Admin.findById(admin.id);
+    if (!currentAdmin) {
       return NextResponse.json(
         { error: 'Admin not found' },
         { status: 404 }
@@ -60,7 +52,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify current password
-    const isPasswordValid = await admin.comparePassword(currentPassword);
+    const isPasswordValid = await currentAdmin.comparePassword(currentPassword);
     if (!isPasswordValid) {
       return NextResponse.json(
         { error: 'Current password is incorrect' },
@@ -69,7 +61,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if new username is different from current
-    if (admin.username.toLowerCase() === newUsername.toLowerCase()) {
+    if (currentAdmin.username.toLowerCase() === newUsername.toLowerCase()) {
       return NextResponse.json(
         { error: 'New username must be different from current username' },
         { status: 400 }
@@ -79,7 +71,7 @@ export async function POST(request: NextRequest) {
     // Check if username already exists (case-insensitive)
     const existingAdmin = await Admin.findOne({
       username: { $regex: new RegExp(`^${newUsername}$`, 'i') },
-      _id: { $ne: admin._id }
+      _id: { $ne: currentAdmin._id }
     });
 
     if (existingAdmin) {
@@ -90,18 +82,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Update username
-    admin.username = newUsername.trim();
-    await admin.save();
+    currentAdmin.username = newUsername.trim();
+    await currentAdmin.save();
 
     return NextResponse.json({
       success: true,
       message: 'Username updated successfully',
       admin: {
-        id: admin._id,
-        username: admin.username,
-        email: admin.email,
-        name: admin.name,
-        role: admin.role
+        id: currentAdmin._id,
+        username: currentAdmin.username,
+        email: currentAdmin.email,
+        name: currentAdmin.name,
+        role: currentAdmin.role
       }
     });
 
