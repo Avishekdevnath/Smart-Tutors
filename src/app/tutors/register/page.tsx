@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useRef } from "react";
 
 const steps = [
   "Personal Information",
@@ -71,7 +72,7 @@ export default function TutorRegisterPage() {
     division: "",
     district: "",
     area: "",
-    password: "654321", // default for testing
+    password: "",
     nidPhoto: null,
     studentIdPhoto: null,
   });
@@ -79,6 +80,40 @@ export default function TutorRegisterPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
+
+  const nidInputRef = useRef<HTMLInputElement>(null);
+  const studentIdInputRef = useRef<HTMLInputElement>(null);
+
+  // Add preview URLs for images
+  const [nidPreview, setNidPreview] = useState<string | null>(null);
+  const [studentIdPreview, setStudentIdPreview] = useState<string | null>(null);
+
+  // Drag and drop handlers
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>, type: 'nidPhoto' | 'studentIdPhoto') => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setForm(prev => ({ ...prev, [type]: file }));
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        if (type === 'nidPhoto') setNidPreview(ev.target?.result as string);
+        else setStudentIdPreview(ev.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, files } = e.target;
+    if (files && files[0] && files[0].type.startsWith('image/')) {
+      setForm(prev => ({ ...prev, [name]: files[0] }));
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        if (name === 'nidPhoto') setNidPreview(ev.target?.result as string);
+        else setStudentIdPreview(ev.target?.result as string);
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -192,6 +227,10 @@ export default function TutorRegisterPage() {
                   <option value="Female">Female</option>
                   <option value="Other">Other</option>
                 </select>
+              </div>
+              <div>
+                <label className="block font-semibold mb-1">Password</label>
+                <input name="password" value={form.password} onChange={handleChange} type="password" className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="Enter a password" />
               </div>
             </div>
           </div>
@@ -312,14 +351,60 @@ export default function TutorRegisterPage() {
         {step === 4 && (
           <div>
             <h2 className="text-xl font-semibold mb-4 border-b pb-2">Documents</h2>
-            <div className="space-y-4">
+            <div className="space-y-8">
+              {/* NID Photo Upload */}
               <div>
-                <label className="block font-semibold mb-1">NID Photo</label>
-                <input name="nidPhoto" type="file" accept="image/*" onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" />
+                <label className="block font-semibold mb-2">NID Photo</label>
+                <div
+                  className="w-full border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition hover:border-blue-400 bg-gray-50 relative"
+                  onClick={() => nidInputRef.current?.click()}
+                  onDragOver={e => e.preventDefault()}
+                  onDrop={e => handleDrop(e, 'nidPhoto')}
+                >
+                  {nidPreview ? (
+                    <img src={nidPreview} alt="NID Preview" className="h-32 object-contain mb-2 rounded shadow" />
+                  ) : (
+                    <span className="text-gray-400 text-sm mb-2">Drag & drop or click to upload NID photo</span>
+                  )}
+                  <input
+                    ref={nidInputRef}
+                    name="nidPhoto"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </div>
+                {form.nidPhoto && typeof form.nidPhoto !== 'string' && (
+                  <div className="text-xs text-gray-500 mt-1">{form.nidPhoto.name}</div>
+                )}
               </div>
+              {/* Student ID Photo Upload */}
               <div>
-                <label className="block font-semibold mb-1">Student ID Photo</label>
-                <input name="studentIdPhoto" type="file" accept="image/*" onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" />
+                <label className="block font-semibold mb-2">Student ID Photo</label>
+                <div
+                  className="w-full border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition hover:border-blue-400 bg-gray-50 relative"
+                  onClick={() => studentIdInputRef.current?.click()}
+                  onDragOver={e => e.preventDefault()}
+                  onDrop={e => handleDrop(e, 'studentIdPhoto')}
+                >
+                  {studentIdPreview ? (
+                    <img src={studentIdPreview} alt="Student ID Preview" className="h-32 object-contain mb-2 rounded shadow" />
+                  ) : (
+                    <span className="text-gray-400 text-sm mb-2">Drag & drop or click to upload Student ID photo</span>
+                  )}
+                  <input
+                    ref={studentIdInputRef}
+                    name="studentIdPhoto"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </div>
+                {form.studentIdPhoto && typeof form.studentIdPhoto !== 'string' && (
+                  <div className="text-xs text-gray-500 mt-1">{form.studentIdPhoto.name}</div>
+                )}
               </div>
             </div>
           </div>

@@ -439,14 +439,18 @@ export default function FacebookGroupsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {filteredCollections.map((collection) => (
-            <CollectionCard
-              key={collection._id}
-              collection={collection}
-              onView={(collection) => router.push(`/dashboard/facebook-groups/${collection._id}`)}
-              onEdit={openEditModal}
-              onDelete={handleDelete}
-            />
+          {filteredCollections.map((collection, index) => (
+            <div key={collection._id} className="relative">
+              <div className="absolute top-3 left-3 bg-blue-600 text-white text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center z-10 shadow-lg">
+                {index + 1}
+              </div>
+              <CollectionCard
+                collection={collection}
+                onView={(collection) => router.push(`/dashboard/facebook-groups/${collection._id}`)}
+                onEdit={openEditModal}
+                onDelete={handleDelete}
+              />
+            </div>
           ))}
         </div>
       )}

@@ -6,17 +6,13 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import { 
   HomeIcon, 
-  UserGroupIcon, 
-  UsersIcon, 
+  UserIcon,
   AcademicCapIcon,
-  ChartBarIcon,
+  DocumentTextIcon,
   CogIcon,
-  Bars3Icon,
   XMarkIcon,
-  GlobeAltIcon,
   ArrowRightOnRectangleIcon,
-  ArrowLeftIcon,
-  UserIcon
+  ArrowLeftIcon
 } from '@heroicons/react/24/outline';
 
 interface SidebarItem {
@@ -26,68 +22,50 @@ interface SidebarItem {
   description?: string;
 }
 
-const sidebarItems: SidebarItem[] = [
+const tutorSidebarItems: SidebarItem[] = [
   {
     name: 'Dashboard',
-    href: '/dashboard',
+    href: '/tutor/dashboard',
     icon: HomeIcon,
-    description: 'Overview and analytics'
+    description: 'Overview and stats'
   },
   {
     name: 'Profile',
-    href: '/dashboard/profile',
+    href: '/tutor/profile',
     icon: UserIcon,
     description: 'Manage your profile'
   },
   {
-    name: 'Tutors',
-    href: '/dashboard/tutors',
+    name: 'My Tuitions',
+    href: '/tutor/tuitions',
     icon: AcademicCapIcon,
-    description: 'Manage tutor profiles'
+    description: 'View assigned tuitions'
   },
   {
-    name: 'Guardians',
-    href: '/dashboard/guardians',
-    icon: UserGroupIcon,
-    description: 'Manage guardian accounts'
-  },
-  {
-    name: 'Tuitions',
-    href: '/dashboard/tuitions',
-    icon: UsersIcon,
-    description: 'Manage tuition classes'
-  },
-  {
-    name: 'Facebook Groups',
-    href: '/dashboard/facebook-groups',
-    icon: GlobeAltIcon,
-    description: 'Manage Facebook group collections'
-  },
-  {
-    name: 'Analytics',
-    href: '/dashboard/analytics',
-    icon: ChartBarIcon,
-    description: 'View reports and insights'
+    name: 'Applications',
+    href: '/tutor/applications',
+    icon: DocumentTextIcon,
+    description: 'Application history'
   },
   {
     name: 'Settings',
-    href: '/dashboard/settings',
+    href: '/tutor/settings',
     icon: CogIcon,
-    description: 'System configuration'
+    description: 'Account settings'
   }
 ];
 
-interface DashboardSidebarProps {
+interface TutorDashboardSidebarProps {
   className?: string;
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
 }
 
-export default function DashboardSidebar({ 
+export default function TutorDashboardSidebar({ 
   className = '', 
   sidebarOpen, 
   setSidebarOpen 
-}: DashboardSidebarProps) {
+}: TutorDashboardSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
@@ -95,15 +73,15 @@ export default function DashboardSidebar({
   const user = session?.user as any;
 
   const isActive = (href: string) => {
-    if (href === '/dashboard') {
-      return pathname === '/dashboard';
+    if (href === '/tutor/dashboard') {
+      return pathname === '/tutor/dashboard';
     }
     return pathname.startsWith(href);
   };
 
   const handleLogout = async () => {
     try {
-      console.log('Initiating logout from dashboard...');
+      console.log('Initiating logout from tutor dashboard...');
       await signOut({ 
         callbackUrl: '/',
         redirect: true 
@@ -132,7 +110,7 @@ export default function DashboardSidebar({
           <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white shadow-xl">
             {/* Mobile header */}
             <div className="flex h-16 items-center justify-between px-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Smart Tutors</h2>
+              <h2 className="text-lg font-semibold text-gray-900">Tutor Portal</h2>
               <button
                 type="button"
                 className="text-gray-400 hover:text-gray-500 p-1 rounded-md"
@@ -157,7 +135,7 @@ export default function DashboardSidebar({
             
             {/* Mobile navigation */}
             <nav className="flex-1 space-y-1 px-3 py-2 overflow-y-auto">
-              {sidebarItems.map((item) => {
+              {tutorSidebarItems.map((item) => {
                 const isItemActive = isActive(item.href);
                 return (
                   <Link
@@ -188,17 +166,17 @@ export default function DashboardSidebar({
             <div className="flex-shrink-0 border-t border-gray-200 p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center min-w-0 flex-1">
-                  <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+                  <div className="h-8 w-8 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0">
                     <span className="text-sm font-medium text-white">
-                      {user?.name?.charAt(0) || user?.username?.charAt(0) || 'U'}
+                      {user?.name?.charAt(0) || 'T'}
                     </span>
                   </div>
                   <div className="ml-3 min-w-0 flex-1">
                     <p className="text-sm font-medium text-gray-700 truncate">
-                      {user?.name || user?.username || 'User'}
+                      {user?.name || 'Tutor'}
                     </p>
                     <p className="text-xs text-gray-500 truncate">
-                      {user?.email || 'user@smarttutors.com'}
+                      {user?.email || 'tutor@smarttutors.com'}
                     </p>
                   </div>
                 </div>
@@ -219,10 +197,10 @@ export default function DashboardSidebar({
       <div className={`hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-gray-200 lg:bg-white lg:pt-5 lg:pb-4 ${className}`}>
         <div className="flex items-center flex-shrink-0 px-6">
           <div className="flex items-center">
-            <div className="h-8 w-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3">
-              <span className="text-white font-bold text-lg">ST</span>
+            <div className="h-8 w-8 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg flex items-center justify-center mr-3">
+              <span className="text-white font-bold text-lg">TP</span>
             </div>
-            <h1 className="text-xl font-bold text-gray-900">Smart Tutors</h1>
+            <h1 className="text-xl font-bold text-gray-900">Tutor Portal</h1>
           </div>
         </div>
 
@@ -239,7 +217,7 @@ export default function DashboardSidebar({
 
         {/* Navigation */}
         <nav className="mt-6 flex-1 space-y-1 px-3 overflow-y-auto">
-          {sidebarItems.map((item) => {
+          {tutorSidebarItems.map((item) => {
             const isItemActive = isActive(item.href);
             return (
               <Link
@@ -270,17 +248,17 @@ export default function DashboardSidebar({
         <div className="flex-shrink-0 border-t border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center min-w-0 flex-1">
-              <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+              <div className="h-8 w-8 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0">
                 <span className="text-sm font-medium text-white">
-                  {user?.name?.charAt(0) || user?.username?.charAt(0) || 'U'}
+                  {user?.name?.charAt(0) || 'T'}
                 </span>
               </div>
               <div className="ml-3 min-w-0 flex-1">
                 <p className="text-sm font-medium text-gray-700 truncate">
-                  {user?.name || user?.username || 'User'}
+                  {user?.name || 'Tutor'}
                 </p>
                 <p className="text-xs text-gray-500 truncate">
-                  {user?.email || 'user@smarttutors.com'}
+                  {user?.email || 'tutor@smarttutors.com'}
                 </p>
               </div>
             </div>

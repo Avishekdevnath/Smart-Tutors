@@ -3,6 +3,10 @@
  * Supports both ObjectId references and string arrays
  */
 
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY || '');
+
 export interface LocationData {
   _id?: string;
   name?: string;
@@ -125,4 +129,54 @@ export function isObjectId(value: any): boolean {
 export function safeLocationDisplay(location: any, fallback: string = 'Location not specified'): string {
   const formatted = formatLocation(location);
   return formatted === 'Location not specified' ? fallback : formatted;
+} 
+
+/**
+ * Use Google AI to format and standardize location info.
+ * @param rawLocation { division: string, district: string, area: string }
+ * @returns { division: string, district: string, area: string, formatted: string, extra?: any }
+ */
+export async function openaiFormatLocation(rawLocation: any) {
+  try {
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+    const prompt = `
+      Given the following location information, return a JSON object with standardized fields: division, district, area.
+      Format the location data according to Bangladesh geographical divisions.
+      
+      Input: ${JSON.stringify(rawLocation)}
+      
+      Return only a valid JSON object with these fields:
+      {
+        "division": "standardized division name",
+        "district": "standardized district name", 
+        "area": "standardized area name"
+      }
+    `;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    
+    try {
+      const json = JSON.parse(text);
+      return {
+        ...json,
+        formatted: `${json.area}, ${json.district}, ${json.division}`,
+      };
+    } catch (parseError) {
+      // fallback: return raw with basic formatting
+      return {
+        ...rawLocation,
+        formatted: `${rawLocation.area || ''}, ${rawLocation.district || ''}, ${rawLocation.division || ''}`.replace(/^,\s*|,\s*$/g, ''),
+      };
+    }
+  } catch (error) {
+    console.error('Google AI location formatting error:', error);
+    // fallback: return raw with basic formatting
+    return {
+      ...rawLocation,
+      formatted: `${rawLocation.area || ''}, ${rawLocation.district || ''}, ${rawLocation.division || ''}`.replace(/^,\s*|,\s*$/g, ''),
+    };
+  }
 } 

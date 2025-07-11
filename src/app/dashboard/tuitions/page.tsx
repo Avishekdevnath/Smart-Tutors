@@ -259,31 +259,25 @@ export default function TuitionManagementDashboard() {
       title="Tuition Management" 
       description="Manage and monitor all tuition assignments in the system"
     >
-      {/* Header with Add Button and Quick Sort - Mobile Responsive */}
-      <div className="mb-6">
-        <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
-          <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-3">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Tuition Management</h1>
-            <div className="flex flex-wrap items-center gap-2">
+      {/* Header Section - Desktop Horizontal, Mobile Vertical */}
+      <div className="mb-8">
+        <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+          <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-6">
+            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Tuition Management</h1>
+            <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => {
-                  setSortField('createdAt');
-                  setSortOrder('desc');
-                }}
-                className={`px-3 py-2 text-sm rounded-full transition-colors touch-target ${
+                onClick={() => handleSort('createdAt')}
+                className={`px-3 py-1.5 text-sm font-medium rounded-full transition-colors ${
                   sortField === 'createdAt' && sortOrder === 'desc'
                     ? 'bg-purple-100 text-purple-800 border border-purple-200'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                Latest
+                Latest Tuitions
               </button>
               <button
-                onClick={() => {
-                  setSortField('urgent');
-                  setSortOrder('desc');
-                }}
-                className={`px-3 py-2 text-sm rounded-full transition-colors touch-target ${
+                onClick={() => handleSort('urgent')}
+                className={`px-3 py-1.5 text-sm font-medium rounded-full transition-colors ${
                   sortField === 'urgent' && sortOrder === 'desc'
                     ? 'bg-red-100 text-red-800 border border-red-200'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -292,11 +286,8 @@ export default function TuitionManagementDashboard() {
                 Urgent First
               </button>
               <button
-                onClick={() => {
-                  setSortField('salary');
-                  setSortOrder('desc');
-                }}
-                className={`px-3 py-2 text-sm rounded-full transition-colors touch-target ${
+                onClick={() => handleSort('salary')}
+                className={`px-3 py-1.5 text-sm font-medium rounded-full transition-colors ${
                   sortField === 'salary' && sortOrder === 'desc'
                     ? 'bg-green-100 text-green-800 border border-green-200'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -307,7 +298,7 @@ export default function TuitionManagementDashboard() {
             </div>
           </div>
           <Link href="/dashboard/tuitions/add">
-            <button className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2 touch-target">
+            <button className="w-full lg:w-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
@@ -343,65 +334,65 @@ export default function TuitionManagementDashboard() {
         )}
       />
 
-      {/* Stats Cards - Mobile Responsive Grid */}
+      {/* Stats Cards - Desktop 4 columns, Mobile 2 columns */}
       <div className="mb-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow p-4 lg:p-6">
             <div className="flex items-center">
-              <div className="p-2 sm:p-3 rounded-full bg-purple-100">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-2 lg:p-3 rounded-full bg-purple-100">
+                <svg className="w-5 h-5 lg:w-6 lg:h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <div className="ml-3 sm:ml-4 min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">Total Tuitions</p>
-                <p className="text-lg sm:text-2xl font-bold text-gray-900">{tuitions.length}</p>
+              <div className="ml-3 lg:ml-4 min-w-0 flex-1">
+                <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">Total Tuitions</p>
+                <p className="text-lg lg:text-2xl font-bold text-gray-900">{tuitions.length}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+          <div className="bg-white rounded-lg shadow p-4 lg:p-6">
             <div className="flex items-center">
-              <div className="p-2 sm:p-3 rounded-full bg-green-100">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-2 lg:p-3 rounded-full bg-green-100">
+                <svg className="w-5 h-5 lg:w-6 lg:h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <div className="ml-3 sm:ml-4 min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">Open</p>
-                <p className="text-lg sm:text-2xl font-bold text-gray-900">
+              <div className="ml-3 lg:ml-4 min-w-0 flex-1">
+                <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">Open</p>
+                <p className="text-lg lg:text-2xl font-bold text-gray-900">
                   {tuitions.filter(t => t.status === 'open').length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+          <div className="bg-white rounded-lg shadow p-4 lg:p-6">
             <div className="flex items-center">
-              <div className="p-2 sm:p-3 rounded-full bg-blue-100">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-2 lg:p-3 rounded-full bg-blue-100">
+                <svg className="w-5 h-5 lg:w-6 lg:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <div className="ml-3 sm:ml-4 min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">Demo Running</p>
-                <p className="text-lg sm:text-2xl font-bold text-gray-900">
+              <div className="ml-3 lg:ml-4 min-w-0 flex-1">
+                <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">Demo Running</p>
+                <p className="text-lg lg:text-2xl font-bold text-gray-900">
                   {tuitions.filter(t => t.status === 'demo running').length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+          <div className="bg-white rounded-lg shadow p-4 lg:p-6">
             <div className="flex items-center">
-              <div className="p-2 sm:p-3 rounded-full bg-purple-100">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-2 lg:p-3 rounded-full bg-purple-100">
+                <svg className="w-5 h-5 lg:w-6 lg:h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <div className="ml-3 sm:ml-4 min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">Booked</p>
-                <p className="text-lg sm:text-2xl font-bold text-gray-900">
+              <div className="ml-3 lg:ml-4 min-w-0 flex-1">
+                <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">Booked</p>
+                <p className="text-lg lg:text-2xl font-bold text-gray-900">
                   {tuitions.filter(t => t.status === 'booked').length}
                 </p>
               </div>
@@ -410,7 +401,7 @@ export default function TuitionManagementDashboard() {
         </div>
 
         {/* Tuitions Grid */}
-        <div className="space-y-4 sm:space-y-6">
+        <div className="space-y-4 lg:space-y-6">
           {loading ? (
             <div className="bg-white rounded-lg shadow p-8 text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
@@ -419,23 +410,23 @@ export default function TuitionManagementDashboard() {
           ) : (
             filteredTuitions.map((tuition) => (
               <div key={tuition._id} className="bg-white rounded-lg shadow overflow-hidden">
-                {/* Tuition Header - Mobile Responsive */}
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-4 sm:px-6 py-4 border-b border-gray-200">
-                  <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                    <div className="flex items-center space-x-3 sm:space-x-4">
-                      <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center relative flex-shrink-0">
-                        <span className="text-white font-bold text-sm sm:text-lg">
+                {/* Tuition Header - Desktop Horizontal, Mobile Vertical */}
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-4 lg:px-6 py-4 border-b border-gray-200">
+                  <div className="flex flex-col space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+                    <div className="flex items-center space-x-3 lg:space-x-4">
+                      <div className="h-10 w-10 lg:h-12 lg:w-12 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center relative flex-shrink-0">
+                        <span className="text-white font-bold text-sm lg:text-lg">
                           {tuition.code.slice(-2)}
                         </span>
                         {/* Sort indicator */}
                         {sortField === 'code' && (
                           <div className="absolute -top-1 -right-1 bg-purple-600 rounded-full p-1">
                             {sortOrder === 'desc' ? (
-                              <svg className="w-2 h-2 sm:w-3 sm:h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-2 h-2 lg:w-3 lg:h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                               </svg>
                             ) : (
-                              <svg className="w-2 h-2 sm:w-3 sm:h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-2 h-2 lg:w-3 lg:h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8V4m0 0l-4 4m4-4l4 4M7 20v-4m0 0l4-4m-4 4l-4-4" />
                               </svg>
                             )}
@@ -443,7 +434,7 @@ export default function TuitionManagementDashboard() {
                         )}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h3 className="text-base sm:text-lg font-semibold text-gray-900 flex flex-wrap items-center gap-2">
+                        <h3 className="text-base lg:text-lg font-semibold text-gray-900 flex flex-wrap items-center gap-2">
                           <span>{tuition.code}</span>
                           {sortField === 'createdAt' && (
                             <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
@@ -489,8 +480,8 @@ export default function TuitionManagementDashboard() {
                       </div>
                     </div>
                     
-                    {/* Action buttons - Mobile responsive */}
-                    <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-2">
+                    {/* Action buttons - Desktop Horizontal, Mobile Vertical */}
+                    <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-2">
                       <div className="flex items-center space-x-2">
                         <select
                           value={tuition.status}
@@ -518,7 +509,7 @@ export default function TuitionManagementDashboard() {
                               showToast('An error occurred while updating status', 'error');
                             }
                           }}
-                          className={`px-3 py-2 text-sm font-semibold rounded-full border-0 focus:ring-2 focus:ring-purple-500 touch-target min-w-0 ${getStatusColor(tuition.status)}`}
+                          className={`px-3 py-2 text-sm font-semibold rounded-full border-0 focus:ring-2 focus:ring-purple-500 min-w-0 ${getStatusColor(tuition.status)}`}
                         >
                           <option value="open">Open</option>
                           <option value="available">Available</option>
@@ -529,7 +520,7 @@ export default function TuitionManagementDashboard() {
                       </div>
                       <button
                         onClick={() => setSelectedTuitionForPosts(selectedTuitionForPosts === tuition._id ? null : tuition._id)}
-                        className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium touch-target"
+                        className="w-full lg:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                       >
                         {selectedTuitionForPosts === tuition._id ? 'Hide Posts' : 'Generate Posts'}
                       </button>
@@ -537,9 +528,9 @@ export default function TuitionManagementDashboard() {
                   </div>
                 </div>
 
-                {/* Tuition Details - Mobile Responsive Grid */}
-                <div className="p-4 sm:p-6">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+                {/* Tuition Details - Desktop 3 columns, Mobile 1 column */}
+                <div className="p-4 lg:p-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
                     {/* Guardian Information */}
                     <div>
                       <div className="flex items-center justify-between mb-3">
@@ -553,7 +544,7 @@ export default function TuitionManagementDashboard() {
                         />
                       </div>
                       <div className="space-y-2 text-sm">
-                        <p className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
+                        <p className="flex flex-col lg:flex-row lg:items-center lg:space-x-2">
                           <span className="font-medium">Name:</span>
                           <span className="flex items-center space-x-1">
                             <span className="break-words">{tuition.guardianName}</span>
@@ -572,7 +563,7 @@ export default function TuitionManagementDashboard() {
                             )}
                           </span>
                         </p>
-                        <p className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
+                        <p className="flex flex-col lg:flex-row lg:items-center lg:space-x-2">
                           <span className="font-medium">Number:</span>
                           <span className="flex items-center space-x-1">
                             <span className="break-all">{tuition.guardianNumber}</span>
@@ -616,7 +607,7 @@ export default function TuitionManagementDashboard() {
                     <div>
                       <h4 className="text-sm font-semibold text-gray-700 mb-3">Financial & Requirements</h4>
                       <div className="space-y-2 text-sm">
-                        <p className="flex flex-col sm:flex-row sm:items-center sm:space-x-2">
+                        <p className="flex flex-col lg:flex-row lg:items-center lg:space-x-2">
                           <span className="font-medium">Salary:</span>
                           <span className="flex items-center space-x-1">
                             <span className="break-words">{tuition.salary}</span>
@@ -646,30 +637,30 @@ export default function TuitionManagementDashboard() {
                     </div>
                   </div>
 
-                  {/* Actions - Mobile Responsive */}
+                  {/* Actions - Desktop Horizontal, Mobile Vertical */}
                   <div className="mt-6 pt-4 border-t border-gray-200">
-                    <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                      <div className="flex flex-col space-y-1 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4 text-sm text-gray-600">
+                    <div className="flex flex-col space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+                      <div className="flex flex-col space-y-1 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-4 text-sm text-gray-600">
                         <span>Created: {new Date(tuition.createdAt).toLocaleDateString()}</span>
                         {tuition.selectedTutor && (
                           <span className="text-green-600 font-medium">✓ Tutor Selected</span>
                         )}
                       </div>
-                      <div className="flex flex-wrap gap-2 sm:space-x-2">
+                      <div className="flex flex-wrap gap-2 lg:space-x-2">
                         <button 
-                          className="text-blue-600 hover:text-blue-900 text-sm font-medium touch-target px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors" 
+                          className="text-blue-600 hover:text-blue-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors" 
                           onClick={() => setViewModal(tuition)}
                         >
                           View Details
                         </button>
                         <button 
-                          className="text-green-600 hover:text-green-900 text-sm font-medium touch-target px-3 py-2 rounded-lg hover:bg-green-50 transition-colors" 
+                          className="text-green-600 hover:text-green-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-green-50 transition-colors" 
                           onClick={() => onEdit(tuition)}
                         >
                           Edit
                         </button>
                         <button 
-                          className="text-red-600 hover:text-red-900 text-sm font-medium touch-target px-3 py-2 rounded-lg hover:bg-red-50 transition-colors" 
+                          className="text-red-600 hover:text-red-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-red-50 transition-colors" 
                           onClick={() => setDeleteModal(tuition)}
                         >
                           Delete
@@ -681,7 +672,7 @@ export default function TuitionManagementDashboard() {
 
                 {/* Generated Posts */}
                 {selectedTuitionForPosts === tuition._id && (
-                  <div className="border-t border-gray-200 p-4 sm:p-6 bg-gray-50">
+                  <div className="border-t border-gray-200 p-4 lg:p-6 bg-gray-50">
                     <TuitionPostGenerator tuition={tuition} />
                   </div>
                 )}

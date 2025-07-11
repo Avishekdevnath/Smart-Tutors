@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import { useSession } from 'next-auth/react';
 import { Loader2 } from 'lucide-react';
 
 interface ProtectedRouteProps {
@@ -14,27 +14,36 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children, 
   requireSuperAdmin = false 
 }) => {
-  const { admin, loading } = useAdminAuth();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
-    if (!loading) {
+    if (status !== 'loading') {
       setIsChecking(false);
       
-      if (!admin) {
+      if (!session) {
+        // Redirect to appropriate login page
         router.push('/admin/login');
         return;
       }
       
-      if (requireSuperAdmin && admin.role !== 'super_admin') {
+      // Check if user is admin or tutor
+      const user = session.user as any;
+      if (!user.isAdmin && user.userType !== 'admin' && user.userType !== 'tutor') {
+        router.push('/admin/login');
+        return;
+      }
+      
+      // For super admin requirement, check if user is super admin
+      if (requireSuperAdmin && user.userType !== 'admin') {
         router.push('/admin/unauthorized');
         return;
       }
     }
-  }, [admin, loading, router, requireSuperAdmin]);
+  }, [session, status, router, requireSuperAdmin]);
 
-  if (loading || isChecking) {
+  if (status === 'loading' || isChecking) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -45,11 +54,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
-  if (!admin) {
+  if (!session) {
     return null;
   }
 
-  if (requireSuperAdmin && admin.role !== 'super_admin') {
+  const user = session.user as any;
+  if (!user.isAdmin && user.userType !== 'admin' && user.userType !== 'tutor') {
+    return null;
+  }
+
+  if (requireSuperAdmin && user.userType !== 'admin') {
     return null;
   }
 

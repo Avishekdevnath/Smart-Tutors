@@ -278,11 +278,11 @@ Location: ${address}
                 value={formData.tuitionCode}
                 onChange={(e) => handleInputChange('tuitionCode', e.target.value)}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                placeholder="e.g., 135 (leave empty for auto-generation)"
+                placeholder="e.g., 135 (just the number)"
               />
             </div>
             <p className="text-sm text-gray-500 mt-2">
-              Leave empty to auto-generate the next sequential code, or enter a specific number to skip codes.
+              Enter just the number (e.g., 135). The system will automatically add "ST" prefix. Leave empty to auto-generate the next sequential code.
             </p>
           </div>
         </div>

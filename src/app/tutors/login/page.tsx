@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
-export default function AdminLoginPage() {
-  const [username, setUsername] = useState("");
+export default function TutorLoginPage() {
+  const [phoneOrEmail, setPhoneOrEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -17,16 +17,16 @@ export default function AdminLoginPage() {
     
     try {
       const result = await signIn("credentials", {
-        username: username,
+        username: phoneOrEmail,
         password: password,
         redirect: false,
       });
 
       if (result?.error) {
-        setError("Invalid username or password");
+        setError("Invalid credentials");
       } else if (result?.ok) {
-        // Successfully logged in, redirect to dashboard
-        router.replace("/dashboard");
+        // Successfully logged in, redirect to tutor dashboard
+        router.replace("/tutor/dashboard");
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
@@ -39,23 +39,23 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div>
-          <h2 className="mt-2 text-center text-3xl font-extrabold text-gray-900">Admin Login</h2>
-          <p className="mt-2 text-center text-sm text-gray-600">Sign in to your admin account</p>
+          <h2 className="mt-2 text-center text-3xl font-extrabold text-gray-900">Tutor Login</h2>
+          <p className="mt-2 text-center text-sm text-gray-600">Sign in to your tutor account</p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div className="mb-4">
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
+              <label htmlFor="phoneOrEmail" className="block text-sm font-medium text-gray-700">Phone or Email</label>
               <input
-                id="username"
-                name="username"
+                id="phoneOrEmail"
+                name="phoneOrEmail"
                 type="text"
                 autoComplete="username"
                 required
-                value={username}
-                onChange={e => setUsername(e.target.value)}
+                value={phoneOrEmail}
+                onChange={e => setPhoneOrEmail(e.target.value)}
                 className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Username"
+                placeholder="Phone or Email"
               />
             </div>
             <div>
@@ -84,6 +84,9 @@ export default function AdminLoginPage() {
             </button>
           </div>
         </form>
+        <div className="text-center text-sm text-gray-500 mt-4">
+          Don&apos;t have an account? <a href="/tutors/register" className="text-blue-600 hover:underline">Register</a>
+        </div>
       </div>
     </div>
   );

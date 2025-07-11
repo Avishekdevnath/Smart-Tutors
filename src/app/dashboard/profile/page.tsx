@@ -1,150 +1,173 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
-import { 
-  UserIcon, 
-  ClockIcon,
-  EnvelopeIcon,
-  PhoneIcon,
-  MapPinIcon,
-  ShieldCheckIcon
-} from '@heroicons/react/24/outline';
 
 export default function ProfilePage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const user = session?.user as any;
+
+  useEffect(() => {
+    if (status === 'loading') return;
+    if (!session) {
+      router.push('/tutors/login');
+      return;
+    }
+    setIsLoading(false);
+  }, [session, status]);
+
+  if (isLoading) {
+    return (
+      <DashboardLayout title="Profile" description="Manage your profile">
+        <div className="flex items-center justify-center min-h-96">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
-    <DashboardLayout 
-      title="Profile" 
-      description="Manage your account settings and preferences"
-    >
-      {/* Coming Soon Banner */}
-      <div className="mb-8 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-6">
-        <div className="flex items-center">
-          <div className="flex-shrink-0">
-            <ClockIcon className="h-8 w-8 text-purple-600" />
-          </div>
-          <div className="ml-4">
-            <h3 className="text-lg font-semibold text-purple-900">Profile Management Coming Soon</h3>
-            <p className="text-purple-700">
-              We're working on comprehensive profile management features to help you 
-              customize your account and manage your personal information.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Profile Sections */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-dashed border-gray-300">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-blue-100">
-              <UserIcon className="h-6 w-6 text-blue-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Personal Info</p>
-              <p className="text-2xl font-bold text-gray-900">Coming Soon</p>
+    <DashboardLayout title="Profile" description="Manage your profile and account settings">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center space-x-4">
+              <div className="h-16 w-16 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
+                <span className="text-white font-bold text-2xl">
+                  {(user?.name || user?.username || 'U').charAt(0).toUpperCase()}
+                </span>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {user?.name || user?.username || 'User'}
+                </h1>
+                <p className="text-gray-600 capitalize">
+                  {user?.userType || 'User'} Profile
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-dashed border-gray-300">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-green-100">
-              <ShieldCheckIcon className="h-6 w-6 text-green-600" />
+        {/* Profile Details */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Basic Information */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Basic Information</h2>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Security</p>
-              <p className="text-2xl font-bold text-gray-900">Coming Soon</p>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Full Name
+                </label>
+                <p className="text-gray-900">{user?.name || user?.username || 'Not provided'}</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address
+                </label>
+                <p className="text-gray-900">{user?.email || 'Not provided'}</p>
+              </div>
+
+              {user?.username && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Username
+                  </label>
+                  <p className="text-gray-900">{user.username}</p>
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  User Type
+                </label>
+                <p className="text-gray-900 capitalize">{user?.userType || 'User'}</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  User ID
+                </label>
+                <p className="text-gray-900 font-mono text-sm">{user?.id || 'N/A'}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Account Information */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Account Information</h2>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Account Status
+                </label>
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  Active
+                </span>
+              </div>
+
+              {user?.isAdmin && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Admin Privileges
+                  </label>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    Full Access
+                  </span>
+                </div>
+              )}
+
+              {user?.tutorId && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Tutor Profile ID
+                  </label>
+                  <p className="text-gray-900 font-mono text-sm">{user.tutorId}</p>
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Session Information
+                </label>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <p>Last login: Just now</p>
+                  <p>Session active: Yes</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-dashed border-gray-300">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-purple-100">
-              <EnvelopeIcon className="h-6 w-6 text-purple-600" />
+        {/* Actions */}
+        <div className="mt-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Account Actions</h2>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Email Settings</p>
-              <p className="text-2xl font-bold text-gray-900">Coming Soon</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-dashed border-gray-300">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-orange-100">
-              <PhoneIcon className="h-6 w-6 text-orange-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Contact Info</p>
-              <p className="text-2xl font-bold text-gray-900">Coming Soon</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-dashed border-gray-300">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-red-100">
-              <MapPinIcon className="h-6 w-6 text-red-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Location</p>
-              <p className="text-2xl font-bold text-gray-900">Coming Soon</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6 border-2 border-dashed border-gray-300">
-          <div className="flex items-center">
-            <div className="p-3 rounded-full bg-indigo-100">
-              <UserIcon className="h-6 w-6 text-indigo-600" />
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Preferences</p>
-              <p className="text-2xl font-bold text-gray-900">Coming Soon</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Planned Features */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Planned Profile Features</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-3">
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-              <span className="text-gray-700">Personal information management</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-              <span className="text-gray-700">Password and security settings</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-              <span className="text-gray-700">Email and notification preferences</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-              <span className="text-gray-700">Profile picture and avatar</span>
-            </div>
-          </div>
-          <div className="space-y-3">
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-              <span className="text-gray-700">Two-factor authentication</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-              <span className="text-gray-700">Privacy and data settings</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-              <span className="text-gray-700">Account activity history</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-              <span className="text-gray-700">Theme and appearance options</span>
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  Update Profile
+                </button>
+                <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                  Change Password
+                </button>
+                <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                  Security Settings
+                </button>
+              </div>
             </div>
           </div>
         </div>

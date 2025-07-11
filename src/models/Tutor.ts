@@ -29,10 +29,11 @@ const TutorSchema = new Schema({
     nidPhoto: { type: String },
     studentIdPhoto: { type: String },
   },
-  status: {
+  // Removed global status - now tracked per application in TutorTuition model
+  profileStatus: {
     type: String,
-    enum: ['pending', 'confirmed', 'completed', 'rejected'],
-    default: 'pending'
+    enum: ['active', 'inactive', 'suspended'],
+    default: 'active'
   },
   mediaFeeHistory: [
     {
@@ -54,10 +55,15 @@ const TutorSchema = new Schema({
   },
   gender: { type: String, enum: ['Male', 'Female', 'Other'] },
   location: {
-    division: { type: String },
-    district: { type: String },
-    area: { type: String },
+    type: Schema.Types.ObjectId,
+    ref: 'Location',
+    required: false,
   },
+  // Additional profile fields
+  isProfileComplete: { type: Boolean, default: false },
+  lastLoginAt: { type: Date },
+  totalApplications: { type: Number, default: 0 },
+  successfulTuitions: { type: Number, default: 0 },
 }, { timestamps: true });
 
 const Tutor = models.Tutor || model('Tutor', TutorSchema);

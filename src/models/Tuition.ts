@@ -55,9 +55,31 @@ const TuitionSchema = new Schema({
 // Auto-generating Tuition Code (only if no code provided)
 TuitionSchema.pre('validate', async function (next) {
   if (!this.code) {
+    // Auto-generate next sequential code
     const lastTuition = await mongoose.model('Tuition').findOne().sort({ createdAt: -1 });
-    const nextCode = lastTuition ? `ST${parseInt(lastTuition.code.substring(2)) + 1}` : "ST150";
-    this.code = nextCode;
+    let nextNumber = 150; // Default starting number
+    
+    if (lastTuition) {
+      // Extract number from existing code (handle both ST123 and 123 formats)
+      const existingCode = lastTuition.code;
+      const numberMatch = existingCode.match(/(\d+)$/);
+      if (numberMatch) {
+        nextNumber = parseInt(numberMatch[1]) + 1;
+      }
+    }
+    
+    this.code = `ST${nextNumber}`;
+  } else {
+    // Ensure manual code has ST prefix
+    if (!this.code.startsWith('ST')) {
+      // If just a number is provided, add ST prefix
+      if (/^\d+$/.test(this.code)) {
+        this.code = `ST${this.code}`;
+      } else {
+        // If some other format, add ST prefix
+        this.code = `ST${this.code}`;
+      }
+    }
   }
   next();
 });

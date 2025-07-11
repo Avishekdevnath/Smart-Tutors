@@ -464,12 +464,17 @@ export default function CollectionDetailsPage() {
             </button>
           </div>
         ) : (
-          collection.groups.map((group) => (
+          collection.groups.map((group, index) => (
             <div key={group._id} className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 hover:shadow-md transition-shadow">
               <div className="flex flex-col space-y-4 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-4">
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 break-words">{group.name}</h3>
-                  <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:gap-4 sm:space-y-0 text-sm text-gray-600">
+                  <div className="flex items-start gap-3 mb-2">
+                    <div className="bg-blue-600 text-white text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
+                      {index + 1}
+                    </div>
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 break-words">{group.name}</h3>
+                  </div>
+                  <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:gap-4 sm:space-y-0 text-sm text-gray-600 ml-11">
                     <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full inline-block w-fit">
                       {group.memberCount.toLocaleString()} members
                     </span>

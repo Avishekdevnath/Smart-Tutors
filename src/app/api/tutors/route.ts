@@ -3,15 +3,10 @@ import { dbConnect } from '@/lib/mongodb';
 import Tutor from '@/models/Tutor';
 import User from '@/models/User';
 import bcrypt from 'bcryptjs';
-import formidable from 'formidable';
 import { uploadImage } from '@/lib/cloudinary';
-import { Readable } from 'stream';
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+import { sendWelcomeEmail } from '@/lib/email';
+import Location from '@/models/Location';
+import { openaiFormatLocation } from '@/utils/location';
 
 // Generate unique tutor ID
 const generateTutorId = async () => {
@@ -56,11 +51,19 @@ export async function GET(request: NextRequest) {
       tutorId: 1,
       name: 1,
       phone: 1,
+      email: 1,
       version: 1,
       address: 1,
       universityShortForm: 1,
       group: 1,
       preferredLocation: 1,
+      profileStatus: 1,
+      gender: 1,
+      department: 1,
+      yearAndSemester: 1,
+      totalApplications: 1,
+      successfulTuitions: 1,
+      createdAt: 1,
     });
 
     return NextResponse.json(tutors);
@@ -74,33 +77,60 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
 
-    // Parse multipart form data
-    const form = new formidable.IncomingForm();
+    // Parse form data using Next.js built-in FormData
+    const formData = await request.formData();
 
-    const bufferFromStream = async (stream: Readable): Promise<Buffer> => {
-      const chunks: Buffer[] = [];
-      for await (const chunk of stream) {
-        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-      }
-      return Buffer.concat(chunks);
-    };
+    // Extract form fields
+    const name = formData.get('name') as string;
+    const phone = formData.get('phone') as string;
+    const email = formData.get('email') as string;
+    const address = formData.get('address') as string;
+    const fatherName = formData.get('fatherName') as string;
+    const fatherNumber = formData.get('fatherNumber') as string;
+    const version = formData.get('version') as string;
+    const group = formData.get('group') as string;
+    const schoolName = formData.get('schoolName') as string;
+    const collegeName = formData.get('collegeName') as string;
+    const university = formData.get('university') as string;
+    const universityShortForm = formData.get('universityShortForm') as string;
+    const department = formData.get('department') as string;
+    const yearAndSemester = formData.get('yearAndSemester') as string;
+    const experience = formData.get('experience') as string;
+    const gender = formData.get('gender') as string;
+    const password = (formData.get('password') as string) || '654321';
 
-    const data = await new Promise<{ fields: any; files: any }>((resolve, reject) => {
-      form.parse(request as any, (err, fields, files) => {
-        if (err) reject(err);
-        else resolve({ fields, files });
-      });
+    // Parse JSON fields
+    const academicQualifications = formData.get('academicQualifications') 
+      ? JSON.parse(formData.get('academicQualifications') as string) 
+      : {};
+    
+    // Parse location info from form
+    const rawLocation = formData.get('location') ? JSON.parse(formData.get('location') as string) : {};
+    // Use AI to format location
+    const formattedLocation = await openaiFormatLocation(rawLocation);
+    // Find or create Location document
+    let locationDoc = await Location.findOne({
+      division: formattedLocation.division,
+      district: formattedLocation.district,
+      area: formattedLocation.area,
     });
+    if (!locationDoc) {
+      locationDoc = new Location(formattedLocation);
+      await locationDoc.save();
+    }
 
-    const fields = data.fields;
-    const files = data.files;
+    // Parse array fields
+    const preferredSubjects = formData.get('preferredSubjects') 
+      ? (formData.get('preferredSubjects') as string).split(',').map(s => s.trim()).filter(Boolean)
+      : [];
+    
+    const preferredLocation = formData.get('preferredLocation') 
+      ? (formData.get('preferredLocation') as string).split(',').map(s => s.trim()).filter(Boolean)
+      : [];
 
-    const name = fields.name;
-    const phone = fields.phone;
-    const email = fields.email;
-    const status = fields.status;
-    const mediaFeeHistory = fields.mediaFeeHistory;
-    const password = fields.password || '654321';
+    // Get file uploads
+    const nidPhoto = formData.get('nidPhoto') as File | null;
+    const studentIdPhoto = formData.get('studentIdPhoto') as File | null;
 
     if (!name || !phone) {
       return NextResponse.json({ error: 'Name and phone are required' }, { status: 400 });
@@ -112,67 +142,57 @@ export async function POST(request: NextRequest) {
     // Handle file uploads to Cloudinary
     let nidPhotoUrl = '';
     let studentIdPhotoUrl = '';
-    if (files.nidPhoto) {
-      const file = files.nidPhoto;
-      const fileBuffer = await bufferFromStream(Readable.from(file._readStream));
-      const uploadRes = await uploadImage({
-        arrayBuffer: async () => fileBuffer,
-        name: file.originalFilename,
-        type: file.mimetype,
-      } as unknown as File, { folder: 'smart-tutors/nid' });
-      nidPhotoUrl = uploadRes.secure_url;
+    
+    if (nidPhoto && nidPhoto.size > 0) {
+      try {
+        const uploadRes = await uploadImage(nidPhoto, { folder: 'smart-tutors/nid' });
+        nidPhotoUrl = uploadRes.secure_url;
+      } catch (error) {
+        console.error('NID photo upload failed:', error);
+      }
     }
-    if (files.studentIdPhoto) {
-      const file = files.studentIdPhoto;
-      const fileBuffer = await bufferFromStream(Readable.from(file._readStream));
-      const uploadRes = await uploadImage({
-        arrayBuffer: async () => fileBuffer,
-        name: file.originalFilename,
-        type: file.mimetype,
-      } as unknown as File, { folder: 'smart-tutors/student-id' });
-      studentIdPhotoUrl = uploadRes.secure_url;
+    
+    if (studentIdPhoto && studentIdPhoto.size > 0) {
+      try {
+        const uploadRes = await uploadImage(studentIdPhoto, { folder: 'smart-tutors/student-id' });
+        studentIdPhotoUrl = uploadRes.secure_url;
+      } catch (error) {
+        console.error('Student ID photo upload failed:', error);
+      }
     }
-
-    // Parse JSON fields if needed
-    let academicQualifications = {};
-    if (fields.academicQualifications) {
-      academicQualifications = JSON.parse(fields.academicQualifications);
-    }
-    let location = {};
-    if (fields.location) {
-      location = JSON.parse(fields.location);
-    }
-    const preferredSubjects = fields.preferredSubjects ? fields.preferredSubjects.split(',').map((s: string) => s.trim()) : [];
-    const preferredLocation = fields.preferredLocation ? fields.preferredLocation.split(',').map((s: string) => s.trim()) : [];
 
     const tutor = new Tutor({
       tutorId,
       name,
       phone,
       email,
-      status: status || 'pending',
-      mediaFeeHistory: mediaFeeHistory || [],
+      address,
+      profileStatus: 'active',
+      mediaFeeHistory: [],
       password: hashedPassword,
-      fatherName: fields.fatherName,
-      fatherNumber: fields.fatherNumber,
-      version: fields.version,
-      group: fields.group,
+      fatherName,
+      fatherNumber,
+      version,
+      group,
       academicQualifications,
-      schoolName: fields.schoolName,
-      collegeName: fields.collegeName,
-      university: fields.university,
-      universityShortForm: fields.universityShortForm,
-      department: fields.department,
-      yearAndSemester: fields.yearAndSemester,
+      schoolName,
+      collegeName,
+      university,
+      universityShortForm,
+      department,
+      yearAndSemester,
       preferredSubjects,
       preferredLocation,
-      experience: fields.experience,
+      experience,
       documents: {
         nidPhoto: nidPhotoUrl,
         studentIdPhoto: studentIdPhotoUrl,
       },
-      gender: fields.gender,
-      location,
+      gender,
+      location: locationDoc._id,
+      isProfileComplete: true,
+      totalApplications: 0,
+      successfulTuitions: 0,
     });
 
     await tutor.save();
@@ -187,10 +207,36 @@ export async function POST(request: NextRequest) {
 
     await user.save();
 
+    // Send welcome email if email is provided (non-blocking)
+    let emailSent = false;
+    if (email) {
+      try {
+        await sendWelcomeEmail(email, name, tutorId, phone);
+        console.log(`Welcome email sent successfully to ${email}`);
+        emailSent = true;
+      } catch (emailError) {
+        console.error('Failed to send welcome email:', emailError);
+        console.log('Registration completed successfully despite email error');
+        // Continue with successful registration
+      }
+    }
+
     return NextResponse.json({
       message: 'Tutor and User registered successfully',
-      tutor,
-      user,
+      tutor: {
+        _id: tutor._id,
+        tutorId: tutor.tutorId,
+        name: tutor.name,
+        phone: tutor.phone,
+        email: tutor.email,
+        profileStatus: tutor.profileStatus,
+      },
+      user: {
+        _id: user._id,
+        username: user.username,
+        userType: user.userType,
+      },
+      emailSent: emailSent,
     }, { status: 201 });
 
   } catch (error: any) {

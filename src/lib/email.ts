@@ -2,13 +2,16 @@ import nodemailer from 'nodemailer';
 
 // Email transporter configuration
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.EMAIL_PORT || '587'),
-  secure: process.env.EMAIL_SECURE === 'true',
+  service: 'gmail', // Use Gmail service directly
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASSWORD,
   },
+  // Alternative configuration if service doesn't work:
+  // host: 'smtp.gmail.com',
+  // port: 587,
+  // secure: false, // true for 465, false for other ports
+  // requireTLS: true,
 });
 
 export interface EmailOptions {
@@ -30,7 +33,7 @@ export interface EmailOptions {
 export async function sendEmail(options: EmailOptions): Promise<void> {
   try {
     const mailOptions = {
-      from: options.from || `${process.env.EMAIL_FROM_NAME} <${process.env.GMAIL_USER}>`,
+      from: options.from || `${process.env.EMAIL_FROM_NAME || 'Smart Tutors'} <${process.env.GMAIL_USER}>`,
       to: Array.isArray(options.to) ? options.to.join(', ') : options.to,
       subject: options.subject,
       html: options.html,
@@ -39,38 +42,156 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
     };
 
     await transporter.sendMail(mailOptions);
-    console.log('Email sent successfully');
+    console.log('Email sent successfully to:', options.to);
   } catch (error) {
     console.error('Email sending error:', error);
-    throw new Error('Failed to send email');
+    // Don't throw error to prevent registration failure
+    console.log('Continuing despite email error...');
   }
 }
 
 /**
  * Send welcome email to new tutors
  */
-export async function sendWelcomeEmail(tutorEmail: string, tutorName: string): Promise<void> {
+export async function sendWelcomeEmail(
+  tutorEmail: string, 
+  tutorName: string, 
+  tutorId: string, 
+  loginPhone: string
+): Promise<void> {
+  const loginUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/tutors`;
+  const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/tutor`;
+  
   const html = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2 style="color: #2563eb;">Welcome to Smart Tutors!</h2>
-      <p>Dear ${tutorName},</p>
-      <p>Welcome to Smart Tutors! Your account has been successfully created.</p>
-      <p>You can now:</p>
-      <ul>
-        <li>Complete your profile</li>
-        <li>Browse available tuitions</li>
-        <li>Apply for teaching positions</li>
-        <li>Track your applications</li>
-      </ul>
-      <p>If you have any questions, please don't hesitate to contact us.</p>
-      <p>Best regards,<br>The Smart Tutors Team</p>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">
+      <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #7c3aed; font-size: 28px; margin: 0;">Smart Tutors</h1>
+          <p style="color: #6b7280; margin: 5px 0 0 0;">Welcome to our tutoring community!</p>
+        </div>
+
+        <!-- Welcome Message -->
+        <div style="margin-bottom: 30px;">
+          <h2 style="color: #1f2937; margin-bottom: 15px;">Welcome, ${tutorName}! 🎉</h2>
+          <p style="color: #374151; line-height: 1.6; margin-bottom: 15px;">
+            Congratulations! Your Smart Tutors account has been successfully created. 
+            You're now part of our growing community of dedicated educators.
+          </p>
+        </div>
+
+        <!-- Account Details -->
+        <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+          <h3 style="color: #1f2937; margin-top: 0; margin-bottom: 15px;">Your Account Details</h3>
+          <p style="margin: 8px 0; color: #374151;"><strong>Tutor ID:</strong> ${tutorId}</p>
+          <p style="margin: 8px 0; color: #374151;"><strong>Login Phone:</strong> ${loginPhone}</p>
+          <p style="margin: 8px 0; color: #374151;"><strong>Email:</strong> ${tutorEmail}</p>
+        </div>
+
+        <!-- Next Steps -->
+        <div style="margin-bottom: 25px;">
+          <h3 style="color: #1f2937; margin-bottom: 15px;">What's Next? 📚</h3>
+          <div style="margin-bottom: 15px;">
+            <div style="display: flex; align-items: flex-start; margin-bottom: 10px;">
+              <span style="color: #7c3aed; font-weight: bold; margin-right: 10px;">1.</span>
+              <span style="color: #374151;">Complete your profile with additional details</span>
+            </div>
+            <div style="display: flex; align-items: flex-start; margin-bottom: 10px;">
+              <span style="color: #7c3aed; font-weight: bold; margin-right: 10px;">2.</span>
+              <span style="color: #374151;">Browse available tuition opportunities</span>
+            </div>
+            <div style="display: flex; align-items: flex-start; margin-bottom: 10px;">
+              <span style="color: #7c3aed; font-weight: bold; margin-right: 10px;">3.</span>
+              <span style="color: #374151;">Apply for positions that match your expertise</span>
+            </div>
+            <div style="display: flex; align-items: flex-start; margin-bottom: 10px;">
+              <span style="color: #7c3aed; font-weight: bold; margin-right: 10px;">4.</span>
+              <span style="color: #374151;">Track your applications in your dashboard</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div style="text-align: center; margin-bottom: 25px;">
+          <a href="${loginUrl}" 
+             style="background-color: #7c3aed; color: white; padding: 12px 24px; 
+                    text-decoration: none; border-radius: 6px; display: inline-block; 
+                    margin-right: 10px; font-weight: bold;">
+            Login to Account
+          </a>
+          <a href="${dashboardUrl}" 
+             style="background-color: #059669; color: white; padding: 12px 24px; 
+                    text-decoration: none; border-radius: 6px; display: inline-block; 
+                    font-weight: bold;">
+            Go to Dashboard
+          </a>
+        </div>
+
+        <!-- Tips -->
+        <div style="background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 15px; margin-bottom: 25px;">
+          <h4 style="color: #065f46; margin-top: 0; margin-bottom: 10px;">💡 Pro Tips for Success</h4>
+          <ul style="color: #047857; margin: 0; padding-left: 20px;">
+            <li style="margin-bottom: 5px;">Keep your profile updated with latest qualifications</li>
+            <li style="margin-bottom: 5px;">Respond promptly to application updates</li>
+            <li style="margin-bottom: 5px;">Maintain professionalism in all communications</li>
+            <li style="margin-bottom: 5px;">Provide quality teaching to build your reputation</li>
+          </ul>
+        </div>
+
+        <!-- Support -->
+        <div style="border-top: 1px solid #e5e7eb; padding-top: 20px; text-align: center;">
+          <p style="color: #6b7280; margin-bottom: 10px;">
+            Need help getting started? We're here to support you!
+          </p>
+          <p style="color: #6b7280; margin-bottom: 15px;">
+            Contact us at: <a href="mailto:support@smarttutors.com" style="color: #7c3aed;">support@smarttutors.com</a>
+          </p>
+          <p style="color: #9ca3af; font-size: 14px; margin: 0;">
+            Best regards,<br>
+            <strong>The Smart Tutors Team</strong>
+          </p>
+        </div>
+      </div>
+      
+      <!-- Footer -->
+      <div style="text-align: center; margin-top: 20px;">
+        <p style="color: #9ca3af; font-size: 12px; margin: 0;">
+          © 2024 Smart Tutors. All rights reserved.
+        </p>
+      </div>
     </div>
+  `;
+
+  const textVersion = `
+    Welcome to Smart Tutors, ${tutorName}!
+    
+    Your account has been successfully created.
+    
+    Account Details:
+    - Tutor ID: ${tutorId}
+    - Login Phone: ${loginPhone}
+    - Email: ${tutorEmail}
+    
+    Next Steps:
+    1. Complete your profile
+    2. Browse available tuitions
+    3. Apply for teaching positions
+    4. Track your applications
+    
+    Login: ${loginUrl}
+    Dashboard: ${dashboardUrl}
+    
+    Need help? Contact us at support@smarttutors.com
+    
+    Best regards,
+    The Smart Tutors Team
   `;
 
   await sendEmail({
     to: tutorEmail,
-    subject: 'Welcome to Smart Tutors!',
+    subject: '🎉 Welcome to Smart Tutors - Your Account is Ready!',
     html,
+    text: textVersion,
   });
 }
 
@@ -210,6 +331,159 @@ export async function sendContactFormNotification(
   await sendEmail({
     to: process.env.GMAIL_USER!,
     subject: `Contact Form: ${subject}`,
+    html,
+  });
+} 
+
+/**
+ * Send application status update email to tutor
+ */
+export async function sendApplicationStatusUpdate(
+  tutorEmail: string,
+  tutorName: string,
+  tuitionDetails: {
+    tuitionId: string;
+    studentClass: string;
+    subject: string[];
+    location: string;
+    salary: number;
+  },
+  oldStatus: string,
+  newStatus: string,
+  feedback?: string,
+  demoDate?: string
+): Promise<void> {
+  const statusConfig = {
+    confirmed: {
+      color: '#10b981',
+      bgColor: '#ecfdf5',
+      title: '🎉 Congratulations! Your Application has been Confirmed',
+      emoji: '✅',
+      message: 'Great news! Your application has been accepted.'
+    },
+    rejected: {
+      color: '#ef4444',
+      bgColor: '#fef2f2',
+      title: '❌ Application Update: Not Selected',
+      emoji: '❌',
+      message: 'Unfortunately, your application was not selected for this position.'
+    },
+    completed: {
+      color: '#3b82f6',
+      bgColor: '#eff6ff',
+      title: '🏆 Tuition Completed Successfully',
+      emoji: '🎓',
+      message: 'Congratulations! You have successfully completed this tuition.'
+    },
+    withdrawn: {
+      color: '#6b7280',
+      bgColor: '#f9fafb',
+      title: '↩️ Application Withdrawn',
+      emoji: '📤',
+      message: 'Your application has been withdrawn.'
+    }
+  };
+
+  const config = statusConfig[newStatus as keyof typeof statusConfig];
+  const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/tutor`;
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">
+      <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #7c3aed; font-size: 24px; margin: 0;">Smart Tutors</h1>
+        </div>
+
+        <!-- Status Update -->
+        <div style="background-color: ${config?.bgColor || '#f3f4f6'}; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 25px;">
+          <h2 style="color: ${config?.color || '#374151'}; margin: 0 0 10px 0; font-size: 22px;">
+            ${config?.title || 'Application Status Updated'}
+          </h2>
+          <p style="color: #374151; font-size: 16px; margin: 0;">
+            Hello ${tutorName}, ${config?.message || 'Your application status has been updated.'}
+          </p>
+        </div>
+
+        <!-- Tuition Details -->
+        <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+          <h3 style="color: #1f2937; margin-top: 0; margin-bottom: 15px;">Tuition Details</h3>
+          <p style="margin: 8px 0; color: #374151;"><strong>Tuition ID:</strong> ${tuitionDetails.tuitionId}</p>
+          <p style="margin: 8px 0; color: #374151;"><strong>Class:</strong> ${tuitionDetails.studentClass}</p>
+          <p style="margin: 8px 0; color: #374151;"><strong>Subjects:</strong> ${tuitionDetails.subject.join(', ')}</p>
+          <p style="margin: 8px 0; color: #374151;"><strong>Location:</strong> ${tuitionDetails.location}</p>
+          <p style="margin: 8px 0; color: #374151;"><strong>Salary:</strong> ৳${tuitionDetails.salary.toLocaleString()}</p>
+          <p style="margin: 8px 0; color: #374151;"><strong>Status:</strong> 
+            <span style="background-color: ${config?.color || '#6b7280'}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+              ${newStatus.toUpperCase()}
+            </span>
+          </p>
+        </div>
+
+        ${feedback ? `
+        <!-- Feedback -->
+        <div style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin-bottom: 25px;">
+          <h4 style="color: #92400e; margin-top: 0; margin-bottom: 10px;">💬 Feedback</h4>
+          <p style="color: #78350f; margin: 0; font-style: italic;">"${feedback}"</p>
+        </div>
+        ` : ''}
+
+        ${demoDate ? `
+        <!-- Demo Information -->
+        <div style="background-color: #dbeafe; border-left: 4px solid #3b82f6; padding: 15px; margin-bottom: 25px;">
+          <h4 style="color: #1e40af; margin-top: 0; margin-bottom: 10px;">📅 Demo Scheduled</h4>
+          <p style="color: #1e3a8a; margin: 0;">Demo Date: <strong>${new Date(demoDate).toLocaleDateString()}</strong></p>
+        </div>
+        ` : ''}
+
+        <!-- Next Steps -->
+        ${newStatus === 'confirmed' ? `
+        <div style="background-color: #ecfdf5; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+          <h4 style="color: #065f46; margin-top: 0; margin-bottom: 15px;">🚀 Next Steps</h4>
+          <ul style="color: #047857; margin: 0; padding-left: 20px;">
+            <li style="margin-bottom: 8px;">Contact the guardian to arrange the first class</li>
+            <li style="margin-bottom: 8px;">Prepare your teaching materials</li>
+            <li style="margin-bottom: 8px;">Confirm the schedule and payment terms</li>
+            <li style="margin-bottom: 8px;">Start delivering quality education!</li>
+          </ul>
+        </div>
+        ` : newStatus === 'rejected' ? `
+        <div style="background-color: #fef2f2; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+          <h4 style="color: #991b1b; margin-top: 0; margin-bottom: 15px;">💪 Keep Going!</h4>
+          <p style="color: #7f1d1d; margin: 0;">
+            Don't worry! There are many other opportunities available. 
+            Keep applying and improving your profile to increase your chances of success.
+          </p>
+        </div>
+        ` : ''}
+
+        <!-- CTA Button -->
+        <div style="text-align: center; margin-bottom: 25px;">
+          <a href="${dashboardUrl}" 
+             style="background-color: #7c3aed; color: white; padding: 12px 24px; 
+                    text-decoration: none; border-radius: 6px; display: inline-block; 
+                    font-weight: bold;">
+            View Dashboard
+          </a>
+        </div>
+
+        <!-- Footer -->
+        <div style="border-top: 1px solid #e5e7eb; padding-top: 20px; text-align: center;">
+          <p style="color: #6b7280; margin-bottom: 10px;">
+            Questions? Contact us at: <a href="mailto:support@smarttutors.com" style="color: #7c3aed;">support@smarttutors.com</a>
+          </p>
+          <p style="color: #9ca3af; font-size: 14px; margin: 0;">
+            Best regards,<br>
+            <strong>The Smart Tutors Team</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  await sendEmail({
+    to: tutorEmail,
+    subject: `${config?.emoji || '📄'} Application Update - ${tuitionDetails.tuitionId}`,
     html,
   });
 } 
