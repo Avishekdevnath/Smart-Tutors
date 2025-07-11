@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Eye, Edit, Trash2, MapPin, Users, Globe } from 'lucide-react';
+import { Eye, Edit, Trash2, MapPin, Users, Globe, Calendar } from 'lucide-react';
 
 interface FacebookGroup {
   _id: string;
@@ -37,98 +37,121 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
   // Get unique locations from all groups
   const allLocations = collection.groups.flatMap(group => Array.isArray(group.locations) ? group.locations : []);
   const uniqueLocations = [...new Set(allLocations)];
+
+  const formatMemberCount = (count: number) => {
+    if (count >= 1000000) {
+      return `${(count / 1000000).toFixed(1)}M`;
+    } else if (count >= 1000) {
+      return `${(count / 1000).toFixed(1)}K`;
+    }
+    return count.toString();
+  };
+
   return (
-    <div className="bg-white rounded-md border border-gray-200 shadow-sm hover:shadow transition-all duration-150">
-      <div className="p-3 sm:p-4">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-3">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+      {/* Header */}
+      <div className="p-6 pb-4">
+        <div className="flex items-start justify-between mb-4">
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1 line-clamp-2">
+            <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
               {collection.collectionName}
             </h3>
-            {/* Stats grid - minimal */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-2">
-              <div className="flex items-center gap-1 text-xs text-gray-600">
-                <Globe size={14} className="text-blue-500 flex-shrink-0" />
-                <span>{collection.groups.length} groups</span>
-              </div>
-              <div className="flex items-center gap-1 text-xs text-gray-600">
-                <Users size={14} className="text-green-500 flex-shrink-0" />
-                <span>{totalMembers.toLocaleString()} members</span>
-              </div>
-              {uniqueLocations.length > 0 && (
-                <div className="flex items-center gap-1 text-xs text-gray-600 col-span-2 sm:col-span-1">
-                  <MapPin size={14} className="text-purple-500 flex-shrink-0" />
-                  <span className="truncate">
-                    {uniqueLocations.length === 1 
-                      ? uniqueLocations[0] 
-                      : `${uniqueLocations.length} locations`
-                    }
-                  </span>
-                </div>
-              )}
-            </div>
-            {/* Location tags - up to 2 */}
-            {uniqueLocations.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-2">
-                {uniqueLocations.slice(0, 2).map((location, index) => (
-                  <span 
-                    key={index}
-                    className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 text-gray-700"
-                  >
-                    {location}
-                  </span>
-                ))}
-                {uniqueLocations.length > 2 && (
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-100 text-blue-700">
-                    +{uniqueLocations.length - 2} more
-                  </span>
-                )}
-              </div>
-            )}
+            <p className="text-sm text-gray-500 font-mono">
+              /{collection.slug}
+            </p>
           </div>
-          {/* Action buttons - minimal */}
-          <div className="flex items-center gap-1 flex-shrink-0">
+          
+          {/* Action buttons */}
+          <div className="flex items-center gap-1 ml-4">
             <button
               onClick={() => onView(collection)}
-              className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
               title="View Collection"
             >
-              <Eye size={16} />
+              <Eye size={18} />
             </button>
             <button
               onClick={() => onEdit(collection)}
-              className="p-1.5 text-yellow-600 hover:bg-yellow-50 rounded-md transition-colors"
+              className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
               title="Edit Collection"
             >
-              <Edit size={16} />
+              <Edit size={18} />
             </button>
             <button
               onClick={() => onDelete(collection._id)}
-              className="p-1.5 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
               title="Delete Collection"
             >
-              <Trash2 size={16} />
+              <Trash2 size={18} />
             </button>
           </div>
         </div>
-        {/* Footer - subtle */}
-        <div className="pt-2 border-t border-gray-100">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-            <div className="text-[11px] sm:text-xs text-gray-400">
-              Slug: {collection.slug}
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="text-center">
+            <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-lg mb-2 mx-auto">
+              <Globe size={20} className="text-blue-600" />
             </div>
-            <div className="flex items-center gap-1">
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-50 text-blue-700">
-                Collection
-              </span>
-              {collection.createdAt && (
-                <span className="text-[10px] text-gray-400">
-                  {new Date(collection.createdAt).toLocaleDateString()}
+            <div className="text-lg font-bold text-gray-900">{collection.groups.length}</div>
+            <div className="text-xs text-gray-500">Groups</div>
+          </div>
+          
+          <div className="text-center">
+            <div className="flex items-center justify-center w-10 h-10 bg-green-100 rounded-lg mb-2 mx-auto">
+              <Users size={20} className="text-green-600" />
+            </div>
+            <div className="text-lg font-bold text-gray-900">{formatMemberCount(totalMembers)}</div>
+            <div className="text-xs text-gray-500">Members</div>
+          </div>
+          
+          <div className="text-center">
+            <div className="flex items-center justify-center w-10 h-10 bg-purple-100 rounded-lg mb-2 mx-auto">
+              <MapPin size={20} className="text-purple-600" />
+            </div>
+            <div className="text-lg font-bold text-gray-900">{uniqueLocations.length}</div>
+            <div className="text-xs text-gray-500">Locations</div>
+          </div>
+        </div>
+
+        {/* Locations */}
+        {uniqueLocations.length > 0 && (
+          <div className="mb-4">
+            <div className="flex flex-wrap gap-2">
+              {uniqueLocations.slice(0, 3).map((location, index) => (
+                <span 
+                  key={index}
+                  className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 border border-blue-200"
+                >
+                  {location}
+                </span>
+              ))}
+              {uniqueLocations.length > 3 && (
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-gray-50 to-gray-100 text-gray-600 border border-gray-200">
+                  +{uniqueLocations.length - 3} more
                 </span>
               )}
             </div>
           </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <Calendar size={14} />
+            <span>
+              {collection.createdAt ? new Date(collection.createdAt).toLocaleDateString() : 'N/A'}
+            </span>
+          </div>
+          
+          <button
+            onClick={() => onView(collection)}
+            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            View Details
+          </button>
         </div>
       </div>
     </div>
