@@ -142,6 +142,8 @@ export default function TutorApplicationsPage() {
       <Toast />
       
       <div className="space-y-6">
+        
+
         {/* Header */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -167,6 +169,8 @@ export default function TutorApplicationsPage() {
             </div>
           </div>
         </div>
+
+        
 
         {/* Applications List */}
         {filteredApplications.length === 0 ? (
@@ -223,7 +227,7 @@ export default function TutorApplicationsPage() {
                         <span>{application.tuition.location}</span>
                       </div>
                       <div className="flex items-center text-gray-600">
-                        <span className="w-4 h-4 mr-2 text-yellow-500 font-bold text-lg">৳</span>
+                        <span className="w-4 h-4 mr-2 text-yellow-500 font-semibold text-sm flex items-center justify-center">৳</span>
                         <span>{application.tuition.salary}</span>
                       </div>
                       <div className="flex items-center text-gray-600">
@@ -284,41 +288,42 @@ export default function TutorApplicationsPage() {
           </div>
         )}
 
-        {/* Statistics */}
+                {/* Statistics */}
         {applications.length > 0 && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Application Statistics</h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-900">{applications.length}</div>
-                <div className="text-sm text-gray-600">Total</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-600">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl shadow-sm border border-blue-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">📊 Application Overview</h3>
+              <span className="text-sm text-blue-600 bg-blue-100 px-3 py-1 rounded-full font-medium">
+                {applications.length} Total Applications
+              </span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="bg-white rounded-lg p-4 text-center shadow-sm border border-yellow-200">
+                <div className="text-3xl font-bold text-yellow-600 mb-1">
                   {applications.filter(app => app.status === 'pending').length}
                 </div>
-                <div className="text-sm text-gray-600">Pending</div>
+                <div className="text-sm text-gray-600 font-medium">⏳ Pending Review</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">
+              <div className="bg-white rounded-lg p-4 text-center shadow-sm border border-green-200">
+                <div className="text-3xl font-bold text-green-600 mb-1">
                   {applications.filter(app => app.status === 'confirmed').length}
                 </div>
-                <div className="text-sm text-gray-600">Confirmed</div>
+                <div className="text-sm text-gray-600 font-medium">✅ Confirmed</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">
+              <div className="bg-white rounded-lg p-4 text-center shadow-sm border border-blue-200">
+                <div className="text-3xl font-bold text-blue-600 mb-1">
                   {applications.filter(app => app.status === 'completed').length}
                 </div>
-                <div className="text-sm text-gray-600">Completed</div>
+                <div className="text-sm text-gray-600 font-medium">🎯 Completed</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-600">
+              <div className="bg-white rounded-lg p-4 text-center shadow-sm border border-red-200">
+                <div className="text-3xl font-bold text-red-600 mb-1">
                   {applications.filter(app => app.status === 'rejected').length}
                 </div>
-                <div className="text-sm text-gray-600">Rejected</div>
+                <div className="text-sm text-gray-600 font-medium">❌ Rejected</div>
               </div>
+            </div>
           </div>
-        </div>
         )}
       </div>
     </TutorDashboardLayout>

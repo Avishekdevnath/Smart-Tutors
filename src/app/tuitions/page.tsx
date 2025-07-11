@@ -454,7 +454,7 @@ export default function TuitionsPage() {
                   {/* Salary */}
                   <div className="mb-4">
                     <h4 className="font-semibold text-gray-900 mb-2 flex items-center">
-                                              <span className="w-4 h-4 mr-2 text-yellow-500 font-bold text-lg">৳</span>
+                                              <span className="w-4 h-4 mr-2 text-yellow-500 font-semibold text-sm flex items-center justify-center">৳</span>
                       Salary
                     </h4>
                     <p className="text-gray-600 text-sm">{tuition.salary}</p>

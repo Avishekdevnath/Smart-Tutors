@@ -334,7 +334,7 @@ export function LatestTuitionsSection() {
 
                 {/* Salary */}
                 <div className="flex items-center text-gray-600 mb-4">
-                  <span className="w-4 h-4 mr-2 text-yellow-500 font-bold text-lg">৳</span>
+                  <span className="w-4 h-4 mr-2 text-yellow-500 font-semibold text-sm flex items-center justify-center">৳</span>
                   <span className="text-lg font-bold text-green-600">{tuition.salary}</span>
                 </div>
 
