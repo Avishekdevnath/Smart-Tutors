@@ -1,15 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/[...nextauth]/route';
 import { dbConnect } from '@/lib/mongodb';
 import TutorTuition from '@/models/TutorTuition';
 import { sendApplicationStatusUpdate } from '@/lib/email';
 
 // GET /api/applications/[id] - Get specific application
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-  try {
-    await dbConnect();
+  export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+    try {
+      await dbConnect();
     
     const application = await TutorTuition.findById(params.id)
-      .populate('tutor', 'tutorId name phone email universityShortForm version group gender address documents')
+      .populate({
+        path: 'tutor',
+        select: 'tutorId name phone email universityShortForm version group gender address documents',
+        required: false // Allow null tutors for guest applications
+      })
       .populate('tuition', 'tuitionId studentClass subject location salary status guardianName guardianPhone');
 
     if (!application) {
@@ -24,16 +30,20 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 }
 
 // PATCH /api/applications/[id] - Update application status and details
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
-  try {
-    await dbConnect();
+  export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+    try {
+      await dbConnect();
     
     const body = await request.json();
     const { status, feedback, guardianFeedback, demoDate, demoCompleted, demoFeedback, mediaFee, notes } = body;
 
     // Get the current application to compare status
     const currentApplication = await TutorTuition.findById(params.id)
-      .populate('tutor', 'name email')
+      .populate({
+        path: 'tutor',
+        select: 'name email',
+        required: false
+      })
       .populate('tuition', 'tuitionId studentClass subject location salary');
 
     if (!currentApplication) {
@@ -63,7 +73,11 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       params.id,
       updateData,
       { new: true, runValidators: true }
-    ).populate('tutor', 'tutorId name phone email universityShortForm version group')
+    ).populate({
+      path: 'tutor',
+      select: 'tutorId name phone email universityShortForm version group',
+      required: false
+    })
      .populate('tuition', 'tuitionId studentClass subject location salary status');
 
     if (!application) {
@@ -71,7 +85,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     }
 
     // Send email notification if status changed and tutor has email
-    if (status && status !== oldStatus && application.tutor.email) {
+    if (status && status !== oldStatus && application.tutor?.email) {
       try {
         const tuitionDetails = {
           tuitionId: application.tuition.tuitionId,
@@ -103,7 +117,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     return NextResponse.json({
       message: 'Application updated successfully',
       application,
-      emailSent: status && status !== oldStatus && application.tutor.email ? true : false,
+      emailSent: status && status !== oldStatus && application.tutor?.email ? true : false,
     });
 
   } catch (error: any) {
@@ -113,9 +127,9 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 }
 
 // DELETE /api/applications/[id] - Delete application (withdraw)
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-  try {
-    await dbConnect();
+  export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+    try {
+      await dbConnect();
     
     const application = await TutorTuition.findByIdAndDelete(params.id);
 
@@ -128,5 +142,75 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
   } catch (error: any) {
     console.error('Error deleting application:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+} 
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    await dbConnect();
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user || (session.user as any).userType !== 'admin') {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const { id } = params;
+    const body = await request.json();
+    const { status } = body;
+
+    if (!status || !['pending', 'confirmed', 'completed', 'rejected', 'withdrawn'].includes(status)) {
+      return NextResponse.json(
+        { error: 'Invalid status' },
+        { status: 400 }
+      );
+    }
+
+    const updateData: any = { status };
+
+    // Set appropriate timestamp based on status
+    if (status === 'confirmed') {
+      updateData.confirmedAt = new Date();
+    } else if (status === 'completed') {
+      updateData.completedAt = new Date();
+    } else if (status === 'rejected') {
+      updateData.rejectedAt = new Date();
+    }
+
+    const application = await TutorTuition.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true }
+    ).populate({
+      path: 'tutor',
+      select: 'name phone email',
+      required: false
+    })
+     .populate('tuition', 'code class version location salary status');
+
+    if (!application) {
+      return NextResponse.json(
+        { error: 'Application not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: `Application ${status} successfully`,
+      application
+    });
+
+  } catch (error) {
+    console.error('Error updating application:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 } 

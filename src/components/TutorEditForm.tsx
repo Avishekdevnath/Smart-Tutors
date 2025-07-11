@@ -71,8 +71,7 @@ export default function TutorEditForm({ tutor, onSave, onCancel, loading = false
     experience: tutor.experience || '',
     division: tutor.location?.division || '',
     district: tutor.location?.district || '',
-    area: tutor.location?.area || '',
-    status: tutor.status || 'pending'
+    area: tutor.location?.area || ''
   });
 
   const handleInputChange = (field: string, value: any) => {
@@ -83,13 +82,30 @@ export default function TutorEditForm({ tutor, onSave, onCancel, loading = false
     e.preventDefault();
     
     const updateData = {
-      ...formData,
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      gender: formData.gender,
+      address: formData.address,
+      fatherName: formData.fatherName,
+      fatherNumber: formData.fatherNumber,
+      version: formData.version,
+      group: formData.group,
       academicQualifications: {
         sscResult: formData.sscResult,
         hscResult: formData.hscResult,
         oLevelResult: formData.oLevelResult,
         aLevelResult: formData.aLevelResult,
       },
+      schoolName: formData.schoolName,
+      collegeName: formData.collegeName,
+      university: formData.university,
+      universityShortForm: formData.universityShortForm,
+      department: formData.department,
+      yearAndSemester: formData.yearAndSemester,
+      preferredSubjects: formData.preferredSubjects,
+      preferredLocation: formData.preferredLocation,
+      experience: formData.experience,
       location: {
         division: formData.division,
         district: formData.district,
@@ -244,6 +260,40 @@ export default function TutorEditForm({ tutor, onSave, onCancel, loading = false
           </div>
         </div>
 
+        {/* Family Information */}
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <User className="w-5 h-5 text-purple-600" />
+            Family Information
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Father's Name
+              </label>
+              <input
+                type="text"
+                value={formData.fatherName}
+                onChange={(e) => handleInputChange('fatherName', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Father's Phone Number
+              </label>
+              <input
+                type="tel"
+                value={formData.fatherNumber}
+                onChange={(e) => handleInputChange('fatherNumber', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Educational Background */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
@@ -252,6 +302,30 @@ export default function TutorEditForm({ tutor, onSave, onCancel, loading = false
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                School Name
+              </label>
+              <input
+                type="text"
+                value={formData.schoolName}
+                onChange={(e) => handleInputChange('schoolName', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                College Name
+              </label>
+              <input
+                type="text"
+                value={formData.collegeName}
+                onChange={(e) => handleInputChange('collegeName', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 University
@@ -302,29 +376,102 @@ export default function TutorEditForm({ tutor, onSave, onCancel, loading = false
           </div>
         </div>
 
-        {/* Status */}
+        {/* Teaching Preferences */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <Target className="w-5 h-5 text-purple-600" />
-            Status
+            Teaching Preferences
           </h3>
           
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tutor Status
-            </label>
-            <select
-              value={formData.status}
-              onChange={(e) => handleInputChange('status', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-            >
-              <option value="pending">Pending</option>
-              <option value="confirmed">Confirmed</option>
-              <option value="completed">Completed</option>
-              <option value="rejected">Rejected</option>
-            </select>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Experience
+              </label>
+              <input
+                type="text"
+                value={formData.experience}
+                onChange={(e) => handleInputChange('experience', e.target.value)}
+                placeholder="e.g., 2 years of teaching experience"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Preferred Subjects (comma-separated)
+              </label>
+              <input
+                type="text"
+                value={formData.preferredSubjects.join(', ')}
+                onChange={(e) => handleInputChange('preferredSubjects', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+                placeholder="e.g., Physics, Math, Chemistry"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Preferred Locations (comma-separated)
+              </label>
+              <input
+                type="text"
+                value={formData.preferredLocation.join(', ')}
+                onChange={(e) => handleInputChange('preferredLocation', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+                placeholder="e.g., Mohammadpur, Gulshan, Gulisthan"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
+            </div>
           </div>
         </div>
+
+        {/* Location Information */}
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-purple-600" />
+            Location Information
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Division
+              </label>
+              <input
+                type="text"
+                value={formData.division}
+                onChange={(e) => handleInputChange('division', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                District
+              </label>
+              <input
+                type="text"
+                value={formData.district}
+                onChange={(e) => handleInputChange('district', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Area
+              </label>
+              <input
+                type="text"
+                value={formData.area}
+                onChange={(e) => handleInputChange('area', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+
+
 
         {/* Action Buttons */}
         <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-3 pt-4 border-t border-gray-200">

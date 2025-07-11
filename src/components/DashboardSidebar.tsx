@@ -16,7 +16,8 @@ import {
   GlobeAltIcon,
   ArrowRightOnRectangleIcon,
   ArrowLeftIcon,
-  UserIcon
+  UserIcon,
+  DocumentTextIcon
 } from '@heroicons/react/24/outline';
 
 interface SidebarItem {
@@ -56,6 +57,12 @@ const sidebarItems: SidebarItem[] = [
     href: '/dashboard/tuitions',
     icon: UsersIcon,
     description: 'Manage tuition classes'
+  },
+  {
+    name: 'Applications',
+    href: '/dashboard/applications',
+    icon: DocumentTextIcon,
+    description: 'Manage tuition applications'
   },
   {
     name: 'Facebook Groups',

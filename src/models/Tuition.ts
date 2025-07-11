@@ -55,20 +55,53 @@ const TuitionSchema = new Schema({
 // Auto-generating Tuition Code (only if no code provided)
 TuitionSchema.pre('validate', async function (next) {
   if (!this.code) {
-    // Auto-generate next sequential code
-    const lastTuition = await mongoose.model('Tuition').findOne().sort({ createdAt: -1 });
-    let nextNumber = 150; // Default starting number
+    let attempts = 0;
+    const maxAttempts = 10;
     
-    if (lastTuition) {
-      // Extract number from existing code (handle both ST123 and 123 formats)
-      const existingCode = lastTuition.code;
-      const numberMatch = existingCode.match(/(\d+)$/);
-      if (numberMatch) {
-        nextNumber = parseInt(numberMatch[1]) + 1;
+    while (attempts < maxAttempts) {
+      try {
+        // Find all existing codes to avoid conflicts
+        const existingTuitions = await mongoose.model('Tuition').find({}, 'code').lean();
+        const existingCodes = new Set(existingTuitions.map(t => t.code));
+        
+        // Find the first available code starting from ST150
+        let codeFound = false;
+        for (let i = 150; i <= 2000; i++) { // Extended range
+          const candidateCode = `ST${i}`;
+          if (!existingCodes.has(candidateCode)) {
+            // Double-check this code doesn't exist (race condition protection)
+            const existingCheck = await mongoose.model('Tuition').findOne({ code: candidateCode });
+            if (!existingCheck) {
+              this.code = candidateCode;
+              codeFound = true;
+              break;
+            }
+          }
+        }
+        
+        // If no code found in range, use timestamp-based approach
+        if (!codeFound) {
+          const timestamp = Date.now();
+          this.code = `ST${timestamp}`;
+        }
+        
+        break; // Exit the retry loop
+        
+      } catch (error) {
+        attempts++;
+        console.error(`Error generating tuition code (attempt ${attempts}):`, error);
+        
+        if (attempts >= maxAttempts) {
+          // Final fallback - use timestamp with random suffix
+          const timestamp = Date.now();
+          const random = Math.floor(Math.random() * 1000);
+          this.code = `ST${timestamp}_${random}`;
+        } else {
+          // Wait a bit before retrying (helps with race conditions)
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
       }
     }
-    
-    this.code = `ST${nextNumber}`;
   } else {
     // Ensure manual code has ST prefix
     if (!this.code.startsWith('ST')) {

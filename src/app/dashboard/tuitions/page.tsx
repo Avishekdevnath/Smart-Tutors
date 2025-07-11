@@ -632,7 +632,7 @@ export default function TuitionManagementDashboard() {
                         {tuition.specialRemarks && (
                           <p className="break-words"><span className="font-medium">Remarks:</span> {tuition.specialRemarks}</p>
                         )}
-                        <p><span className="font-medium">Applications:</span> {tuition.applications.length}</p>
+                        <p><span className="font-medium">Applications:</span> {Array.isArray(tuition.applications) ? tuition.applications.length : 0}</p>
                       </div>
                     </div>
                   </div>

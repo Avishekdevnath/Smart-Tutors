@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/mongodb';
 import Tuition from '@/models/Tuition';
 import Guardian from '@/models/Guardian';
+import { generateUniqueTuitionCode, formatTuitionCode, validateTuitionCode } from '@/utils/tuitionCodeGenerator';
 
 // GET /api/tuitions - Get all tuitions with populated guardian data
 export async function GET(request: NextRequest) {
@@ -61,6 +62,26 @@ export async function POST(request: NextRequest) {
       description 
     } = body;
 
+    // Handle tuition code generation/validation
+    let finalCode = '';
+    
+    if (code && code.trim()) {
+      // Manual code provided
+      finalCode = formatTuitionCode(code.trim());
+      
+      // Validate that this code is available
+      const isAvailable = await validateTuitionCode(finalCode);
+      if (!isAvailable) {
+        return NextResponse.json({ 
+          success: false,
+          error: `Tuition code ${finalCode} already exists. Please choose a different code or leave it empty for auto-generation.`
+        }, { status: 400 });
+      }
+    } else {
+      // Auto-generate code
+      finalCode = await generateUniqueTuitionCode();
+    }
+
     // Handle Guardian Creation (if not exists)
     let existingGuardian = await Guardian.findOne({ number: guardianNumber });
     if (!existingGuardian) {
@@ -80,9 +101,9 @@ export async function POST(request: NextRequest) {
       await existingGuardian.save();
     }
 
-    // Create the Tuition Record
+    // Create the Tuition Record with the safely generated/validated code
     const tuition = new Tuition({
-      code, // This will be used if provided, otherwise auto-generated
+      code: finalCode,
       guardianName,
       guardianNumber,
       guardianAddress,
@@ -108,10 +129,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ 
       success: true,
       message: 'Tuition added successfully', 
-      tuition 
+      tuition,
+      generatedCode: finalCode
     }, { status: 201 });
   } catch (error: any) {
     console.error('Error creating tuition:', error);
+    
+    // Handle specific MongoDB duplicate key error
+    if (error.code === 11000 && error.keyPattern?.code) {
+      return NextResponse.json({ 
+        success: false,
+        error: `Tuition code already exists. This might be a race condition. Please try again or specify a different code.`
+      }, { status: 409 });
+    }
+    
     return NextResponse.json({ 
       success: false,
       error: error.message 

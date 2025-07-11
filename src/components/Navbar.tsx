@@ -22,7 +22,6 @@ export default function Navbar() {
       name: 'Dashboard', 
       href: user?.userType === 'admin' ? '/dashboard' : '/tutor/dashboard' 
     }] : []),
-    { name: 'Tutors', href: '/tutors' },
     { name: 'Tuitions', href: '/tuitions' },
     { name: 'Guardians', href: '/guardians' },
     { name: 'Contact', href: '/contact' },

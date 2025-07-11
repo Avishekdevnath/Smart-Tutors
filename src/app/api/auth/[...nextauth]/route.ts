@@ -6,7 +6,7 @@ import Tutor from '@/models/Tutor';
 import Admin from '@/models/Admin';
 import bcrypt from 'bcryptjs';
 
-const handler = NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -150,6 +150,8 @@ const handler = NextAuth({
     signIn: '/tutors/login',
   },
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST }; 
