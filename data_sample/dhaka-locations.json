@@ -1,0 +1,566 @@
+[
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Mirpur",
+    "formatted": "Mirpur, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Dhanmondi",
+    "formatted": "Dhanmondi, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Gulshan",
+    "formatted": "Gulshan, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Banani",
+    "formatted": "Banani, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Baridhara",
+    "formatted": "Baridhara, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Bashundhara",
+    "formatted": "Bashundhara, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Uttara",
+    "formatted": "Uttara, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Mohammadpur",
+    "formatted": "Mohammadpur, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Lalbagh",
+    "formatted": "Lalbagh, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Old Dhaka",
+    "formatted": "Old Dhaka, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Wari",
+    "formatted": "Wari, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Ramna",
+    "formatted": "Ramna, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Motijheel",
+    "formatted": "Motijheel, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Paltan",
+    "formatted": "Paltan, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Shahbagh",
+    "formatted": "Shahbagh, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Farmgate",
+    "formatted": "Farmgate, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Tejgaon",
+    "formatted": "Tejgaon, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Kakrail",
+    "formatted": "Kakrail, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Malibagh",
+    "formatted": "Malibagh, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Moghbazar",
+    "formatted": "Moghbazar, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Rampura",
+    "formatted": "Rampura, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Badda",
+    "formatted": "Badda, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Khilgaon",
+    "formatted": "Khilgaon, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Demra",
+    "formatted": "Demra, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Shyampur",
+    "formatted": "Shyampur, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Jatrabari",
+    "formatted": "Jatrabari, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Kadamtali",
+    "formatted": "Kadamtali, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Keraniganj",
+    "formatted": "Keraniganj, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Savar",
+    "formatted": "Savar, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Dhamrai",
+    "formatted": "Dhamrai, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Nawabganj",
+    "formatted": "Nawabganj, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "area": "Dohar",
+    "formatted": "Dohar, Dhaka, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Gazipur",
+    "area": "Gazipur Sadar",
+    "formatted": "Gazipur Sadar, Gazipur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Gazipur",
+    "area": "Kaliakair",
+    "formatted": "Kaliakair, Gazipur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Gazipur",
+    "area": "Kapasia",
+    "formatted": "Kapasia, Gazipur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Gazipur",
+    "area": "Kaliganj",
+    "formatted": "Kaliganj, Gazipur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Gazipur",
+    "area": "Sreepur",
+    "formatted": "Sreepur, Gazipur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Narayanganj",
+    "area": "Narayanganj Sadar",
+    "formatted": "Narayanganj Sadar, Narayanganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Narayanganj",
+    "area": "Sonargaon",
+    "formatted": "Sonargaon, Narayanganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Narayanganj",
+    "area": "Bandar",
+    "formatted": "Bandar, Narayanganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Narayanganj",
+    "area": "Araihazar",
+    "formatted": "Araihazar, Narayanganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Narayanganj",
+    "area": "Siddhirganj",
+    "formatted": "Siddhirganj, Narayanganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Narayanganj",
+    "area": "Rupganj",
+    "formatted": "Rupganj, Narayanganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Tangail",
+    "area": "Tangail Sadar",
+    "formatted": "Tangail Sadar, Tangail, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Tangail",
+    "area": "Basail",
+    "formatted": "Basail, Tangail, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Tangail",
+    "area": "Bhuapur",
+    "formatted": "Bhuapur, Tangail, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Tangail",
+    "area": "Delduar",
+    "formatted": "Delduar, Tangail, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Tangail",
+    "area": "Ghatail",
+    "formatted": "Ghatail, Tangail, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Tangail",
+    "area": "Gopalpur",
+    "formatted": "Gopalpur, Tangail, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Tangail",
+    "area": "Kalihati",
+    "formatted": "Kalihati, Tangail, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Tangail",
+    "area": "Madhupur",
+    "formatted": "Madhupur, Tangail, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Tangail",
+    "area": "Mirzapur",
+    "formatted": "Mirzapur, Tangail, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Tangail",
+    "area": "Nagarpur",
+    "formatted": "Nagarpur, Tangail, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Tangail",
+    "area": "Sakhipur",
+    "formatted": "Sakhipur, Tangail, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Narsingdi",
+    "area": "Narsingdi Sadar",
+    "formatted": "Narsingdi Sadar, Narsingdi, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Narsingdi",
+    "area": "Belabo",
+    "formatted": "Belabo, Narsingdi, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Narsingdi",
+    "area": "Monohardi",
+    "formatted": "Monohardi, Narsingdi, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Narsingdi",
+    "area": "Palash",
+    "formatted": "Palash, Narsingdi, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Narsingdi",
+    "area": "Raipura",
+    "formatted": "Raipura, Narsingdi, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Narsingdi",
+    "area": "Shibpur",
+    "formatted": "Shibpur, Narsingdi, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Munshiganj",
+    "area": "Munshiganj Sadar",
+    "formatted": "Munshiganj Sadar, Munshiganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Munshiganj",
+    "area": "Gazaria",
+    "formatted": "Gazaria, Munshiganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Munshiganj",
+    "area": "Lohajang",
+    "formatted": "Lohajang, Munshiganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Munshiganj",
+    "area": "Sirajdikhan",
+    "formatted": "Sirajdikhan, Munshiganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Munshiganj",
+    "area": "Sreenagar",
+    "formatted": "Sreenagar, Munshiganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Munshiganj",
+    "area": "Tongibari",
+    "formatted": "Tongibari, Munshiganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Rajbari",
+    "area": "Rajbari Sadar",
+    "formatted": "Rajbari Sadar, Rajbari, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Rajbari",
+    "area": "Baliakandi",
+    "formatted": "Baliakandi, Rajbari, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Rajbari",
+    "area": "Goalandaghat",
+    "formatted": "Goalandaghat, Rajbari, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Rajbari",
+    "area": "Pangsha",
+    "formatted": "Pangsha, Rajbari, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Madaripur",
+    "area": "Madaripur Sadar",
+    "formatted": "Madaripur Sadar, Madaripur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Madaripur",
+    "area": "Kalkini",
+    "formatted": "Kalkini, Madaripur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Madaripur",
+    "area": "Rajoir",
+    "formatted": "Rajoir, Madaripur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Madaripur",
+    "area": "Shibchar",
+    "formatted": "Shibchar, Madaripur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Gopalganj",
+    "area": "Gopalganj Sadar",
+    "formatted": "Gopalganj Sadar, Gopalganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Gopalganj",
+    "area": "Kashiani",
+    "formatted": "Kashiani, Gopalganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Gopalganj",
+    "area": "Kotalipara",
+    "formatted": "Kotalipara, Gopalganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Gopalganj",
+    "area": "Muksudpur",
+    "formatted": "Muksudpur, Gopalganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Gopalganj",
+    "area": "Tungipara",
+    "formatted": "Tungipara, Gopalganj, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Shariatpur",
+    "area": "Shariatpur Sadar",
+    "formatted": "Shariatpur Sadar, Shariatpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Shariatpur",
+    "area": "Bhedarganj",
+    "formatted": "Bhedarganj, Shariatpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Shariatpur",
+    "area": "Damudya",
+    "formatted": "Damudya, Shariatpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Shariatpur",
+    "area": "Gosairhat",
+    "formatted": "Gosairhat, Shariatpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Shariatpur",
+    "area": "Naria",
+    "formatted": "Naria, Shariatpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Shariatpur",
+    "area": "Zanjira",
+    "formatted": "Zanjira, Shariatpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Faridpur",
+    "area": "Faridpur Sadar",
+    "formatted": "Faridpur Sadar, Faridpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Faridpur",
+    "area": "Alfadanga",
+    "formatted": "Alfadanga, Faridpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Faridpur",
+    "area": "Bhanga",
+    "formatted": "Bhanga, Faridpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Faridpur",
+    "area": "Boalmari",
+    "formatted": "Boalmari, Faridpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Faridpur",
+    "area": "Charbhadrasan",
+    "formatted": "Charbhadrasan, Faridpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Faridpur",
+    "area": "Madhukhali",
+    "formatted": "Madhukhali, Faridpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Faridpur",
+    "area": "Nagarkanda",
+    "formatted": "Nagarkanda, Faridpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Faridpur",
+    "area": "Sadarpur",
+    "formatted": "Sadarpur, Faridpur, Dhaka Division"
+  },
+  {
+    "division": "Dhaka",
+    "district": "Faridpur",
+    "area": "Saltha",
+    "formatted": "Saltha, Faridpur, Dhaka Division"
+  }
+] 

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -82,37 +83,36 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-gray-900 text-white">
-      {/* Main Footer Content */}
+    <footer className="bg-white border-t">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand Section */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center mb-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3">
-                <span className="text-white font-bold text-xl">ST</span>
-              </div>
-              <span className="text-2xl font-bold">Smart Tutors</span>
+          <div className="lg:col-span-1">
+            <div className="flex items-center gap-3 mb-4">
+              <Link href="/">
+                <Image src="/logo.jpg" alt="Smart Tutors Logo" width={40} height={40} className="rounded" />
+              </Link>
+              <span className="font-bold text-xl text-blue-700">Smart Tutors</span>
             </div>
-            <p className="text-gray-300 mb-6 max-w-md">
-              Empowering education through intelligent tutor management. Connect students with qualified tutors and streamline the learning experience.
+            <p className="text-gray-600 text-sm mb-6">
+              Connecting qualified tutors with students for personalized learning experiences.
             </p>
             
             {/* Newsletter Signup */}
             <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-3">Stay Updated</h3>
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Stay Updated</h3>
               <form onSubmit={handleNewsletterSubmit} className="flex">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="flex-1 px-4 py-2 rounded-l-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 rounded-r-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition-colors text-sm"
                 >
                   Subscribe
                 </button>
@@ -120,29 +120,32 @@ export default function Footer() {
             </div>
 
             {/* Social Links */}
-            <div className="flex space-x-4">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.href}
-                  className="text-gray-400 hover:text-white transition-colors duration-200"
-                  aria-label={social.name}
-                >
-                  {social.icon}
-                </a>
-              ))}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Follow Us</h3>
+              <div className="flex space-x-3">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    className="text-gray-400 hover:text-blue-600 transition-colors"
+                    aria-label={social.name}
+                  >
+                    {social.icon}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Services Links */}
+          {/* Services */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Services</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">Services</h3>
             <ul className="space-y-2">
               {footerLinks.services.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                    className="text-gray-600 hover:text-blue-600 transition-colors text-sm"
                   >
                     {link.name}
                   </Link>
@@ -151,15 +154,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Company Links */}
+          {/* Company */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Company</h3>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">Company</h3>
             <ul className="space-y-2">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                    className="text-gray-600 hover:text-blue-600 transition-colors text-sm"
                   >
                     {link.name}
                   </Link>
@@ -168,29 +171,32 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Support & Resources */}
+          {/* Support */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Support</h3>
-            <ul className="space-y-2 mb-6">
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">Support</h3>
+            <ul className="space-y-2">
               {footerLinks.support.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                    className="text-gray-600 hover:text-blue-600 transition-colors text-sm"
                   >
                     {link.name}
                   </Link>
                 </li>
               ))}
             </ul>
-            
-            <h3 className="text-lg font-semibold mb-4">Resources</h3>
+          </div>
+
+          {/* Resources */}
+          <div>
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">Resources</h3>
             <ul className="space-y-2">
               {footerLinks.resources.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                    className="text-gray-600 hover:text-blue-600 transition-colors text-sm"
                   >
                     {link.name}
                   </Link>
@@ -199,24 +205,19 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-200 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-gray-400 text-sm">
-              © {currentYear} Smart Tutors. All rights reserved.
-            </div>
+            <p className="text-gray-500 text-sm">
+              &copy; {currentYear} Smart Tutors. All rights reserved.
+            </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">
+              <Link href="/privacy" className="text-gray-500 hover:text-blue-600 text-sm">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">
+              <Link href="/terms" className="text-gray-500 hover:text-blue-600 text-sm">
                 Terms of Service
-              </Link>
-              <Link href="/cookies" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">
-                Cookie Policy
               </Link>
             </div>
           </div>

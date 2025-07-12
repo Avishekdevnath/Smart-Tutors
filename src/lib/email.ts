@@ -319,7 +319,7 @@ export async function sendContactFormNotification(
       <h2 style="color: #2563eb;">New Contact Form Submission</h2>
       <div style="background-color: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
         <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Email:</strong> ${email || 'Not provided'}</p>
         <p><strong>Subject:</strong> ${subject}</p>
         <p><strong>Message:</strong></p>
         <p style="white-space: pre-wrap;">${message}</p>

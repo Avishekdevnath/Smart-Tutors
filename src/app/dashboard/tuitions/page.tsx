@@ -647,6 +647,13 @@ export default function TuitionManagementDashboard() {
                         )}
                       </div>
                       <div className="flex flex-wrap gap-2 lg:space-x-2">
+                        <Link
+                          href={`/tuition/${tuition.code}`}
+                          target="_blank"
+                          className="text-purple-600 hover:text-purple-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-purple-50 transition-colors"
+                        >
+                          View Public Page
+                        </Link>
                         <button 
                           className="text-blue-600 hover:text-blue-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors" 
                           onClick={() => setViewModal(tuition)}

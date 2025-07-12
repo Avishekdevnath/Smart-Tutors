@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
 import { Plus, Copy, Check, ArrowLeft, X } from 'lucide-react';
 import CreatableSelect from 'react-select/creatable';
+import LocationSelector from '@/components/LocationSelector';
 
 interface TuitionFormData {
   // Tuition Code (optional - manual entry)
@@ -14,6 +15,12 @@ interface TuitionFormData {
   guardianName: string;
   guardianNumber: string;
   address: string; // Single address field for both guardian and tuition
+  location: {
+    division: string;
+    district: string;
+    area: string;
+    subarea?: string;
+  };
   
   // Student Information
   studentClass: string;
@@ -37,6 +44,12 @@ export default function AddTuitionPage() {
     guardianName: '',
     guardianNumber: '',
     address: '',
+    location: {
+      division: '',
+      district: '',
+      area: '',
+      subarea: '',
+    },
     studentClass: '',
     version: 'English Medium',
     subjects: [],
@@ -196,7 +209,7 @@ Location: ${address}
         code: formData.tuitionCode || undefined, // Include manual code if provided
         ...formData,
         guardianAddress: formData.address, // Map to guardianAddress for backend
-        location: formData.address, // Map to location for backend
+        location: JSON.stringify(formData.location), // Map structured location for backend
         status: 'open',
         applications: [],
         createdAt: new Date().toISOString()
@@ -331,6 +344,16 @@ Location: ${address}
                 placeholder="Enter detailed address where tuition will be held"
                 rows={3}
                 required
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Location (Division/District/Area) *
+              </label>
+              <LocationSelector
+                value={formData.location}
+                onChange={(location) => handleInputChange('location', location)}
               />
             </div>
           </div>

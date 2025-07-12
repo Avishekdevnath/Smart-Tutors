@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/mongodb';
 import Tutor from '@/models/Tutor';
 import User from '@/models/User';
+import Tuition from '@/models/Tuition';
 import bcrypt from 'bcryptjs';
 import { uploadImage } from '@/lib/cloudinary';
 import { sendWelcomeEmail } from '@/lib/email';
@@ -47,24 +48,7 @@ export async function GET(request: NextRequest) {
       filter.version = version;
     }
 
-    const tutors = await Tutor.find(filter, {
-      tutorId: 1,
-      name: 1,
-      phone: 1,
-      email: 1,
-      version: 1,
-      address: 1,
-      universityShortForm: 1,
-      group: 1,
-      preferredLocation: 1,
-      profileStatus: 1,
-      gender: 1,
-      department: 1,
-      yearAndSemester: 1,
-      totalApplications: 1,
-      successfulTuitions: 1,
-      createdAt: 1,
-    });
+    const tutors = await Tutor.find(filter).populate('location');
 
     return NextResponse.json(tutors);
   } catch (error: any) {
@@ -98,6 +82,7 @@ export async function POST(request: NextRequest) {
     const experience = formData.get('experience') as string;
     const gender = formData.get('gender') as string;
     const password = (formData.get('password') as string) || '654321';
+    const applyingForTuition = formData.get('applyingForTuition') as string;
 
     // Parse JSON fields
     const academicQualifications = formData.get('academicQualifications') 
@@ -131,6 +116,28 @@ export async function POST(request: NextRequest) {
     // Get file uploads
     const nidPhoto = formData.get('nidPhoto') as File | null;
     const studentIdPhoto = formData.get('studentIdPhoto') as File | null;
+
+    // Handle additional documents
+    const additionalDocumentsCount = parseInt(formData.get('additionalDocumentsCount') as string) || 0;
+    const additionalDocuments = [];
+
+    for (let i = 0; i < additionalDocumentsCount; i++) {
+      const file = formData.get(`additionalDocument_${i}`) as File | null;
+      const label = formData.get(`additionalDocumentLabel_${i}`) as string;
+      
+      if (file && label && file.size > 0) {
+        try {
+          const uploadRes = await uploadImage(file, { folder: 'smart-tutors/additional-documents' });
+          additionalDocuments.push({
+            label,
+            url: uploadRes.secure_url,
+            uploadedAt: new Date()
+          });
+        } catch (error) {
+          console.error(`Additional document ${i} upload failed:`, error);
+        }
+      }
+    }
 
     if (!name || !phone) {
       return NextResponse.json({ error: 'Name and phone are required' }, { status: 400 });
@@ -187,6 +194,7 @@ export async function POST(request: NextRequest) {
       documents: {
         nidPhoto: nidPhotoUrl,
         studentIdPhoto: studentIdPhotoUrl,
+        additionalDocuments
       },
       gender,
       location: locationDoc._id,
@@ -206,6 +214,35 @@ export async function POST(request: NextRequest) {
     });
 
     await user.save();
+
+    // Handle tuition application if specified
+    let tuitionApplication = null;
+    if (applyingForTuition) {
+      try {
+        const tuition = await Tuition.findOne({ code: applyingForTuition });
+        if (tuition) {
+          // Add application to tuition
+          tuition.applications.push({
+            tutorId: tutor._id.toString(),
+            appliedDate: new Date()
+          });
+          await tuition.save();
+          
+          // Update tutor's total applications
+          tutor.totalApplications = 1;
+          await tutor.save();
+          
+          tuitionApplication = {
+            tuitionCode: tuition.code,
+            tuitionId: tuition._id,
+            appliedDate: new Date()
+          };
+        }
+      } catch (error) {
+        console.error('Error applying for tuition:', error);
+        // Don't fail the registration if tuition application fails
+      }
+    }
 
     // Send welcome email if email is provided (non-blocking)
     let emailSent = false;
@@ -237,6 +274,7 @@ export async function POST(request: NextRequest) {
         userType: user.userType,
       },
       emailSent: emailSent,
+      tuitionApplication: tuitionApplication,
     }, { status: 201 });
 
   } catch (error: any) {

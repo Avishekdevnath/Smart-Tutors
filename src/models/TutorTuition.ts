@@ -13,7 +13,7 @@ const TutorTuitionSchema = new Schema({
   
   status: { 
     type: String, 
-    enum: ['pending', 'confirmed', 'completed', 'rejected', 'withdrawn'], 
+    enum: ['pending', 'selected-for-demo', 'confirmed-fee-pending', 'completed', 'rejected', 'withdrawn'], 
     default: 'pending' 
   },
   appliedAt: { type: Date, default: Date.now },
@@ -25,6 +25,9 @@ const TutorTuitionSchema = new Schema({
   demoDate: { type: Date },
   demoCompleted: { type: Boolean, default: false },
   demoFeedback: { type: String },
+  demoInstructions: { type: String }, // Instructions sent to tutor for demo
+  guardianContactSent: { type: Boolean, default: false }, // Track if guardian contact was sent
+  guardianContactSentAt: { type: Date },
   mediaFee: {
     amount: { type: Number },
     dueDate: { type: Date },

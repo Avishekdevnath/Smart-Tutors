@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import { Download, Share2, Phone, Mail, MapPin, GraduationCap, BookOpen, Users } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { Download, Share2, Phone, Mail, MapPin, GraduationCap, BookOpen, Users, Calendar, Award, School, Building } from "lucide-react";
 
 interface Tutor {
   _id: string;
@@ -30,15 +30,13 @@ interface Tutor {
   preferredLocation?: string[];
   experience?: string;
   profileStatus: string;
-  totalApplications?: number;
-  successfulTuitions?: number;
 }
 
 export default function PublicTutorProfilePage() {
   const params = useParams();
   const [tutor, setTutor] = useState<Tutor | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchTutorProfile();
@@ -50,7 +48,7 @@ export default function PublicTutorProfilePage() {
       const slug = params.slug as string;
       
       // Convert slug back to name (replace hyphens with spaces and capitalize)
-      const name = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      const name = slug.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase());
       
       const response = await fetch(`/api/tutors/public/${encodeURIComponent(name)}`);
       const data = await response.json();
@@ -58,11 +56,11 @@ export default function PublicTutorProfilePage() {
       if (response.ok && data.success) {
         setTutor(data.tutor);
       } else {
-        setError(data.error || 'Tutor not found');
+        setError(data.error || "Tutor not found");
       }
     } catch (error) {
-      console.error('Error fetching tutor profile:', error);
-      setError('Failed to load tutor profile');
+      console.error("Error fetching tutor profile:", error);
+      setError("Failed to load tutor profile");
     } finally {
       setLoading(false);
     }
@@ -71,9 +69,9 @@ export default function PublicTutorProfilePage() {
   const handleDownloadCV = () => {
     try {
       // Create a new window with the CV content
-      const printWindow = window.open('', '_blank');
+      const printWindow = window.open("", "_blank");
       if (!printWindow) {
-        alert('Please allow popups to download CV');
+        alert("Please allow popups to download CV");
         return;
       }
 
@@ -181,14 +179,14 @@ export default function PublicTutorProfilePage() {
         <!DOCTYPE html>
         <html>
         <head>
-          <title>${tutor?.name || 'Tutor'} - CV</title>
+          <title>${tutor?.name || "Tutor"} - CV</title>
           <meta charset="UTF-8">
           ${styles}
         </head>
         <body>
           <div class="cv-header">
-            <h3>${tutor?.name || 'Tutor Name'}</h3>
-            <p>${tutor?.university || 'University'} - ${tutor?.department || 'Department'}</p>
+            <h3>${tutor?.name || "Tutor Name"}</h3>
+            <p>${tutor?.university || "University"} - ${tutor?.department || "Department"}</p>
             <p style="color: #059669; font-weight: 600; font-size: 14px;">TUITION WANTED | WANT TO TEACH</p>
             <div style="border-top: 1px solid #e5e7eb; padding-top: 8px; margin-top: 10px;">
               <p style="color: #6b7280; font-size: 11px; margin: 0;">Smart Tutors - Professional Tuition Services</p>
@@ -198,36 +196,36 @@ export default function PublicTutorProfilePage() {
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div class="cv-section">
               <h4>Personal Information</h4>
-              <p><span>Name:</span> ${tutor?.name || 'Not specified'}</p>
-              <p><span>Phone:</span> ${tutor?.phone || 'Not specified'}</p>
-              <p><span>Gender:</span> ${tutor?.gender || 'Not specified'}</p>
-              <p><span>Address:</span> ${tutor?.address || 'Not specified'}</p>
-              <p><span>Experience:</span> ${tutor?.experience || 'Not specified'}</p>
+              <p><span>Name:</span> ${tutor?.name || "Not specified"}</p>
+              <p><span>Phone:</span> ${tutor?.phone || "Not specified"}</p>
+              <p><span>Gender:</span> ${tutor?.gender || "Not specified"}</p>
+              <p><span>Address:</span> ${tutor?.address || "Not specified"}</p>
+              <p><span>Experience:</span> ${tutor?.experience || "Not specified"}</p>
             </div>
 
             <div class="cv-section">
               <h4>Academic Background</h4>
-              <p><span>University:</span> ${tutor?.university || 'Not specified'}</p>
-              <p><span>Department:</span> ${tutor?.department || 'Not specified'}</p>
-              <p><span>Year & Semester:</span> ${tutor?.yearAndSemester || 'Not specified'}</p>
-              <p><span>Version:</span> ${tutor?.version || 'Not specified'}</p>
-              <p><span>Group:</span> ${tutor?.group || 'Not specified'}</p>
+              <p><span>University:</span> ${tutor?.university || "Not specified"}</p>
+              <p><span>Department:</span> ${tutor?.department || "Not specified"}</p>
+              <p><span>Year & Semester:</span> ${tutor?.yearAndSemester || "Not specified"}</p>
+              <p><span>Version:</span> ${tutor?.version || "Not specified"}</p>
+              <p><span>Group:</span> ${tutor?.group || "Not specified"}</p>
             </div>
 
             <div class="cv-section">
               <h4>Educational Institutions</h4>
-              <p><span>School:</span> ${tutor?.schoolName || 'Not specified'}</p>
-              <p><span>College:</span> ${tutor?.collegeName || 'Not specified'}</p>
-              <p><span>University:</span> ${tutor?.university || 'Not specified'}</p>
-              <p><span>University Short:</span> ${tutor?.universityShortForm || 'Not specified'}</p>
+              <p><span>School:</span> ${tutor?.schoolName || "Not specified"}</p>
+              <p><span>College:</span> ${tutor?.collegeName || "Not specified"}</p>
+              <p><span>University:</span> ${tutor?.university || "Not specified"}</p>
+              <p><span>University Short:</span> ${tutor?.universityShortForm || "Not specified"}</p>
             </div>
 
             <div class="cv-section">
               <h4>Academic Results</h4>
-              <p><span>SSC Result:</span> ${tutor?.academicQualifications?.sscResult || 'Not specified'}</p>
-              <p><span>HSC Result:</span> ${tutor?.academicQualifications?.hscResult || 'Not specified'}</p>
-              <p><span>O-Level Result:</span> ${tutor?.academicQualifications?.oLevelResult || 'Not specified'}</p>
-              <p><span>A-Level Result:</span> ${tutor?.academicQualifications?.aLevelResult || 'Not specified'}</p>
+              <p><span>SSC Result:</span> ${tutor?.academicQualifications?.sscResult || "Not specified"}</p>
+              <p><span>HSC Result:</span> ${tutor?.academicQualifications?.hscResult || "Not specified"}</p>
+              ${tutor?.academicQualifications?.oLevelResult ? `<p><span>O-Level Result:</span> ${tutor.academicQualifications.oLevelResult}</p>` : ''}
+              ${tutor?.academicQualifications?.aLevelResult ? `<p><span>A-Level Result:</span> ${tutor.academicQualifications.aLevelResult}</p>` : ''}
             </div>
           </div>
 
@@ -236,7 +234,7 @@ export default function PublicTutorProfilePage() {
             <div class="cv-tags">
               ${tutor?.preferredSubjects?.map((subject: string) => 
                 `<span class="cv-tag blue">${subject}</span>`
-              ).join('') || '<p style="color: #999;">No subjects specified</p>'}
+              ).join("") || '<p style="color: #999;">No subjects specified</p>'}
             </div>
           </div>
 
@@ -245,7 +243,7 @@ export default function PublicTutorProfilePage() {
             <div class="cv-tags">
               ${tutor?.preferredLocation?.map((location: string) => 
                 `<span class="cv-tag green">${location}</span>`
-              ).join('') || '<p style="color: #999;">No locations specified</p>'}
+              ).join("") || '<p style="color: #999;">No locations specified</p>'}
             </div>
           </div>
 
@@ -270,8 +268,8 @@ export default function PublicTutorProfilePage() {
         printWindow.close();
       };
     } catch (error) {
-      console.error('Error downloading CV:', error);
-      alert('Error downloading CV');
+      console.error("Error downloading CV:", error);
+      alert("Error downloading CV");
     }
   };
 
@@ -286,244 +284,307 @@ export default function PublicTutorProfilePage() {
         });
       } else {
         await navigator.clipboard.writeText(url);
-        alert('Profile link copied to clipboard!');
+        alert("Profile link copied to clipboard!");
       }
     } catch (error) {
-      console.error('Error sharing:', error);
+      console.error("Error sharing:", error);
       // Fallback to copying to clipboard
       try {
         await navigator.clipboard.writeText(url);
-        alert('Profile link copied to clipboard!');
+        alert("Profile link copied to clipboard!");
       } catch (clipboardError) {
-        alert('Failed to copy link. Please copy manually: ' + url);
+        alert("Failed to copy link. Please copy manually: " + url);
       }
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading tutor profile...</p>
+        </div>
       </div>
     );
   }
 
   if (error || !tutor) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Tutor Not Found</h1>
-          <p className="text-gray-600">{error || 'The tutor profile you are looking for does not exist.'}</p>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <div className="text-red-500 mb-4">
+              <Users className="w-16 h-16 mx-auto" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Tutor Not Found</h1>
+            <p className="text-gray-600 mb-6">{error || "The tutor profile you are looking for does not exist."}</p>
+            <a
+              href="/"
+              className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
+            >
+              ← Back to Home
+            </a>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-4xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="h-16 w-16 rounded-full bg-gradient-to-r from-green-600 to-blue-600 flex items-center justify-center">
-                <span className="text-white font-bold text-2xl">
+      <div className="bg-white shadow-lg border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center space-x-6 mb-6 lg:mb-0">
+              <div className="h-20 w-20 rounded-full bg-gradient-to-r from-green-600 to-blue-600 flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-3xl">
                   {tutor.name.charAt(0).toUpperCase()}
                 </span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{tutor.name}</h1>
-                <p className="text-gray-600">{tutor.university} - {tutor.department}</p>
-                <p className="text-sm text-green-600 font-semibold">TUITION WANTED | WANT TO TEACH</p>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">{tutor.name}</h1>
+                <p className="text-lg text-gray-600 mb-1">
+                  {tutor.university} • {tutor.department}
+                </p>
+                <p className="text-sm text-green-600 font-semibold uppercase tracking-wide">
+                  Available for Tuition • Want to Teach
+                </p>
               </div>
             </div>
-            <div className="flex space-x-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleDownloadCV}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
+                className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center justify-center gap-2 font-semibold transition-colors shadow-md"
               >
-                <Download size={16} />
+                <Download size={18} />
                 Download CV
               </button>
               <button
                 onClick={handleShare}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2 font-semibold transition-colors shadow-md"
               >
-                <Share2 size={16} />
-                Share
+                <Share2 size={18} />
+                Share Profile
               </button>
             </div>
           </div>
-          <div className="text-xs text-gray-500 border-t border-gray-200 pt-2 mt-4">
-            <p>Smart Tutors - Professional Tuition Services</p>
+          <div className="text-xs text-gray-500 border-t border-gray-200 pt-4 mt-6">
+            <p>Smart Tutors - Professional Tuition Services • Tutor ID: {tutor.tutorId}</p>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Personal Information */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <Users size={20} className="mr-2 text-green-600" />
-              Personal Information
-            </h2>
-            <div className="space-y-3">
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">Name:</span>
-                <span className="text-gray-900">{tutor.name}</span>
-              </div>
-              <div className="flex items-center">
-                <Phone size={16} className="mr-2 text-green-600 w-4" />
-                <span className="font-medium text-gray-700 w-24">Phone:</span>
-                <span className="text-gray-900">{tutor.phone}</span>
-              </div>
-              {tutor.email && (
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column - Personal & Contact Info */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Contact Information */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <Phone className="w-5 h-5 mr-2 text-green-600" />
+                Contact Information
+              </h2>
+              <div className="space-y-4">
                 <div className="flex items-center">
-                  <Mail size={16} className="mr-2 text-green-600 w-4" />
-                  <span className="font-medium text-gray-700 w-24">Email:</span>
-                  <span className="text-gray-900">{tutor.email}</span>
+                  <Phone className="w-4 h-4 mr-3 text-green-600" />
+                  <div>
+                    <p className="text-sm text-gray-500">Phone</p>
+                    <p className="font-semibold text-gray-900">{tutor.phone}</p>
+                  </div>
                 </div>
-              )}
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">Gender:</span>
-                <span className="text-gray-900">{tutor.gender || 'Not specified'}</span>
-              </div>
-              {tutor.address && (
-                <div className="flex items-start">
-                  <MapPin size={16} className="mr-2 text-green-600 w-4 mt-1" />
-                  <span className="font-medium text-gray-700 w-24">Address:</span>
-                  <span className="text-gray-900">{tutor.address}</span>
+                {tutor.email && (
+                  <div className="flex items-center">
+                    <Mail className="w-4 h-4 mr-3 text-green-600" />
+                    <div>
+                      <p className="text-sm text-gray-500">Email</p>
+                      <p className="font-semibold text-gray-900">{tutor.email}</p>
+                    </div>
+                  </div>
+                )}
+                {tutor.address && (
+                  <div className="flex items-start">
+                    <MapPin className="w-4 h-4 mr-3 text-green-600 mt-1" />
+                    <div>
+                      <p className="text-sm text-gray-500">Address</p>
+                      <p className="font-semibold text-gray-900">{tutor.address}</p>
+                    </div>
+                  </div>
+                )}
+                <div className="flex items-center">
+                  <Users className="w-4 h-4 mr-3 text-green-600" />
+                  <div>
+                    <p className="text-sm text-gray-500">Gender</p>
+                    <p className="font-semibold text-gray-900">{tutor.gender || "Not specified"}</p>
+                  </div>
                 </div>
-              )}
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">Experience:</span>
-                <span className="text-gray-900">{tutor.experience || 'Not specified'}</span>
               </div>
             </div>
-          </div>
 
-          {/* Academic Background */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <GraduationCap size={20} className="mr-2 text-green-600" />
-              Academic Background
-            </h2>
-            <div className="space-y-3">
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">University:</span>
-                <span className="text-gray-900">{tutor.university || 'Not specified'}</span>
-              </div>
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">Department:</span>
-                <span className="text-gray-900">{tutor.department || 'Not specified'}</span>
-              </div>
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">Year & Semester:</span>
-                <span className="text-gray-900">{tutor.yearAndSemester || 'Not specified'}</span>
-              </div>
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">Version:</span>
-                <span className="text-gray-900">{tutor.version || 'Not specified'}</span>
-              </div>
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">Group:</span>
-                <span className="text-gray-900">{tutor.group || 'Not specified'}</span>
+            {/* Academic Background */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <GraduationCap className="w-5 h-5 mr-2 text-green-600" />
+                Academic Background
+              </h2>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-500">University</p>
+                  <p className="font-semibold text-gray-900">{tutor.university || "Not specified"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Department</p>
+                  <p className="font-semibold text-gray-900">{tutor.department || "Not specified"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Year & Semester</p>
+                  <p className="font-semibold text-gray-900">{tutor.yearAndSemester || "Not specified"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Version</p>
+                  <p className="font-semibold text-gray-900">{tutor.version || "Not specified"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Group</p>
+                  <p className="font-semibold text-gray-900">{tutor.group || "Not specified"}</p>
+                </div>
               </div>
             </div>
+
+            {/* Experience */}
+            {tutor.experience && (
+              <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                  <Award className="w-5 h-5 mr-2 text-green-600" />
+                  Teaching Experience
+                </h2>
+                <p className="text-gray-700 leading-relaxed">{tutor.experience}</p>
+              </div>
+            )}
           </div>
 
-          {/* Educational Institutions */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Educational Institutions</h2>
-            <div className="space-y-3">
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">School:</span>
-                <span className="text-gray-900">{tutor.schoolName || 'Not specified'}</span>
-              </div>
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">College:</span>
-                <span className="text-gray-900">{tutor.collegeName || 'Not specified'}</span>
-              </div>
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">University:</span>
-                <span className="text-gray-900">{tutor.university || 'Not specified'}</span>
-              </div>
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">University Short:</span>
-                <span className="text-gray-900">{tutor.universityShortForm || 'Not specified'}</span>
+          {/* Right Column - Detailed Information */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Educational Institutions */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                <School className="w-5 h-5 mr-2 text-green-600" />
+                Educational Journey
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <School className="w-8 h-8 mx-auto mb-3 text-green-600" />
+                  <h3 className="font-semibold text-gray-900 mb-2">School</h3>
+                  <p className="text-gray-600 text-sm">{tutor.schoolName || "Not specified"}</p>
+                </div>
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <Building className="w-8 h-8 mx-auto mb-3 text-green-600" />
+                  <h3 className="font-semibold text-gray-900 mb-2">College</h3>
+                  <p className="text-gray-600 text-sm">{tutor.collegeName || "Not specified"}</p>
+                </div>
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <GraduationCap className="w-8 h-8 mx-auto mb-3 text-green-600" />
+                  <h3 className="font-semibold text-gray-900 mb-2">University</h3>
+                  <p className="text-gray-600 text-sm">{tutor.university || "Not specified"}</p>
+                  {tutor.universityShortForm && (
+                    <p className="text-xs text-gray-500 mt-1">({tutor.universityShortForm})</p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Academic Results */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Academic Results</h2>
-            <div className="space-y-3">
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">SSC Result:</span>
-                <span className="text-gray-900">{tutor.academicQualifications?.sscResult || 'Not specified'}</span>
+            {/* Academic Results */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                <Award className="w-5 h-5 mr-2 text-green-600" />
+                Academic Achievements
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                    <span className="font-medium text-gray-700">SSC Result</span>
+                    <span className="font-bold text-blue-600">{tutor.academicQualifications?.sscResult || "Not specified"}</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                    <span className="font-medium text-gray-700">HSC Result</span>
+                    <span className="font-bold text-green-600">{tutor.academicQualifications?.hscResult || "Not specified"}</span>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  {tutor.academicQualifications?.oLevelResult && (
+                    <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+                      <span className="font-medium text-gray-700">O-Level Result</span>
+                      <span className="font-bold text-purple-600">{tutor.academicQualifications.oLevelResult}</span>
+                    </div>
+                  )}
+                  {tutor.academicQualifications?.aLevelResult && (
+                    <div className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                      <span className="font-medium text-gray-700">A-Level Result</span>
+                      <span className="font-bold text-orange-600">{tutor.academicQualifications.aLevelResult}</span>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">HSC Result:</span>
-                <span className="text-gray-900">{tutor.academicQualifications?.hscResult || 'Not specified'}</span>
+            </div>
+
+            {/* Preferred Subjects */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <BookOpen className="w-5 h-5 mr-2 text-green-600" />
+                Preferred Teaching Subjects
+              </h2>
+              <div className="flex flex-wrap gap-3">
+                {tutor.preferredSubjects?.map((subject, index) => (
+                  <span key={index} className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                    {subject}
+                  </span>
+                )) || (
+                  <p className="text-gray-500 italic">No subjects specified</p>
+                )}
               </div>
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">O-Level Result:</span>
-                <span className="text-gray-900">{tutor.academicQualifications?.oLevelResult || 'Not specified'}</span>
-              </div>
-              <div className="flex items-center">
-                <span className="font-medium text-gray-700 w-24">A-Level Result:</span>
-                <span className="text-gray-900">{tutor.academicQualifications?.aLevelResult || 'Not specified'}</span>
+            </div>
+
+            {/* Preferred Teaching Areas */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <MapPin className="w-5 h-5 mr-2 text-green-600" />
+                Preferred Teaching Areas
+              </h2>
+              <div className="flex flex-wrap gap-3">
+                {tutor.preferredLocation?.map((location, index) => (
+                  <span key={index} className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
+                    {location}
+                  </span>
+                )) || (
+                  <p className="text-gray-500 italic">No locations specified</p>
+                )}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Preferred Subjects */}
-        <div className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <BookOpen size={20} className="mr-2 text-green-600" />
-            Preferred Subjects
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {tutor.preferredSubjects?.map((subject, index) => (
-              <span key={index} className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
-                {subject}
-              </span>
-            )) || <p className="text-gray-500">No subjects specified</p>}
-          </div>
-        </div>
-
-        {/* Preferred Teaching Areas */}
-        <div className="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <MapPin size={20} className="mr-2 text-green-600" />
-            Preferred Teaching Areas
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {tutor.preferredLocation?.map((location, index) => (
-              <span key={index} className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200">
-                {location}
-              </span>
-            )) || <p className="text-gray-500">No locations specified</p>}
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
-            <div className="text-2xl font-bold text-green-600">{tutor.totalApplications || 0}</div>
-            <div className="text-sm text-gray-600">Total Applications</div>
-          </div>
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
-            <div className="text-2xl font-bold text-blue-600">{tutor.successfulTuitions || 0}</div>
-            <div className="text-sm text-gray-600">Successful Tuitions</div>
-          </div>
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
-            <div className="text-2xl font-bold text-purple-600">{tutor.tutorId}</div>
-            <div className="text-sm text-gray-600">Tutor ID</div>
+        {/* Call to Action */}
+        <div className="mt-12 bg-gradient-to-r from-green-600 to-blue-600 rounded-xl shadow-lg p-8 text-center text-white">
+          <h3 className="text-2xl font-bold mb-4">Interested in Hiring This Tutor?</h3>
+          <p className="text-lg mb-6 opacity-90">
+            Contact {tutor.name} directly or reach out to Smart Tutors for professional tuition services.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href={`tel:${tutor.phone}`}
+              className="inline-flex items-center px-6 py-3 bg-white text-green-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+            >
+              <Phone className="w-4 h-4 mr-2" />
+              Call Now
+            </a>
+            <a
+              href="/"
+              className="inline-flex items-center px-6 py-3 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-green-600 transition-colors"
+            >
+              Browse More Tutors
+            </a>
           </div>
         </div>
       </div>

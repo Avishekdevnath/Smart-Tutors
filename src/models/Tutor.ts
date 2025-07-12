@@ -28,6 +28,11 @@ const TutorSchema = new Schema({
   documents: {
     nidPhoto: { type: String },
     studentIdPhoto: { type: String },
+    additionalDocuments: [{
+      label: { type: String, required: true },
+      url: { type: String, required: true },
+      uploadedAt: { type: Date, default: Date.now }
+    }]
   },
   // Removed global status - now tracked per application in TutorTuition model
   profileStatus: {

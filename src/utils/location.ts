@@ -14,6 +14,15 @@ export interface LocationData {
   [key: string]: any;
 }
 
+export interface LocationOption {
+  value: string;
+  label: string;
+  division: string;
+  district: string;
+  area: string;
+  formatted: string;
+}
+
 /**
  * Safely formats location data regardless of format
  * @param location - Can be ObjectId string, LocationData object, string array, or any other format
@@ -178,5 +187,179 @@ export async function openaiFormatLocation(rawLocation: any) {
       ...rawLocation,
       formatted: `${rawLocation.area || ''}, ${rawLocation.district || ''}, ${rawLocation.division || ''}`.replace(/^,\s*|,\s*$/g, ''),
     };
+  }
+} 
+
+/**
+ * Get all unique divisions
+ */
+export async function getDivisions(): Promise<string[]> {
+  try {
+    // Dynamic import to avoid client-side issues
+    const { default: Location } = await import('@/models/Location');
+    const divisions = await Location.distinct('division');
+    return divisions.sort();
+  } catch (error) {
+    console.error('Error fetching divisions:', error);
+    return [];
+  }
+}
+
+/**
+ * Get districts by division
+ */
+export async function getDistrictsByDivision(division: string): Promise<string[]> {
+  try {
+    // Dynamic import to avoid client-side issues
+    const { default: Location } = await import('@/models/Location');
+    const districts = await Location.distinct('district', { division });
+    return districts.sort();
+  } catch (error) {
+    console.error('Error fetching districts:', error);
+    return [];
+  }
+}
+
+/**
+ * Get areas by district
+ */
+export async function getAreasByDistrict(district: string): Promise<string[]> {
+  try {
+    // Dynamic import to avoid client-side issues
+    const { default: Location } = await import('@/models/Location');
+    const areas = await Location.distinct('area', { district });
+    return areas.sort();
+  } catch (error) {
+    console.error('Error fetching areas:', error);
+    return [];
+  }
+}
+
+/**
+ * Get areas by division
+ */
+export async function getAreasByDivision(division: string): Promise<string[]> {
+  try {
+    // Dynamic import to avoid client-side issues
+    const { default: Location } = await import('@/models/Location');
+    const areas = await Location.distinct('area', { division });
+    return areas.sort();
+  } catch (error) {
+    console.error('Error fetching areas:', error);
+    return [];
+  }
+}
+
+/**
+ * Search locations with autocomplete
+ */
+export async function searchLocations(query: string, limit: number = 10): Promise<LocationOption[]> {
+  try {
+    // Dynamic import to avoid client-side issues
+    const { default: Location } = await import('@/models/Location');
+    
+    const locations = await Location.find({
+      $or: [
+        { division: { $regex: query, $options: 'i' } },
+        { district: { $regex: query, $options: 'i' } },
+        { area: { $regex: query, $options: 'i' } }
+      ]
+    }).limit(limit).lean();
+
+    return locations.map(loc => ({
+      value: loc._id.toString(),
+      label: loc.formatted || `${loc.area}, ${loc.district}, ${loc.division}`,
+      division: loc.division,
+      district: loc.district,
+      area: loc.area,
+      formatted: loc.formatted || `${loc.area}, ${loc.district}, ${loc.division}`
+    }));
+  } catch (error) {
+    console.error('Error searching locations:', error);
+    return [];
+  }
+}
+
+/**
+ * Get location by ID
+ */
+export async function getLocationById(id: string): Promise<LocationOption | null> {
+  try {
+    // Dynamic import to avoid client-side issues
+    const { default: Location } = await import('@/models/Location');
+    
+    const location = await Location.findById(id).lean();
+    if (!location) return null;
+
+    return {
+      value: location._id.toString(),
+      label: location.formatted || `${location.area}, ${location.district}, ${location.division}`,
+      division: location.division,
+      district: location.district,
+      area: location.area,
+      formatted: location.formatted || `${location.area}, ${location.district}, ${location.division}`
+    };
+  } catch (error) {
+    console.error('Error fetching location by ID:', error);
+    return null;
+  }
+}
+
+/**
+ * Format location string from components
+ */
+export function formatLocationString(division: string, district: string, area: string): string {
+  return `${area}, ${district}, ${division}`;
+}
+
+/**
+ * Parse location string into components
+ */
+export function parseLocationString(locationString: string): {
+  area: string;
+  district: string;
+  division: string;
+} | null {
+  if (!locationString) return null;
+  
+  const parts = locationString.split(',').map(part => part.trim());
+  if (parts.length < 3) return null;
+  
+  return {
+    area: parts[0],
+    district: parts[1],
+    division: parts[2]
+  };
+}
+
+/**
+ * Get location options for dropdowns
+ */
+export async function getLocationOptions(
+  division?: string,
+  district?: string,
+  limit: number = 50
+): Promise<LocationOption[]> {
+  try {
+    // Dynamic import to avoid client-side issues
+    const { default: Location } = await import('@/models/Location');
+    
+    let query: any = {};
+    if (division) query.division = division;
+    if (district) query.district = district;
+
+    const locations = await Location.find(query).limit(limit).lean();
+
+    return locations.map(loc => ({
+      value: loc._id.toString(),
+      label: loc.formatted || `${loc.area}, ${loc.district}, ${loc.division}`,
+      division: loc.division,
+      district: loc.district,
+      area: loc.area,
+      formatted: loc.formatted || `${loc.area}, ${loc.district}, ${loc.division}`
+    }));
+  } catch (error) {
+    console.error('Error fetching location options:', error);
+    return [];
   }
 } 

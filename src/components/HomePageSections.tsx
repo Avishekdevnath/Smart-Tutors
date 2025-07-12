@@ -361,11 +361,18 @@ export function LatestTuitionsSection() {
                     <span>•</span>
                     <span>{getDaysAgo(tuition.createdAt)}</span>
                   </div>
-                  <Link href={`/tuitions`}>
-                    <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 group-hover:shadow-lg">
-                      Apply Now →
-                    </button>
-                  </Link>
+                  <div className="flex gap-2">
+                    <Link href={`/tuition/${tuition.code}`}>
+                      <button className="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all duration-200">
+                        View Details
+                      </button>
+                    </Link>
+                    <Link href={`/tutors/register?tuition=${tuition.code}`}>
+                      <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 group-hover:shadow-lg">
+                        Apply Now →
+                      </button>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

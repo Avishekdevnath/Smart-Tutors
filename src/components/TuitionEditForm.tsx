@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import LocationSelector from '@/components/LocationSelector';
 
 interface TuitionEditFormProps {
   tuition: any;
@@ -19,6 +20,12 @@ export default function TuitionEditForm({ tuition, onSubmit, onCancel, loading =
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>(Array.isArray(tuition.subjects) ? tuition.subjects : []);
   const [customSubject, setCustomSubject] = useState('');
+  const [location, setLocation] = useState({
+    division: tuition.location?.division || '',
+    district: tuition.location?.district || '',
+    area: tuition.location?.area || '',
+    subarea: tuition.location?.subarea || '',
+  });
   
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm({
     defaultValues: {
@@ -75,7 +82,8 @@ export default function TuitionEditForm({ tuition, onSubmit, onCancel, loading =
   const handleFormSubmit = (data: any) => {
     const formData = {
       ...data,
-      subjects: selectedSubjects
+      subjects: selectedSubjects,
+      location: location
     };
     onSubmit(formData);
   };
@@ -302,10 +310,9 @@ export default function TuitionEditForm({ tuition, onSubmit, onCancel, loading =
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Location
             </label>
-            <input
-              {...register('location')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              placeholder="e.g., Dhanmondi, Dhaka"
+            <LocationSelector
+              value={location}
+              onChange={setLocation}
             />
           </div>
 

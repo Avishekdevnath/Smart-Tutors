@@ -17,7 +17,7 @@ export async function GET(
     const tutor = await Tutor.findOne({
       name: { $regex: new RegExp(`^${decodedName}$`, 'i') },
       profileStatus: 'active' // Only show active tutors
-    }).select('-password -mediaFeeHistory -documents'); // Exclude sensitive data
+    }).select('-password -mediaFeeHistory'); // Exclude sensitive data but keep documents
 
     if (!tutor) {
       return NextResponse.json(

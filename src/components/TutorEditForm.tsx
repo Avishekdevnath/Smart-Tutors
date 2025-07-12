@@ -30,6 +30,10 @@ interface Tutor {
   preferredSubjects?: string[];
   preferredLocation?: string[];
   experience?: string;
+  documents?: {
+    nidPhoto?: string;
+    studentIdPhoto?: string;
+  };
   location?: {
     division?: string;
     district?: string;
@@ -74,46 +78,82 @@ export default function TutorEditForm({ tutor, onSave, onCancel, loading = false
     area: tutor.location?.area || ''
   });
 
+  const [documentFiles, setDocumentFiles] = useState<{
+    nidPhoto: File | null;
+    studentIdPhoto: File | null;
+  }>({
+    nidPhoto: null,
+    studentIdPhoto: null
+  });
+
+  const [documentPreviews, setDocumentPreviews] = useState<{
+    nidPhoto: string | null;
+    studentIdPhoto: string | null;
+  }>({
+    nidPhoto: tutor.documents?.nidPhoto || null,
+    studentIdPhoto: tutor.documents?.studentIdPhoto || null
+  });
+
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleFileChange = (field: 'nidPhoto' | 'studentIdPhoto', file: File | null) => {
+    setDocumentFiles(prev => ({ ...prev, [field]: file }));
+    
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setDocumentPreviews(prev => ({ ...prev, [field]: e.target?.result as string }));
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setDocumentPreviews(prev => ({ ...prev, [field]: tutor.documents?.[field] || null }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const updateData = {
-      name: formData.name,
-      phone: formData.phone,
-      email: formData.email,
-      gender: formData.gender,
-      address: formData.address,
-      fatherName: formData.fatherName,
-      fatherNumber: formData.fatherNumber,
-      version: formData.version,
-      group: formData.group,
-      academicQualifications: {
-        sscResult: formData.sscResult,
-        hscResult: formData.hscResult,
-        oLevelResult: formData.oLevelResult,
-        aLevelResult: formData.aLevelResult,
-      },
-      schoolName: formData.schoolName,
-      collegeName: formData.collegeName,
-      university: formData.university,
-      universityShortForm: formData.universityShortForm,
-      department: formData.department,
-      yearAndSemester: formData.yearAndSemester,
-      preferredSubjects: formData.preferredSubjects,
-      preferredLocation: formData.preferredLocation,
-      experience: formData.experience,
-      location: {
-        division: formData.division,
-        district: formData.district,
-        area: formData.area,
-      }
-    };
+    // Create FormData for file uploads
+    const formDataToSend = new FormData();
+    
+    // Add all text fields
+    formDataToSend.append('name', formData.name);
+    formDataToSend.append('phone', formData.phone);
+    formDataToSend.append('email', formData.email);
+    formDataToSend.append('gender', formData.gender);
+    formDataToSend.append('address', formData.address);
+    formDataToSend.append('fatherName', formData.fatherName);
+    formDataToSend.append('fatherNumber', formData.fatherNumber);
+    formDataToSend.append('version', formData.version);
+    formDataToSend.append('group', formData.group);
+    formDataToSend.append('sscResult', formData.sscResult);
+    formDataToSend.append('hscResult', formData.hscResult);
+    formDataToSend.append('oLevelResult', formData.oLevelResult);
+    formDataToSend.append('aLevelResult', formData.aLevelResult);
+    formDataToSend.append('schoolName', formData.schoolName);
+    formDataToSend.append('collegeName', formData.collegeName);
+    formDataToSend.append('university', formData.university);
+    formDataToSend.append('universityShortForm', formData.universityShortForm);
+    formDataToSend.append('department', formData.department);
+    formDataToSend.append('yearAndSemester', formData.yearAndSemester);
+    formDataToSend.append('preferredSubjects', formData.preferredSubjects.join(','));
+    formDataToSend.append('preferredLocation', formData.preferredLocation.join(','));
+    formDataToSend.append('experience', formData.experience);
+    formDataToSend.append('division', formData.division);
+    formDataToSend.append('district', formData.district);
+    formDataToSend.append('area', formData.area);
+    
+    // Add files if they exist
+    if (documentFiles.nidPhoto) {
+      formDataToSend.append('nidPhoto', documentFiles.nidPhoto);
+    }
+    if (documentFiles.studentIdPhoto) {
+      formDataToSend.append('studentIdPhoto', documentFiles.studentIdPhoto);
+    }
 
-    onSave(updateData);
+    onSave(formDataToSend);
   };
 
   return (
@@ -471,7 +511,95 @@ export default function TutorEditForm({ tutor, onSave, onCancel, loading = false
           </div>
         </div>
 
+        {/* Documents */}
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-purple-600" />
+            Documents
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* NID Photo */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                NID Photo
+              </label>
+              <div className="space-y-3">
+                {documentPreviews.nidPhoto ? (
+                  <div className="relative">
+                    <img 
+                      src={documentPreviews.nidPhoto} 
+                      alt="NID Photo" 
+                      className="w-full h-32 object-cover rounded-lg border border-gray-300"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleFileChange('nidPhoto', null)}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-full h-32 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                    <div className="text-center">
+                      <svg className="w-8 h-8 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-gray-500 text-xs">No NID photo</p>
+                    </div>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileChange('nidPhoto', e.target.files?.[0] || null)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                />
+              </div>
+            </div>
 
+            {/* Student ID Photo */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Student ID Photo
+              </label>
+              <div className="space-y-3">
+                {documentPreviews.studentIdPhoto ? (
+                  <div className="relative">
+                    <img 
+                      src={documentPreviews.studentIdPhoto} 
+                      alt="Student ID Photo" 
+                      className="w-full h-32 object-cover rounded-lg border border-gray-300"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleFileChange('studentIdPhoto', null)}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-full h-32 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                    <div className="text-center">
+                      <svg className="w-8 h-8 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-gray-500 text-xs">No Student ID photo</p>
+                    </div>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileChange('studentIdPhoto', e.target.files?.[0] || null)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Action Buttons */}
         <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-3 pt-4 border-t border-gray-200">

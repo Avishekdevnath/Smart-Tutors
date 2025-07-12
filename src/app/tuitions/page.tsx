@@ -275,18 +275,18 @@ export default function TuitionsPage() {
               Find the perfect tuition opportunity that matches your expertise and schedule.
             </p>
             {!session && (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/tutors/register">
-                  <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200">
+                <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200">
                     Register as Tutor
-                  </button>
-                </Link>
+                </button>
+              </Link>
                 <Link href="/tutors/login">
-                  <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors duration-200">
+                <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors duration-200">
                     Login
-                  </button>
-                </Link>
-              </div>
+                </button>
+              </Link>
+            </div>
             )}
           </div>
         </div>
@@ -349,7 +349,7 @@ export default function TuitionsPage() {
                 <option value="English Version">English Version</option>
                 <option value="Others">Others</option>
               </select>
-            </div>
+        </div>
 
             {/* Location Filter */}
             <div>
@@ -437,8 +437,8 @@ export default function TuitionsPage() {
                           {subject}
                         </span>
                       ))}
-                    </div>
-                  </div>
+        </div>
+      </div>
 
                   {/* Schedule */}
                   <div className="mb-4">
@@ -473,8 +473,16 @@ export default function TuitionsPage() {
                     )}
                   </div>
 
-                  {/* Action Button */}
-                  <div className="mt-6">
+                  {/* Action Buttons */}
+                  <div className="mt-6 space-y-3">
+                    {/* View Details Button */}
+                    <Link href={`/tuition/${tuition.code}`}>
+                      <button className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-200 border border-gray-300">
+                        View Details
+                      </button>
+                    </Link>
+                    
+                    {/* Apply Button */}
                     {session ? (
                       applicationsLoading ? (
                         <button
@@ -507,15 +515,15 @@ export default function TuitionsPage() {
                         </button>
                       )
                     ) : (
-                      <Link href="/tutors/login">
-                        <button className="w-full bg-gray-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-200">
-                          Login to Apply
+                      <Link href={`/tutors/register?tuition=${tuition.code}`}>
+                        <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200">
+                          Register & Apply
                         </button>
                       </Link>
                     )}
                   </div>
-                </div>
-              </div>
+          </div>
+        </div>
             ))}
           </div>
         )}
@@ -715,6 +723,6 @@ export default function TuitionsPage() {
            </form>
          )}
        </Modal>
-     </div>
-   );
- } 
+    </div>
+  );
+} 

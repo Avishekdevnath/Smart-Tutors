@@ -1,51 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ChevronLeft, ChevronRight, CheckCircle, Circle, User, GraduationCap, MapPin, FileText, Eye, Send } from "lucide-react";
+import LocationSelector from "@/components/LocationSelector";
+import DocumentUpload from "@/components/DocumentUpload";
 
 const steps = [
-  "Personal Information",
-  "Academic Background",
-  "Preferences & Experience",
-  "Location Details",
-  "Documents",
-  "Review & Submit"
+  { id: 0, title: "Personal Info", icon: User },
+  { id: 1, title: "Academic Background", icon: GraduationCap },
+  { id: 2, title: "Preferences", icon: Eye },
+  { id: 3, title: "Location", icon: MapPin },
+  { id: 4, title: "Documents", icon: FileText },
+  { id: 5, title: "Review", icon: Send },
 ];
+
+interface AdditionalDocument {
+  id: string;
+  label: string;
+  file: File;
+  preview: string;
+}
 
 export default function TutorRegisterPage() {
   const [step, setStep] = useState(0);
-  const [form, setForm] = useState<{
-    name: string;
-    phone: string;
-    email: string;
-    address: string;
-    fatherName: string;
-    fatherNumber: string;
-    background: string;
-    version: string;
-    group: string;
-    sscResult: string;
-    hscResult: string;
-    oLevelResult: string;
-    aLevelResult: string;
-    schoolName: string;
-    collegeName: string;
-    university: string;
-    universityShortForm: string;
-    department: string;
-    yearAndSemester: string;
-    preferredSubjects: string;
-    preferredLocation: string;
-    experience: string;
-    gender: string;
-    division: string;
-    district: string;
-    area: string;
-    password: string;
-    nidPhoto: File | string | null;
-    studentIdPhoto: File | string | null;
-  }>({
+  const [form, setForm] = useState({
     name: "",
     phone: "",
     email: "",
@@ -69,49 +48,81 @@ export default function TutorRegisterPage() {
     preferredLocation: "",
     experience: "",
     gender: "Male",
+    location: {
     division: "",
     district: "",
     area: "",
+      subarea: "",
+    },
     password: "",
-    nidPhoto: null,
-    studentIdPhoto: null,
+    nidPhoto: null as File | string | null,
+    studentIdPhoto: null as File | string | null,
   });
+
+  const [additionalDocuments, setAdditionalDocuments] = useState<AdditionalDocument[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [tuitionCode, setTuitionCode] = useState<string | null>(null);
+  const [tuitionDetails, setTuitionDetails] = useState<any>(null);
   const router = useRouter();
-
-  const nidInputRef = useRef<HTMLInputElement>(null);
-  const studentIdInputRef = useRef<HTMLInputElement>(null);
+  const searchParams = useSearchParams();
 
   // Add preview URLs for images
   const [nidPreview, setNidPreview] = useState<string | null>(null);
   const [studentIdPreview, setStudentIdPreview] = useState<string | null>(null);
 
-  // Drag and drop handlers
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, type: 'nidPhoto' | 'studentIdPhoto') => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      setForm(prev => ({ ...prev, [type]: file }));
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        if (type === 'nidPhoto') setNidPreview(ev.target?.result as string);
-        else setStudentIdPreview(ev.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+  // Handle tuition parameter from URL
+  useEffect(() => {
+    const tuition = searchParams.get('tuition');
+    if (tuition) {
+      setTuitionCode(tuition);
+      fetchTuitionDetails(tuition);
+    }
+  }, [searchParams]);
+
+  const fetchTuitionDetails = async (code: string) => {
+    try {
+      const response = await fetch(`/api/tuitions/public/${code}`);
+      if (response.ok) {
+        const data = await response.json();
+        setTuitionDetails(data);
+        
+        // Pre-fill form with tuition information
+        setForm(prev => ({
+          ...prev,
+          preferredSubjects: data.subjects?.join(', ') || '',
+          preferredLocation: data.location || '',
+          version: data.version === 'English Medium' ? 'EM' : 
+                  data.version === 'English Version' ? 'EV' : 
+                  data.version === 'Bangla Medium' ? 'BM' : 'EM'
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching tuition details:', error);
     }
   };
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, files } = e.target;
-    if (files && files[0] && files[0].type.startsWith('image/')) {
-      setForm(prev => ({ ...prev, [name]: files[0] }));
+
+  // Handle document changes
+  const handleNidPhotoChange = (file: File | null) => {
+    setForm(prev => ({ ...prev, nidPhoto: file }));
+    if (file) {
       const reader = new FileReader();
-      reader.onload = (ev) => {
-        if (name === 'nidPhoto') setNidPreview(ev.target?.result as string);
-        else setStudentIdPreview(ev.target?.result as string);
-      };
-      reader.readAsDataURL(files[0]);
+      reader.onload = (ev) => setNidPreview(ev.target?.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setNidPreview(null);
+    }
+  };
+
+  const handleStudentIdPhotoChange = (file: File | null) => {
+    setForm(prev => ({ ...prev, studentIdPhoto: file }));
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => setStudentIdPreview(ev.target?.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setStudentIdPreview(null);
     }
   };
 
@@ -142,11 +153,12 @@ export default function TutorRegisterPage() {
       });
       formData.set("preferredSubjects", form.preferredSubjects.split(",").map(s => s.trim()).filter(Boolean).join(","));
       formData.set("preferredLocation", form.preferredLocation.split(",").map(s => s.trim()).filter(Boolean).join(","));
-      formData.set("location", JSON.stringify({
-        division: form.division,
-        district: form.district,
-        area: form.area,
-      }));
+      formData.set("location", JSON.stringify(form.location));
+      
+      // Add tuition code if applying for a specific tuition
+      if (tuitionCode) {
+        formData.set("applyingForTuition", tuitionCode);
+      }
       formData.set("academicQualifications", JSON.stringify({
         sscResult: form.sscResult,
         hscResult: form.hscResult,
@@ -157,330 +169,699 @@ export default function TutorRegisterPage() {
       formData.delete("hscResult");
       formData.delete("oLevelResult");
       formData.delete("aLevelResult");
-      formData.delete("division");
-      formData.delete("district");
-      formData.delete("area");
+
+      // Add additional documents
+      additionalDocuments.forEach((doc, index) => {
+        formData.append(`additionalDocument_${index}`, doc.file);
+        formData.append(`additionalDocumentLabel_${index}`, doc.label);
+      });
+      formData.set("additionalDocumentsCount", additionalDocuments.length.toString());
+
       const res = await fetch("/api/tutors", {
         method: "POST",
         body: formData,
       });
       const data = await res.json();
       if (res.ok) {
-        setSuccess("Registration successful! You can now log in.");
-        setTimeout(() => router.push("/tutors"), 2000);
+        setSuccess("Registration successful! Redirecting to login...");
+        setTimeout(() => {
+          router.push("/tutors/login");
+        }, 2000);
       } else {
         setError(data.error || "Registration failed");
       }
-    } catch (err) {
-      setError("Something went wrong. Please try again.");
+    } catch (error) {
+      setError("Registration failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">Tutor Registration</h1>
-      {/* Stepper */}
-      <div className="flex justify-between items-center mb-8">
-        {steps.map((label, idx) => (
-          <div key={label} className="flex-1 flex flex-col items-center">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${idx === step ? 'bg-blue-600' : 'bg-gray-300'}`}>{idx + 1}</div>
-            <span className={`text-xs mt-2 text-center ${idx === step ? 'text-blue-600 font-semibold' : 'text-gray-500'}`}>{label}</span>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-4 sm:py-6 space-y-4 sm:space-y-0">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <User className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Tutor Registration</h1>
+                <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">Join our platform and start your teaching journey</p>
+              </div>
+            </div>
+            <div className="flex items-center justify-between sm:justify-end space-x-4">
+              <div className="hidden sm:flex items-center space-x-4">
+                <span className="text-sm text-gray-500">Step {step + 1} of {steps.length}</span>
+                <div className="w-32 bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${((step + 1) / steps.length) * 100}%` }}
+                  />
+                </div>
+              </div>
+              <div className="sm:hidden flex items-center space-x-2">
+                <span className="text-xs text-gray-500">Step {step + 1}/{steps.length}</span>
+                <div className="w-16 bg-gray-200 rounded-full h-1.5">
+                  <div 
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 h-1.5 rounded-full transition-all duration-300"
+                    style={{ width: `${((step + 1) / steps.length) * 100}%` }}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-        ))}
+        </div>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-8 bg-white p-8 rounded-xl shadow-lg" encType="multipart/form-data">
-        {/* Step 1: Personal Information */}
-        {step === 0 && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4 border-b pb-2">Personal Information</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block font-semibold mb-1">Full Name</label>
-                <input name="name" value={form.name} onChange={handleChange} required className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="Enter your full name" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar - Progress Steps */}
+          <div className="hidden lg:block lg:col-span-1">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-8">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">Registration Progress</h3>
+              <div className="space-y-4">
+                {steps.map((stepItem, index) => {
+                  const Icon = stepItem.icon;
+                  const isCompleted = index < step;
+                  const isCurrent = index === step;
+                  return (
+                    <div key={index} className="flex items-center space-x-3">
+                      <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                        isCompleted 
+                          ? 'bg-green-100 text-green-600' 
+                          : isCurrent 
+                            ? 'bg-blue-100 text-blue-600' 
+                            : 'bg-gray-100 text-gray-400'
+                      }`}>
+                        {isCompleted ? (
+                          <CheckCircle className="w-5 h-5" />
+                        ) : (
+                          <Icon className="w-5 h-5" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm font-medium ${
+                          isCompleted 
+                            ? 'text-green-600' 
+                            : isCurrent 
+                              ? 'text-blue-600' 
+                              : 'text-gray-500'
+                        }`}>
+                          {stepItem.title}
+                        </p>
+                        {isCurrent && (
+                          <p className="text-xs text-gray-400">Current step</p>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-              <div>
-                <label className="block font-semibold mb-1">Phone</label>
-                <input name="phone" value={form.phone} onChange={handleChange} required className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="e.g. 017XXXXXXXX" />
+            </div>
+          </div>
+
+          {/* Mobile Horizontal Stepper */}
+          <div className="flex lg:hidden col-span-1 mb-6">
+            <div className="flex w-full justify-between items-center bg-white rounded-xl shadow-sm border border-gray-200 px-2 py-3">
+              {steps.map((stepItem, index) => {
+                const Icon = stepItem.icon;
+                const isCompleted = index < step;
+                const isCurrent = index === step;
+                return (
+                  <div key={index} className="flex flex-col items-center flex-1">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-1 ${
+                      isCompleted
+                        ? 'bg-green-100 text-green-600'
+                        : isCurrent
+                          ? 'bg-blue-100 text-blue-600'
+                          : 'bg-gray-100 text-gray-400'
+                    }`}>
+                      {isCompleted ? (
+                        <CheckCircle className="w-5 h-5" />
+                      ) : (
+                        <Icon className="w-5 h-5" />
+                      )}
+                    </div>
+                    <span className={`text-[10px] font-medium text-center ${
+                      isCompleted
+                        ? 'text-green-600'
+                        : isCurrent
+                          ? 'text-blue-600'
+                          : 'text-gray-400'
+                    }`}>
+                      {stepItem.title.split(' ')[0]}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="lg:col-span-3">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              {/* Tuition Application Banner */}
+              {tuitionCode && tuitionDetails && (
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-b border-blue-200 p-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0">
+                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <CheckCircle className="w-6 h-6 text-blue-600" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-blue-900 mb-2">
+                        Applying for Tuition: {tuitionDetails.code}
+                      </h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                        <div><span className="font-medium text-gray-700">Class:</span> {tuitionDetails.class} - {tuitionDetails.version}</div>
+                        <div><span className="font-medium text-gray-700">Subjects:</span> {tuitionDetails.subjects?.join(', ')}</div>
+                        <div><span className="font-medium text-gray-700">Location:</span> {tuitionDetails.location}</div>
+                        <div><span className="font-medium text-gray-700">Salary:</span> {tuitionDetails.salary}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="p-6 space-y-8">
+                {/* Step 1: Personal Information */}
+                {step === 0 && (
+                  <div className="space-y-6">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <User className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <h2 className="text-xl font-semibold text-gray-900">Personal Information</h2>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Full Name <span className="text-red-500">*</span>
+                        </label>
+                        <input 
+                          name="name" 
+                          value={form.name} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="Enter your full name" 
+                          required 
+                        />
+                        {!form.name && step > 0 && (
+                          <p className="text-xs text-red-500">Full name is required</p>
+                        )}
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Phone Number <span className="text-red-500">*</span>
+                        </label>
+                        <input 
+                          name="phone" 
+                          value={form.phone} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="01XXXXXXXXX" 
+                          required 
+                        />
+                        {!form.phone && step > 0 && (
+                          <p className="text-xs text-red-500">Phone number is required</p>
+                        )}
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Email Address</label>
+                        <input 
+                          name="email" 
+                          type="email" 
+                          value={form.email} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="your.email@example.com" 
+                        />
               </div>
-              <div>
-                <label className="block font-semibold mb-1">Email</label>
-                <input name="email" value={form.email} onChange={handleChange} type="email" className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="your@email.com" />
-              </div>
-              <div>
-                <label className="block font-semibold mb-1">Address</label>
-                <input name="address" value={form.address} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="Current address" />
-              </div>
-              <div>
-                <label className="block font-semibold mb-1">Father's Name</label>
-                <input name="fatherName" value={form.fatherName} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="Father's full name" />
-              </div>
-              <div>
-                <label className="block font-semibold mb-1">Father's Number</label>
-                <input name="fatherNumber" value={form.fatherNumber} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="Father's phone number" />
-              </div>
-              <div>
-                <label className="block font-semibold mb-1">Gender</label>
-                <select name="gender" value={form.gender} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200">
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Gender</label>
+                        <select 
+                          name="gender" 
+                          value={form.gender} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        >
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                   <option value="Other">Other</option>
                 </select>
               </div>
-              <div>
-                <label className="block font-semibold mb-1">Password</label>
-                <input name="password" value={form.password} onChange={handleChange} type="password" className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="Enter a password" />
+                      
+                      <div className="md:col-span-2 space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Address</label>
+                        <textarea 
+                          name="address" 
+                          value={form.address} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          rows={3} 
+                          placeholder="Enter your full address"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Father's Name</label>
+                        <input 
+                          name="fatherName" 
+                          value={form.fatherName} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="Father's name" 
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Father's Phone Number</label>
+                        <input 
+                          name="fatherNumber" 
+                          value={form.fatherNumber} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="Father's phone number" 
+                        />
               </div>
             </div>
           </div>
         )}
+                
         {/* Step 2: Academic Background */}
         {step === 1 && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4 border-b pb-2">Academic Background</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block font-semibold mb-1">Background</label>
-                <select name="background" value={form.background} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200">
+                  <div className="space-y-6">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                        <GraduationCap className="w-5 h-5 text-green-600" />
+                      </div>
+                      <h2 className="text-xl font-semibold text-gray-900">Academic Background</h2>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Educational Background</label>
+                        <select 
+                          name="background" 
+                          value={form.background} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        >
                   <option value="Bangla Medium">Bangla Medium</option>
+                          <option value="English Medium">English Medium</option>
                   <option value="English Version">English Version</option>
-                  <option value="English Medium">English Medium</option>
                 </select>
               </div>
-              <div>
-                <label className="block font-semibold mb-1">Group</label>
-                <select name="group" value={form.group} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200">
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Group</label>
+                        <select 
+                          name="group" 
+                          value={form.group} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        >
                   <option value="Science">Science</option>
                   <option value="Arts">Arts</option>
                   <option value="Commerce">Commerce</option>
                 </select>
               </div>
+                      
               {(form.background === "Bangla Medium" || form.background === "English Version") && (
                 <>
-                  <div>
-                    <label className="block font-semibold mb-1">SSC Result</label>
-                    <input name="sscResult" value={form.sscResult} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="e.g. GPA 5.00" />
+                          <div className="space-y-2">
+                            <label className="block text-sm font-medium text-gray-700">SSC Result</label>
+                            <input 
+                              name="sscResult" 
+                              value={form.sscResult} 
+                              onChange={handleChange} 
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                              placeholder="e.g. 5.00" 
+                            />
                   </div>
-                  <div>
-                    <label className="block font-semibold mb-1">HSC Result</label>
-                    <input name="hscResult" value={form.hscResult} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="e.g. GPA 5.00" />
+                          <div className="space-y-2">
+                            <label className="block text-sm font-medium text-gray-700">HSC Result</label>
+                            <input 
+                              name="hscResult" 
+                              value={form.hscResult} 
+                              onChange={handleChange} 
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                              placeholder="e.g. 5.00" 
+                            />
                   </div>
                 </>
               )}
+                      
               {form.background === "English Medium" && (
                 <>
-                  <div>
-                    <label className="block font-semibold mb-1">O-levels Result</label>
-                    <input name="oLevelResult" value={form.oLevelResult} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="e.g. 5A*, 2A" />
+                          <div className="space-y-2">
+                            <label className="block text-sm font-medium text-gray-700">O-levels Result</label>
+                            <input 
+                              name="oLevelResult" 
+                              value={form.oLevelResult} 
+                              onChange={handleChange} 
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                              placeholder="e.g. 6A, 2B" 
+                            />
                   </div>
-                  <div>
-                    <label className="block font-semibold mb-1">A-levels Result</label>
-                    <input name="aLevelResult" value={form.aLevelResult} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="e.g. 2A, 1B" />
+                          <div className="space-y-2">
+                            <label className="block text-sm font-medium text-gray-700">A-levels Result</label>
+                            <input 
+                              name="aLevelResult" 
+                              value={form.aLevelResult} 
+                              onChange={handleChange} 
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                              placeholder="e.g. 2A, 1B" 
+                            />
                   </div>
                 </>
               )}
-              <div>
-                <label className="block font-semibold mb-1">School Name</label>
-                <input name="schoolName" value={form.schoolName} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="School name" />
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">School Name</label>
+                        <input 
+                          name="schoolName" 
+                          value={form.schoolName} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="School name" 
+                        />
               </div>
-              <div>
-                <label className="block font-semibold mb-1">College Name</label>
-                <input name="collegeName" value={form.collegeName} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="College name" />
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">College Name</label>
+                        <input 
+                          name="collegeName" 
+                          value={form.collegeName} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="College name" 
+                        />
               </div>
-              <div>
-                <label className="block font-semibold mb-1">University</label>
-                <input name="university" value={form.university} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="University name" />
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">University</label>
+                        <input 
+                          name="university" 
+                          value={form.university} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="University name" 
+                        />
               </div>
-              <div>
-                <label className="block font-semibold mb-1">University Short Form</label>
-                <input name="universityShortForm" value={form.universityShortForm} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="e.g. DU, BUET" />
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">University Short Form</label>
+                        <input 
+                          name="universityShortForm" 
+                          value={form.universityShortForm} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="e.g. DU, BUET" 
+                        />
               </div>
-              <div>
-                <label className="block font-semibold mb-1">Department</label>
-                <input name="department" value={form.department} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="Department name" />
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Department</label>
+                        <input 
+                          name="department" 
+                          value={form.department} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="Department name" 
+                        />
               </div>
-              <div>
-                <label className="block font-semibold mb-1">Year & Semester</label>
-                <input name="yearAndSemester" value={form.yearAndSemester} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="e.g. 2nd Year, 1st Semester" />
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Year & Semester</label>
+                        <input 
+                          name="yearAndSemester" 
+                          value={form.yearAndSemester} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="e.g. 2nd Year, 1st Semester" 
+                        />
               </div>
             </div>
           </div>
         )}
+
         {/* Step 3: Preferences & Experience */}
         {step === 2 && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4 border-b pb-2">Preferences & Experience</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block font-semibold mb-1">Preferred Subjects (comma separated)</label>
-                <input name="preferredSubjects" value={form.preferredSubjects} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="Math, Physics, Chemistry" />
+                  <div className="space-y-6">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <Eye className="w-5 h-5 text-purple-600" />
+                      </div>
+                      <h2 className="text-xl font-semibold text-gray-900">Preferences & Experience</h2>
+                    </div>
+                    
+                    <div className="space-y-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Preferred Subjects</label>
+                        <input 
+                          name="preferredSubjects" 
+                          value={form.preferredSubjects} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="Math, Physics, Chemistry (comma separated)" 
+                        />
+                        <p className="text-xs text-gray-500">Enter subjects you can teach, separated by commas</p>
               </div>
-              <div>
-                <label className="block font-semibold mb-1">Preferred Location (comma separated)</label>
-                <input name="preferredLocation" value={form.preferredLocation} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="Dhanmondi, Uttara" />
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Preferred Locations</label>
+                        <input 
+                          name="preferredLocation" 
+                          value={form.preferredLocation} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          placeholder="Dhanmondi, Uttara (comma separated)" 
+                        />
+                        <p className="text-xs text-gray-500">Enter areas where you're willing to teach, separated by commas</p>
               </div>
-              <div>
-                <label className="block font-semibold mb-1">Experience</label>
-                <input name="experience" value={form.experience} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="e.g. 2 years coaching" />
+                      
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Teaching Experience</label>
+                        <textarea 
+                          name="experience" 
+                          value={form.experience} 
+                          onChange={handleChange} 
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
+                          rows={3}
+                          placeholder="Describe your teaching experience, coaching background, or any relevant experience" 
+                        />
+                        <p className="text-xs text-gray-500">Share your teaching experience, coaching background, or any relevant experience</p>
               </div>
             </div>
           </div>
         )}
+
         {/* Step 4: Location Details */}
         {step === 3 && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4 border-b pb-2">Location Details</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block font-semibold mb-1">Division</label>
-                <input name="division" value={form.division} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="e.g. Dhaka" />
+                  <div className="space-y-6">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                        <MapPin className="w-5 h-5 text-orange-600" />
               </div>
-              <div>
-                <label className="block font-semibold mb-1">District</label>
-                <input name="district" value={form.district} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="e.g. Dhaka" />
+                      <h2 className="text-xl font-semibold text-gray-900">Location Details</h2>
               </div>
-              <div>
-                <label className="block font-semibold mb-1">Area</label>
-                <input name="area" value={form.area} onChange={handleChange} className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200" placeholder="e.g. Dhanmondi" />
-              </div>
+                    
+                    <div className="bg-gray-50 rounded-lg p-6">
+                      <LocationSelector
+                        value={form.location}
+                        onChange={(location) => setForm({ ...form, location })}
+                      />
             </div>
           </div>
         )}
+
         {/* Step 5: Documents */}
         {step === 4 && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4 border-b pb-2">Documents</h2>
-            <div className="space-y-8">
-              {/* NID Photo Upload */}
-              <div>
-                <label className="block font-semibold mb-2">NID Photo</label>
-                <div
-                  className="w-full border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition hover:border-blue-400 bg-gray-50 relative"
-                  onClick={() => nidInputRef.current?.click()}
-                  onDragOver={e => e.preventDefault()}
-                  onDrop={e => handleDrop(e, 'nidPhoto')}
-                >
-                  {nidPreview ? (
-                    <img src={nidPreview} alt="NID Preview" className="h-32 object-contain mb-2 rounded shadow" />
-                  ) : (
-                    <span className="text-gray-400 text-sm mb-2">Drag & drop or click to upload NID photo</span>
-                  )}
-                  <input
-                    ref={nidInputRef}
-                    name="nidPhoto"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleFileChange}
+                  <div className="space-y-6">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                        <FileText className="w-5 h-5 text-indigo-600" />
+                </div>
+                      <h2 className="text-xl font-semibold text-gray-900">Documents</h2>
+              </div>
+                    
+                    <DocumentUpload
+                      nidPhoto={form.nidPhoto as File | null}
+                      studentIdPhoto={form.studentIdPhoto as File | null}
+                      additionalDocuments={additionalDocuments}
+                      onNidPhotoChange={handleNidPhotoChange}
+                      onStudentIdPhotoChange={handleStudentIdPhotoChange}
+                      onAdditionalDocumentsChange={setAdditionalDocuments}
+                      nidPreview={nidPreview}
+                      studentIdPreview={studentIdPreview}
+                      showRequired={true}
                   />
                 </div>
-                {form.nidPhoto && typeof form.nidPhoto !== 'string' && (
-                  <div className="text-xs text-gray-500 mt-1">{form.nidPhoto.name}</div>
                 )}
+
+                {/* Step 6: Review & Submit */}
+                {step === 5 && (
+                  <div className="space-y-6">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                        <Send className="w-5 h-5 text-red-600" />
+                      </div>
+                      <h2 className="text-xl font-semibold text-gray-900">Review & Submit</h2>
               </div>
-              {/* Student ID Photo Upload */}
-              <div>
-                <label className="block font-semibold mb-2">Student ID Photo</label>
-                <div
-                  className="w-full border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition hover:border-blue-400 bg-gray-50 relative"
-                  onClick={() => studentIdInputRef.current?.click()}
-                  onDragOver={e => e.preventDefault()}
-                  onDrop={e => handleDrop(e, 'studentIdPhoto')}
-                >
-                  {studentIdPreview ? (
-                    <img src={studentIdPreview} alt="Student ID Preview" className="h-32 object-contain mb-2 rounded shadow" />
-                  ) : (
-                    <span className="text-gray-400 text-sm mb-2">Drag & drop or click to upload Student ID photo</span>
-                  )}
-                  <input
-                    ref={studentIdInputRef}
-                    name="studentIdPhoto"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                </div>
-                {form.studentIdPhoto && typeof form.studentIdPhoto !== 'string' && (
-                  <div className="text-xs text-gray-500 mt-1">{form.studentIdPhoto.name}</div>
-                )}
-              </div>
+                    
+                    <div className="bg-gray-50 rounded-lg p-6 space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Personal Information</h3>
+                          <div className="space-y-2 text-sm">
+                            <div><span className="font-medium text-gray-700">Full Name:</span> {form.name || 'Not provided'}</div>
+                            <div><span className="font-medium text-gray-700">Phone:</span> {form.phone || 'Not provided'}</div>
+                            <div><span className="font-medium text-gray-700">Email:</span> {form.email || 'Not provided'}</div>
+                            <div><span className="font-medium text-gray-700">Gender:</span> {form.gender}</div>
+                            <div><span className="font-medium text-gray-700">Address:</span> {form.address || 'Not provided'}</div>
+                            <div><span className="font-medium text-gray-700">Father's Name:</span> {form.fatherName || 'Not provided'}</div>
+                            <div><span className="font-medium text-gray-700">Father's Number:</span> {form.fatherNumber || 'Not provided'}</div>
             </div>
           </div>
-        )}
-        {/* Step 6: Review & Submit */}
-        {step === 5 && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4 border-b pb-2">Review & Submit</h2>
-            <div className="bg-gray-50 p-4 rounded mb-4 space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">Personal Information</h3>
-                <div><b>Full Name:</b> {form.name}</div>
-                <div><b>Phone:</b> {form.phone}</div>
-                <div><b>Email:</b> {form.email}</div>
-                <div><b>Address:</b> {form.address}</div>
-                <div><b>Father's Name:</b> {form.fatherName}</div>
-                <div><b>Father's Number:</b> {form.fatherNumber}</div>
-                <div><b>Gender:</b> {form.gender}</div>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Academic Background</h3>
-                <div><b>Background:</b> {form.background}</div>
-                <div><b>Group:</b> {form.group}</div>
+                        
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Academic Background</h3>
+                          <div className="space-y-2 text-sm">
+                            <div><span className="font-medium text-gray-700">Background:</span> {form.background}</div>
+                            <div><span className="font-medium text-gray-700">Group:</span> {form.group}</div>
                 {(form.background === "Bangla Medium" || form.background === "English Version") && (
                   <>
-                    <div><b>SSC Result:</b> {form.sscResult}</div>
-                    <div><b>HSC Result:</b> {form.hscResult}</div>
+                                <div><span className="font-medium text-gray-700">SSC Result:</span> {form.sscResult || 'Not provided'}</div>
+                                <div><span className="font-medium text-gray-700">HSC Result:</span> {form.hscResult || 'Not provided'}</div>
                   </>
                 )}
                 {form.background === "English Medium" && (
                   <>
-                    <div><b>O-levels Result:</b> {form.oLevelResult}</div>
-                    <div><b>A-levels Result:</b> {form.aLevelResult}</div>
+                                <div><span className="font-medium text-gray-700">O-levels Result:</span> {form.oLevelResult || 'Not provided'}</div>
+                                <div><span className="font-medium text-gray-700">A-levels Result:</span> {form.aLevelResult || 'Not provided'}</div>
                   </>
                 )}
-                <div><b>School Name:</b> {form.schoolName}</div>
-                <div><b>College Name:</b> {form.collegeName}</div>
-                <div><b>University:</b> {form.university}</div>
-                <div><b>University Short Form:</b> {form.universityShortForm}</div>
-                <div><b>Department:</b> {form.department}</div>
-                <div><b>Year & Semester:</b> {form.yearAndSemester}</div>
+                            <div><span className="font-medium text-gray-700">University:</span> {form.university || 'Not provided'}</div>
+                            <div><span className="font-medium text-gray-700">Department:</span> {form.department || 'Not provided'}</div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Preferences & Experience</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                          <div><span className="font-medium text-gray-700">Preferred Subjects:</span> {form.preferredSubjects || 'Not provided'}</div>
+                          <div><span className="font-medium text-gray-700">Preferred Location:</span> {form.preferredLocation || 'Not provided'}</div>
+                          <div><span className="font-medium text-gray-700">Experience:</span> {form.experience || 'Not provided'}</div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Location Details</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                          <div><span className="font-medium text-gray-700">Division:</span> {form.location.division || 'Not provided'}</div>
+                          <div><span className="font-medium text-gray-700">District:</span> {form.location.district || 'Not provided'}</div>
+                          <div><span className="font-medium text-gray-700">Area:</span> {form.location.area || 'Not provided'}</div>
+                          <div><span className="font-medium text-gray-700">Sub-area:</span> {form.location.subarea || 'Not provided'}</div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Documents</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                          <div><span className="font-medium text-gray-700">NID Photo:</span> {form.nidPhoto ? (form.nidPhoto instanceof File ? form.nidPhoto.name : 'Uploaded') : 'Not uploaded'}</div>
+                          <div><span className="font-medium text-gray-700">Student ID Photo:</span> {form.studentIdPhoto ? (form.studentIdPhoto instanceof File ? form.studentIdPhoto.name : 'Uploaded') : 'Not uploaded'}</div>
               </div>
+                        {additionalDocuments.length > 0 && (
               <div>
-                <h3 className="font-semibold mb-2">Preferences & Experience</h3>
-                <div><b>Preferred Subjects:</b> {form.preferredSubjects}</div>
-                <div><b>Preferred Location:</b> {form.preferredLocation}</div>
-                <div><b>Experience:</b> {form.experience}</div>
+                            <span className="font-medium text-gray-700">Additional Documents:</span>
+                            <ul className="ml-4 mt-2 space-y-1">
+                              {additionalDocuments.map((doc) => (
+                                <li key={doc.id} className="text-sm">• {doc.label}: {doc.file.name}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
               </div>
-              <div>
-                <h3 className="font-semibold mb-2">Location Details</h3>
-                <div><b>Division:</b> {form.division}</div>
-                <div><b>District:</b> {form.district}</div>
-                <div><b>Area:</b> {form.area}</div>
               </div>
-              <div>
-                <h3 className="font-semibold mb-2">Documents</h3>
-                <div><b>NID Photo:</b> {form.nidPhoto ? (form.nidPhoto instanceof File ? form.nidPhoto.name : form.nidPhoto) : 'Not uploaded'}</div>
-                <div><b>Student ID Photo:</b> {form.studentIdPhoto ? (form.studentIdPhoto instanceof File ? form.studentIdPhoto.name : form.studentIdPhoto) : 'Not uploaded'}</div>
+                    
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <p className="text-sm text-blue-800">
+                        <strong>Important:</strong> Please review all your information carefully before submitting. 
+                        You can go back to edit any section if needed.
+                      </p>
               </div>
             </div>
-            <div className="text-gray-600 text-sm mb-2">Please review your information before submitting. You can go back to edit any section.</div>
+                )}
+
+                {/* Error and Success Messages */}
+                {error && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p className="text-sm text-red-800">{error}</p>
+                  </div>
+                )}
+                
+                {success && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <p className="text-sm text-green-800">{success}</p>
           </div>
         )}
-        {error && <div className="text-red-600 font-semibold text-center">{error}</div>}
-        {success && <div className="text-green-600 font-semibold text-center">{success}</div>}
-        <div className="flex justify-between mt-8">
-          <button type="button" onClick={handleBack} disabled={step === 0} className="px-6 py-2 rounded bg-gray-200 text-gray-700 font-semibold disabled:opacity-50">Back</button>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t border-gray-200">
+                  <button 
+                    type="button" 
+                    onClick={handleBack} 
+                    disabled={step === 0} 
+                    className="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronLeft className="w-4 h-4 mr-2" />
+                    Back
+                  </button>
+                  
           {step < steps.length - 1 ? (
-            <button type="button" onClick={handleNext} className="px-6 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700">Next</button>
-          ) : (
-            <button type="submit" disabled={loading} className="px-8 py-2 rounded bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200">
-              {loading ? "Registering..." : "Submit"}
+                    <button 
+                      type="button" 
+                      onClick={handleNext} 
+                      className="inline-flex items-center px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                    >
+                      Next
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </button>
+                  ) : (
+                    <button 
+                      type="submit" 
+                      disabled={loading} 
+                      className="inline-flex items-center px-8 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
+                    >
+                      {loading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4 mr-2" />
+                          Submit Registration
+                        </>
+                      )}
             </button>
           )}
         </div>
       </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 } 

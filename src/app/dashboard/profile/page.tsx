@@ -158,14 +158,23 @@ export default function ProfilePage() {
             </div>
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                  Update Profile
+                <button 
+                  onClick={() => window.location.href = '/dashboard/tutors'}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Manage Tutors
                 </button>
-                <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
-                  Change Password
+                <button 
+                  onClick={() => window.location.href = '/dashboard/tuitions'}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Manage Tuitions
                 </button>
-                <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-                  Security Settings
+                <button 
+                  onClick={() => window.location.href = '/dashboard/applications'}
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                >
+                  View Applications
                 </button>
               </div>
             </div>

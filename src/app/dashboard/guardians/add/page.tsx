@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
 import Toast, { useToast } from '@/components/Toast';
+import LocationSelector from '@/components/LocationSelector';
 
 interface GuardianFormData {
   name: string;
@@ -17,6 +18,7 @@ interface GuardianFormData {
     division: string;
     district: string;
     area: string;
+    subarea?: string;
   };
 }
 
@@ -33,7 +35,8 @@ export default function AddGuardianPage() {
     location: {
       division: '',
       district: '',
-      area: ''
+      area: '',
+      subarea: ''
     }
   });
   const [submitting, setSubmitting] = useState(false);
@@ -43,13 +46,10 @@ export default function AddGuardianPage() {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleLocationChange = (field: keyof GuardianFormData['location'], value: string) => {
+  const handleLocationChange = (location: GuardianFormData['location']) => {
     setFormData(prev => ({
       ...prev,
-      location: {
-        ...prev.location,
-        [field]: value
-      }
+      location
     }));
   };
 
@@ -190,53 +190,14 @@ export default function AddGuardianPage() {
           <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Location Information</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Division
-                </label>
-                <select
-                  value={formData.location.division}
-                  onChange={(e) => handleLocationChange('division', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                >
-                  <option value="">Select Division</option>
-                  <option value="Dhaka">Dhaka</option>
-                  <option value="Chittagong">Chittagong</option>
-                  <option value="Rajshahi">Rajshahi</option>
-                  <option value="Khulna">Khulna</option>
-                  <option value="Barisal">Barisal</option>
-                  <option value="Sylhet">Sylhet</option>
-                  <option value="Rangpur">Rangpur</option>
-                  <option value="Mymensingh">Mymensingh</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  District
-                </label>
-                <input
-                  type="text"
-                  value={formData.location.district}
-                  onChange={(e) => handleLocationChange('district', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  placeholder="e.g., Dhaka, Chittagong"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Area/Location
-                </label>
-                <input
-                  type="text"
-                  value={formData.location.area}
-                  onChange={(e) => handleLocationChange('area', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  placeholder="e.g., Dhanmondi, Gulshan"
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Location (Division/District/Area)
+              </label>
+              <LocationSelector
+                value={formData.location}
+                onChange={handleLocationChange}
+              />
             </div>
           </div>
 

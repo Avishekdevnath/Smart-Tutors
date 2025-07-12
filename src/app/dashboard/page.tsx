@@ -39,14 +39,26 @@ export default function Dashboard() {
       const guardians = await guardiansRes.json();
       const tuitions = await tuitionsRes.json();
 
+      // Ensure we have arrays, handle potential error responses
+      const tutorsArray = Array.isArray(tutors) ? tutors : [];
+      const guardiansArray = Array.isArray(guardians) ? guardians : [];
+      const tuitionsArray = Array.isArray(tuitions) ? tuitions : [];
+
       setStats({
-        tutors: tutors.length || 0,
-        guardians: guardians.length || 0,
-        tuitions: tuitions.length || 0,
-        activeTuitions: tuitions.filter((t: any) => t.status === 'open' || t.status === 'demo running').length || 0
+        tutors: tutorsArray.length || 0,
+        guardians: guardiansArray.length || 0,
+        tuitions: tuitionsArray.length || 0,
+        activeTuitions: tuitionsArray.filter((t: any) => t.status === 'open' || t.status === 'demo running').length || 0
       });
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
+      // Set default values on error
+      setStats({
+        tutors: 0,
+        guardians: 0,
+        tuitions: 0,
+        activeTuitions: 0
+      });
     } finally {
       setLoading(false);
     }

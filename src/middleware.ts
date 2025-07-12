@@ -23,8 +23,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Protect tutor routes - only allow tutor users
-  if (pathname.startsWith('/tutor/')) {
+  // Protect tutor routes - only allow tutor users (except public profile pages)
+  if (pathname.startsWith('/tutor/') && !pathname.match(/^\/tutor\/[^\/]+$/)) {
     if (!token || token.userType !== 'tutor') {
       // Redirect admins to their dashboard, non-authenticated users to login
       if (token?.userType === 'admin') {

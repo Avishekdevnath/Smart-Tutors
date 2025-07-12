@@ -164,7 +164,7 @@ export async function PUT(
     const body = await request.json();
     const { status } = body;
 
-    if (!status || !['pending', 'confirmed', 'completed', 'rejected', 'withdrawn'].includes(status)) {
+    if (!status || !['pending', 'selected-for-demo', 'confirmed-fee-pending', 'completed', 'rejected', 'withdrawn'].includes(status)) {
       return NextResponse.json(
         { error: 'Invalid status' },
         { status: 400 }
@@ -174,12 +174,28 @@ export async function PUT(
     const updateData: any = { status };
 
     // Set appropriate timestamp based on status
-    if (status === 'confirmed') {
+    if (status === 'selected-for-demo') {
+      updateData.confirmedAt = new Date();
+    } else if (status === 'confirmed-fee-pending') {
       updateData.confirmedAt = new Date();
     } else if (status === 'completed') {
       updateData.completedAt = new Date();
     } else if (status === 'rejected') {
       updateData.rejectedAt = new Date();
+    }
+
+    // Handle demo instructions and guardian contact
+    if (body.demoInstructions) {
+      updateData.demoInstructions = body.demoInstructions;
+    }
+    if (body.guardianContactSent !== undefined) {
+      updateData.guardianContactSent = body.guardianContactSent;
+      if (body.guardianContactSent) {
+        updateData.guardianContactSentAt = new Date();
+      }
+    }
+    if (body.confirmationText) {
+      updateData.confirmationText = body.confirmationText;
     }
 
     const application = await TutorTuition.findByIdAndUpdate(

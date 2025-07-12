@@ -6,7 +6,7 @@ import DashboardLayout from '@/components/DashboardLayout';
 import Modal from '@/components/Modal';
 import TutorEditForm from '@/components/TutorEditForm';
 import Toast, { useToast } from '@/components/Toast';
-import { Search, Filter, SortAsc, SortDesc, Plus, Eye, Edit, Trash2, Phone, Mail, MapPin, GraduationCap } from 'lucide-react';
+import { Search, Filter, SortAsc, SortDesc, Plus, Eye, Edit, Trash2, Phone, Mail, MapPin, GraduationCap, MessageSquare } from 'lucide-react';
 
 interface Tutor {
   _id: string;
@@ -70,6 +70,10 @@ export default function TutorsDashboardPage() {
   const [editModal, setEditModal] = useState<Tutor | null>(null);
   const [deleteModal, setDeleteModal] = useState<Tutor | null>(null);
   const [editLoading, setEditLoading] = useState(false);
+  const [smsModal, setSmsModal] = useState(false);
+  const [selectedTutors, setSelectedTutors] = useState<Tutor[]>([]);
+  const [smsMessage, setSmsMessage] = useState('');
+  const [smsLoading, setSmsLoading] = useState(false);
   const { toast, showToast, hideToast } = useToast();
 
   useEffect(() => {
@@ -212,6 +216,80 @@ export default function TutorsDashboardPage() {
     } catch (error) {
       showToast('Error deleting tutor', 'error');
     }
+  };
+
+  // SMS Functions
+  const handleSendSMS = () => {
+    if (selectedTutors.length === 0) {
+      showToast('Please select at least one tutor to send SMS', 'error');
+      return;
+    }
+    setSmsModal(true);
+  };
+
+  const handleSMSSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!smsMessage.trim()) {
+      showToast('Please enter a message', 'error');
+      return;
+    }
+
+    if (selectedTutors.length === 0) {
+      showToast('No tutors selected', 'error');
+      return;
+    }
+
+    try {
+      setSmsLoading(true);
+      
+      const phoneNumbers = selectedTutors.map(tutor => tutor.phone);
+      
+      const response = await fetch('/api/sms', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'send-bulk-same',
+          numbers: phoneNumbers,
+          message: smsMessage
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        showToast(`SMS sent successfully to ${selectedTutors.length} tutors!`, 'success');
+        setSmsModal(false);
+        setSmsMessage('');
+        setSelectedTutors([]);
+      } else {
+        showToast(result.error || 'Failed to send SMS', 'error');
+      }
+    } catch (error) {
+      console.error('SMS sending error:', error);
+      showToast('Failed to send SMS', 'error');
+    } finally {
+      setSmsLoading(false);
+    }
+  };
+
+  const toggleTutorSelection = (tutor: Tutor) => {
+    setSelectedTutors(prev => {
+      const isSelected = prev.some(t => t._id === tutor._id);
+      if (isSelected) {
+        return prev.filter(t => t._id !== tutor._id);
+      } else {
+        return [...prev, tutor];
+      }
+    });
+  };
+
+  const selectAllTutors = () => {
+    setSelectedTutors(sortedTutors);
+  };
+
+  const clearSelection = () => {
+    setSelectedTutors([]);
   };
 
   return (
@@ -377,11 +455,57 @@ export default function TutorsDashboardPage() {
         </div>
       </div>
 
+      {/* SMS Selection Controls */}
+      {sortedTutors.length > 0 && (
+        <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={selectAllTutors}
+                  className="px-3 py-1.5 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+                >
+                  Select All ({sortedTutors.length})
+                </button>
+                <button
+                  onClick={clearSelection}
+                  className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  Clear Selection
+                </button>
+              </div>
+              {selectedTutors.length > 0 && (
+                <span className="text-sm text-gray-600">
+                  {selectedTutors.length} tutor(s) selected
+                </span>
+              )}
+            </div>
+            {selectedTutors.length > 0 && (
+              <button
+                onClick={handleSendSMS}
+                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>Send SMS ({selectedTutors.length})</span>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Tutors Table (Desktop) */}
       <div className="hidden md:block overflow-x-auto bg-white rounded-lg shadow">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                <input
+                  type="checkbox"
+                  checked={selectedTutors.length === sortedTutors.length && sortedTutors.length > 0}
+                  onChange={() => selectedTutors.length === sortedTutors.length ? clearSelection() : selectAllTutors()}
+                  className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                />
+              </th>
               <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Tutor ID</th>
               <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Name</th>
               <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Version</th>
@@ -393,7 +517,7 @@ export default function TutorsDashboardPage() {
           <tbody className="bg-white divide-y divide-gray-200">
             {loading ? (
               <tr>
-                <td colSpan={6} className="text-center py-8">
+                <td colSpan={7} className="text-center py-8">
                   <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-600 mx-auto mb-2"></div>
                   <span className="text-gray-600">Loading tutors...</span>
                 </td>
@@ -401,6 +525,14 @@ export default function TutorsDashboardPage() {
             ) : (
               sortedTutors.map((tutor) => (
                 <tr key={tutor._id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="checkbox"
+                      checked={selectedTutors.some(t => t._id === tutor._id)}
+                      onChange={() => toggleTutorSelection(tutor)}
+                      className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                    />
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap font-mono text-sm text-gray-900">{tutor.tutorId}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{tutor.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -443,7 +575,7 @@ export default function TutorsDashboardPage() {
             {/* Empty State */}
             {!loading && sortedTutors.length === 0 && (
               <tr>
-                <td colSpan={6} className="text-center py-12">
+                <td colSpan={7} className="text-center py-12">
                   <GraduationCap className="mx-auto h-12 w-12 text-gray-400" />
                   <h3 className="mt-2 text-sm font-medium text-gray-900">No tutors found</h3>
                   <p className="mt-1 text-sm text-gray-500">
@@ -478,6 +610,12 @@ export default function TutorsDashboardPage() {
           sortedTutors.map((tutor) => (
             <div key={tutor._id} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2">
               <div className="flex items-center gap-3 mb-2">
+                <input
+                  type="checkbox"
+                  checked={selectedTutors.some(t => t._id === tutor._id)}
+                  onChange={() => toggleTutorSelection(tutor)}
+                  className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                />
                 <span className="font-mono text-sm text-gray-500">{tutor.tutorId}</span>
                 <span className="font-semibold text-gray-900 text-base flex-1 truncate">{tutor.name}</span>
               </div>
@@ -592,9 +730,51 @@ export default function TutorsDashboardPage() {
             {/* Documents Info */}
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-gray-700 mb-3">Documents</h3>
-              <div className="space-y-3 text-base">
-                <p><span className="font-medium">NID Photo:</span> {viewModal.documents?.nidPhoto ? (<a href={viewModal.documents.nidPhoto} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View</a>) : '—'}</p>
-                <p><span className="font-medium">Student ID Photo:</span> {viewModal.documents?.studentIdPhoto ? (<a href={viewModal.documents.studentIdPhoto} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View</a>) : '—'}</p>
+              <div className="space-y-4">
+                <div>
+                  <span className="font-medium">NID Photo:</span>
+                  {viewModal.documents?.nidPhoto ? (
+                    <div className="mt-2">
+                      <img 
+                        src={viewModal.documents.nidPhoto} 
+                        alt="NID Photo" 
+                        className="w-full max-w-md h-48 object-cover rounded-lg border border-gray-300 shadow-sm"
+                      />
+                      <a 
+                        href={viewModal.documents.nidPhoto} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-blue-600 hover:text-blue-800 underline text-sm mt-1 inline-block"
+                      >
+                        View Full Size
+                      </a>
+                    </div>
+                  ) : (
+                    <span className="text-gray-500 ml-2">Not uploaded</span>
+                  )}
+                </div>
+                <div>
+                  <span className="font-medium">Student ID Photo:</span>
+                  {viewModal.documents?.studentIdPhoto ? (
+                    <div className="mt-2">
+                      <img 
+                        src={viewModal.documents.studentIdPhoto} 
+                        alt="Student ID Photo" 
+                        className="w-full max-w-md h-48 object-cover rounded-lg border border-gray-300 shadow-sm"
+                      />
+                      <a 
+                        href={viewModal.documents.studentIdPhoto} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-blue-600 hover:text-blue-800 underline text-sm mt-1 inline-block"
+                      >
+                        View Full Size
+                      </a>
+                    </div>
+                  ) : (
+                    <span className="text-gray-500 ml-2">Not uploaded</span>
+                  )}
+                </div>
               </div>
             </div>
             {/* Status & History */}
@@ -663,6 +843,48 @@ export default function TutorsDashboardPage() {
                 Delete Tutor
               </button>
             </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* SMS Modal */}
+      {smsModal && (
+        <Modal isOpen={smsModal} onClose={() => setSmsModal(false)}>
+          <div className="bg-white rounded-lg shadow-lg max-w-md mx-auto p-6">
+            <div className="flex items-center mb-4">
+              <MessageSquare className="w-8 h-8 text-purple-500 mr-3" />
+              <h2 className="text-xl font-bold text-purple-600">Send SMS to Selected Tutors</h2>
+            </div>
+            <form onSubmit={handleSMSSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="smsMessage" className="block text-sm font-medium text-gray-700">Message:</label>
+                <textarea
+                  id="smsMessage"
+                  value={smsMessage}
+                  onChange={(e) => setSmsMessage(e.target.value)}
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="Enter your SMS message here..."
+                  required
+                ></textarea>
+              </div>
+              <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setSmsModal(false)}
+                  className="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="w-full sm:w-auto bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+                  disabled={smsLoading}
+                >
+                  {smsLoading ? 'Sending...' : 'Send SMS'}
+                </button>
+              </div>
+            </form>
           </div>
         </Modal>
       )}

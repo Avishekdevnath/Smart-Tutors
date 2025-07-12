@@ -142,7 +142,36 @@ export async function GET(request: NextRequest) {
   try {
     await dbConnect();
     const session = await getServerSession(authOptions);
+    const { searchParams } = new URL(request.url);
+    const tuitionCode = searchParams.get('tuitionCode');
     
+    // If tuitionCode is provided, allow public access to view applications for that tuition
+    if (tuitionCode) {
+      // Find the tuition by code
+      const tuition = await Tuition.findOne({ code: tuitionCode });
+      if (!tuition) {
+        return NextResponse.json(
+          { error: 'Tuition not found' },
+          { status: 404 }
+        );
+      }
+
+      // Get applications for this specific tuition
+      const applications = await TutorTuition.find({ tuition: tuition._id })
+        .populate({
+          path: 'tutor',
+          select: 'name phone email university department experience',
+          required: false
+        })
+        .sort({ appliedAt: -1 });
+
+      return NextResponse.json({
+        success: true,
+        applications
+      });
+    }
+
+    // For dashboard access, require authentication
     if (!session?.user) {
       return NextResponse.json(
         { error: 'Unauthorized' },

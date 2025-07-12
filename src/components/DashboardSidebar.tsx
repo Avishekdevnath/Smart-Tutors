@@ -17,7 +17,9 @@ import {
   ArrowRightOnRectangleIcon,
   ArrowLeftIcon,
   UserIcon,
-  DocumentTextIcon
+  DocumentTextIcon,
+  MapPinIcon,
+  EnvelopeIcon
 } from '@heroicons/react/24/outline';
 
 interface SidebarItem {
@@ -65,6 +67,12 @@ const sidebarItems: SidebarItem[] = [
     description: 'Manage tuition applications'
   },
   {
+    name: 'SMS',
+    href: '/dashboard/sms',
+    icon: DocumentTextIcon, // You can replace with a message/chat icon if available
+    description: 'Send SMS to users'
+  },
+  {
     name: 'Facebook Groups',
     href: '/dashboard/facebook-groups',
     icon: GlobeAltIcon,
@@ -75,6 +83,24 @@ const sidebarItems: SidebarItem[] = [
     href: '/dashboard/analytics',
     icon: ChartBarIcon,
     description: 'View reports and insights'
+  },
+  {
+    name: 'Reports',
+    href: '/dashboard/reports',
+    icon: DocumentTextIcon,
+    description: 'Generate and view reports'
+  },
+  {
+    name: 'Locations',
+    href: '/dashboard/locations',
+    icon: MapPinIcon,
+    description: 'Manage locations'
+  },
+  {
+    name: 'Contact',
+    href: '/dashboard/contact',
+    icon: EnvelopeIcon,
+    description: 'Contact us and inquiries'
   },
   {
     name: 'Settings',
