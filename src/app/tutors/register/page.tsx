@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight, CheckCircle, Circle, User, GraduationCap, MapPin, FileText, Eye, Send } from "lucide-react";
 import LocationSelector from "@/components/LocationSelector";
@@ -22,7 +22,7 @@ interface AdditionalDocument {
   preview: string;
 }
 
-export default function TutorRegisterPage() {
+function TutorRegisterContent() {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
     name: "",
@@ -198,670 +198,631 @@ export default function TutorRegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-4 sm:py-6 space-y-4 sm:space-y-0">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <User className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Tutor Registration</h1>
-                <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">Join our platform and start your teaching journey</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-between sm:justify-end space-x-4">
-              <div className="hidden sm:flex items-center space-x-4">
-                <span className="text-sm text-gray-500">Step {step + 1} of {steps.length}</span>
-                <div className="w-32 bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${((step + 1) / steps.length) * 100}%` }}
-                  />
-                </div>
-              </div>
-              <div className="sm:hidden flex items-center space-x-2">
-                <span className="text-xs text-gray-500">Step {step + 1}/{steps.length}</span>
-                <div className="w-16 bg-gray-200 rounded-full h-1.5">
-                  <div 
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 h-1.5 rounded-full transition-all duration-300"
-                    style={{ width: `${((step + 1) / steps.length) * 100}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Tutor Registration</h1>
+          <p className="text-gray-600">Join our platform and start your tutoring journey</p>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar - Progress Steps */}
-          <div className="hidden lg:block lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">Registration Progress</h3>
-              <div className="space-y-4">
-                {steps.map((stepItem, index) => {
-                  const Icon = stepItem.icon;
-                  const isCompleted = index < step;
-                  const isCurrent = index === step;
-                  return (
-                    <div key={index} className="flex items-center space-x-3">
-                      <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                        isCompleted 
-                          ? 'bg-green-100 text-green-600' 
-                          : isCurrent 
-                            ? 'bg-blue-100 text-blue-600' 
-                            : 'bg-gray-100 text-gray-400'
-                      }`}>
-                        {isCompleted ? (
-                          <CheckCircle className="w-5 h-5" />
-                        ) : (
-                          <Icon className="w-5 h-5" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-medium ${
-                          isCompleted 
-                            ? 'text-green-600' 
-                            : isCurrent 
-                              ? 'text-blue-600' 
-                              : 'text-gray-500'
-                        }`}>
-                          {stepItem.title}
-                        </p>
-                        {isCurrent && (
-                          <p className="text-xs text-gray-400">Current step</p>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile Horizontal Stepper */}
-          <div className="flex lg:hidden col-span-1 mb-6">
-            <div className="flex w-full justify-between items-center bg-white rounded-xl shadow-sm border border-gray-200 px-2 py-3">
-              {steps.map((stepItem, index) => {
-                const Icon = stepItem.icon;
-                const isCompleted = index < step;
-                const isCurrent = index === step;
-                return (
-                  <div key={index} className="flex flex-col items-center flex-1">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-1 ${
-                      isCompleted
-                        ? 'bg-green-100 text-green-600'
-                        : isCurrent
-                          ? 'bg-blue-100 text-blue-600'
-                          : 'bg-gray-100 text-gray-400'
-                    }`}>
-                      {isCompleted ? (
-                        <CheckCircle className="w-5 h-5" />
-                      ) : (
-                        <Icon className="w-5 h-5" />
-                      )}
-                    </div>
-                    <span className={`text-[10px] font-medium text-center ${
-                      isCompleted
-                        ? 'text-green-600'
-                        : isCurrent
-                          ? 'text-blue-600'
-                          : 'text-gray-400'
-                    }`}>
-                      {stepItem.title.split(' ')[0]}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              {/* Tuition Application Banner */}
-              {tuitionCode && tuitionDetails && (
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-b border-blue-200 p-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <CheckCircle className="w-6 h-6 text-blue-600" />
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-blue-900 mb-2">
-                        Applying for Tuition: {tuitionDetails.code}
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                        <div><span className="font-medium text-gray-700">Class:</span> {tuitionDetails.class} - {tuitionDetails.version}</div>
-                        <div><span className="font-medium text-gray-700">Subjects:</span> {tuitionDetails.subjects?.join(', ')}</div>
-                        <div><span className="font-medium text-gray-700">Location:</span> {tuitionDetails.location}</div>
-                        <div><span className="font-medium text-gray-700">Salary:</span> {tuitionDetails.salary}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="p-6 space-y-8">
-                {/* Step 1: Personal Information */}
-                {step === 0 && (
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <User className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <h2 className="text-xl font-semibold text-gray-900">Personal Information</h2>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Full Name <span className="text-red-500">*</span>
-                        </label>
-                        <input 
-                          name="name" 
-                          value={form.name} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="Enter your full name" 
-                          required 
-                        />
-                        {!form.name && step > 0 && (
-                          <p className="text-xs text-red-500">Full name is required</p>
-                        )}
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Phone Number <span className="text-red-500">*</span>
-                        </label>
-                        <input 
-                          name="phone" 
-                          value={form.phone} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="01XXXXXXXXX" 
-                          required 
-                        />
-                        {!form.phone && step > 0 && (
-                          <p className="text-xs text-red-500">Phone number is required</p>
-                        )}
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Email Address</label>
-                        <input 
-                          name="email" 
-                          type="email" 
-                          value={form.email} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="your.email@example.com" 
-                        />
-              </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Gender</label>
-                        <select 
-                          name="gender" 
-                          value={form.gender} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                        >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-                      
-                      <div className="md:col-span-2 space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Address</label>
-                        <textarea 
-                          name="address" 
-                          value={form.address} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          rows={3} 
-                          placeholder="Enter your full address"
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Father's Name</label>
-                        <input 
-                          name="fatherName" 
-                          value={form.fatherName} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="Father's name" 
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Father's Phone Number</label>
-                        <input 
-                          name="fatherNumber" 
-                          value={form.fatherNumber} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="Father's phone number" 
-                        />
-              </div>
-            </div>
-          </div>
-        )}
-                
-        {/* Step 2: Academic Background */}
-        {step === 1 && (
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                        <GraduationCap className="w-5 h-5 text-green-600" />
-                      </div>
-                      <h2 className="text-xl font-semibold text-gray-900">Academic Background</h2>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Educational Background</label>
-                        <select 
-                          name="background" 
-                          value={form.background} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                        >
-                  <option value="Bangla Medium">Bangla Medium</option>
-                          <option value="English Medium">English Medium</option>
-                  <option value="English Version">English Version</option>
-                </select>
-              </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Group</label>
-                        <select 
-                          name="group" 
-                          value={form.group} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                        >
-                  <option value="Science">Science</option>
-                  <option value="Arts">Arts</option>
-                  <option value="Commerce">Commerce</option>
-                </select>
-              </div>
-                      
-              {(form.background === "Bangla Medium" || form.background === "English Version") && (
-                <>
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">SSC Result</label>
-                            <input 
-                              name="sscResult" 
-                              value={form.sscResult} 
-                              onChange={handleChange} 
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                              placeholder="e.g. 5.00" 
-                            />
-                  </div>
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">HSC Result</label>
-                            <input 
-                              name="hscResult" 
-                              value={form.hscResult} 
-                              onChange={handleChange} 
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                              placeholder="e.g. 5.00" 
-                            />
-                  </div>
-                </>
-              )}
-                      
-              {form.background === "English Medium" && (
-                <>
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">O-levels Result</label>
-                            <input 
-                              name="oLevelResult" 
-                              value={form.oLevelResult} 
-                              onChange={handleChange} 
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                              placeholder="e.g. 6A, 2B" 
-                            />
-                  </div>
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">A-levels Result</label>
-                            <input 
-                              name="aLevelResult" 
-                              value={form.aLevelResult} 
-                              onChange={handleChange} 
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                              placeholder="e.g. 2A, 1B" 
-                            />
-                  </div>
-                </>
-              )}
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">School Name</label>
-                        <input 
-                          name="schoolName" 
-                          value={form.schoolName} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="School name" 
-                        />
-              </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">College Name</label>
-                        <input 
-                          name="collegeName" 
-                          value={form.collegeName} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="College name" 
-                        />
-              </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">University</label>
-                        <input 
-                          name="university" 
-                          value={form.university} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="University name" 
-                        />
-              </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">University Short Form</label>
-                        <input 
-                          name="universityShortForm" 
-                          value={form.universityShortForm} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="e.g. DU, BUET" 
-                        />
-              </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Department</label>
-                        <input 
-                          name="department" 
-                          value={form.department} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="Department name" 
-                        />
-              </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Year & Semester</label>
-                        <input 
-                          name="yearAndSemester" 
-                          value={form.yearAndSemester} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="e.g. 2nd Year, 1st Semester" 
-                        />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: Preferences & Experience */}
-        {step === 2 && (
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <Eye className="w-5 h-5 text-purple-600" />
-                      </div>
-                      <h2 className="text-xl font-semibold text-gray-900">Preferences & Experience</h2>
-                    </div>
-                    
-                    <div className="space-y-6">
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Preferred Subjects</label>
-                        <input 
-                          name="preferredSubjects" 
-                          value={form.preferredSubjects} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="Math, Physics, Chemistry (comma separated)" 
-                        />
-                        <p className="text-xs text-gray-500">Enter subjects you can teach, separated by commas</p>
-              </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Preferred Locations</label>
-                        <input 
-                          name="preferredLocation" 
-                          value={form.preferredLocation} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          placeholder="Dhanmondi, Uttara (comma separated)" 
-                        />
-                        <p className="text-xs text-gray-500">Enter areas where you're willing to teach, separated by commas</p>
-              </div>
-                      
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Teaching Experience</label>
-                        <textarea 
-                          name="experience" 
-                          value={form.experience} 
-                          onChange={handleChange} 
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors" 
-                          rows={3}
-                          placeholder="Describe your teaching experience, coaching background, or any relevant experience" 
-                        />
-                        <p className="text-xs text-gray-500">Share your teaching experience, coaching background, or any relevant experience</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 4: Location Details */}
-        {step === 3 && (
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                        <MapPin className="w-5 h-5 text-orange-600" />
-              </div>
-                      <h2 className="text-xl font-semibold text-gray-900">Location Details</h2>
-              </div>
-                    
-                    <div className="bg-gray-50 rounded-lg p-6">
-                      <LocationSelector
-                        value={form.location}
-                        onChange={(location) => setForm({ ...form, location })}
-                      />
-            </div>
-          </div>
-        )}
-
-        {/* Step 5: Documents */}
-        {step === 4 && (
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                        <FileText className="w-5 h-5 text-indigo-600" />
-                </div>
-                      <h2 className="text-xl font-semibold text-gray-900">Documents</h2>
-              </div>
-                    
-                    <DocumentUpload
-                      nidPhoto={form.nidPhoto as File | null}
-                      studentIdPhoto={form.studentIdPhoto as File | null}
-                      additionalDocuments={additionalDocuments}
-                      onNidPhotoChange={handleNidPhotoChange}
-                      onStudentIdPhotoChange={handleStudentIdPhotoChange}
-                      onAdditionalDocumentsChange={setAdditionalDocuments}
-                      nidPreview={nidPreview}
-                      studentIdPreview={studentIdPreview}
-                      showRequired={true}
-                  />
-                </div>
-                )}
-
-                {/* Step 6: Review & Submit */}
-                {step === 5 && (
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
-                        <Send className="w-5 h-5 text-red-600" />
-                      </div>
-                      <h2 className="text-xl font-semibold text-gray-900">Review & Submit</h2>
-              </div>
-                    
-                    <div className="bg-gray-50 rounded-lg p-6 space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-4">
-                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Personal Information</h3>
-                          <div className="space-y-2 text-sm">
-                            <div><span className="font-medium text-gray-700">Full Name:</span> {form.name || 'Not provided'}</div>
-                            <div><span className="font-medium text-gray-700">Phone:</span> {form.phone || 'Not provided'}</div>
-                            <div><span className="font-medium text-gray-700">Email:</span> {form.email || 'Not provided'}</div>
-                            <div><span className="font-medium text-gray-700">Gender:</span> {form.gender}</div>
-                            <div><span className="font-medium text-gray-700">Address:</span> {form.address || 'Not provided'}</div>
-                            <div><span className="font-medium text-gray-700">Father's Name:</span> {form.fatherName || 'Not provided'}</div>
-                            <div><span className="font-medium text-gray-700">Father's Number:</span> {form.fatherNumber || 'Not provided'}</div>
-            </div>
-          </div>
-                        
-                        <div className="space-y-4">
-                          <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Academic Background</h3>
-                          <div className="space-y-2 text-sm">
-                            <div><span className="font-medium text-gray-700">Background:</span> {form.background}</div>
-                            <div><span className="font-medium text-gray-700">Group:</span> {form.group}</div>
-                {(form.background === "Bangla Medium" || form.background === "English Version") && (
-                  <>
-                                <div><span className="font-medium text-gray-700">SSC Result:</span> {form.sscResult || 'Not provided'}</div>
-                                <div><span className="font-medium text-gray-700">HSC Result:</span> {form.hscResult || 'Not provided'}</div>
-                  </>
-                )}
-                {form.background === "English Medium" && (
-                  <>
-                                <div><span className="font-medium text-gray-700">O-levels Result:</span> {form.oLevelResult || 'Not provided'}</div>
-                                <div><span className="font-medium text-gray-700">A-levels Result:</span> {form.aLevelResult || 'Not provided'}</div>
-                  </>
-                )}
-                            <div><span className="font-medium text-gray-700">University:</span> {form.university || 'Not provided'}</div>
-                            <div><span className="font-medium text-gray-700">Department:</span> {form.department || 'Not provided'}</div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Preferences & Experience</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                          <div><span className="font-medium text-gray-700">Preferred Subjects:</span> {form.preferredSubjects || 'Not provided'}</div>
-                          <div><span className="font-medium text-gray-700">Preferred Location:</span> {form.preferredLocation || 'Not provided'}</div>
-                          <div><span className="font-medium text-gray-700">Experience:</span> {form.experience || 'Not provided'}</div>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Location Details</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                          <div><span className="font-medium text-gray-700">Division:</span> {form.location.division || 'Not provided'}</div>
-                          <div><span className="font-medium text-gray-700">District:</span> {form.location.district || 'Not provided'}</div>
-                          <div><span className="font-medium text-gray-700">Area:</span> {form.location.area || 'Not provided'}</div>
-                          <div><span className="font-medium text-gray-700">Sub-area:</span> {form.location.subarea || 'Not provided'}</div>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Documents</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                          <div><span className="font-medium text-gray-700">NID Photo:</span> {form.nidPhoto ? (form.nidPhoto instanceof File ? form.nidPhoto.name : 'Uploaded') : 'Not uploaded'}</div>
-                          <div><span className="font-medium text-gray-700">Student ID Photo:</span> {form.studentIdPhoto ? (form.studentIdPhoto instanceof File ? form.studentIdPhoto.name : 'Uploaded') : 'Not uploaded'}</div>
-              </div>
-                        {additionalDocuments.length > 0 && (
-              <div>
-                            <span className="font-medium text-gray-700">Additional Documents:</span>
-                            <ul className="ml-4 mt-2 space-y-1">
-                              {additionalDocuments.map((doc) => (
-                                <li key={doc.id} className="text-sm">• {doc.label}: {doc.file.name}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-              </div>
-              </div>
-                    
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      <p className="text-sm text-blue-800">
-                        <strong>Important:</strong> Please review all your information carefully before submitting. 
-                        You can go back to edit any section if needed.
-                      </p>
-              </div>
-            </div>
-                )}
-
-                {/* Error and Success Messages */}
-                {error && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <p className="text-sm text-red-800">{error}</p>
-                  </div>
-                )}
-                
-                {success && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                    <p className="text-sm text-green-800">{success}</p>
-          </div>
-        )}
-                
-                {/* Navigation Buttons */}
-                <div className="flex justify-between items-center pt-6 border-t border-gray-200">
-                  <button 
-                    type="button" 
-                    onClick={handleBack} 
-                    disabled={step === 0} 
-                    className="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    <ChevronLeft className="w-4 h-4 mr-2" />
-                    Back
-                  </button>
-                  
-          {step < steps.length - 1 ? (
-                    <button 
-                      type="button" 
-                      onClick={handleNext} 
-                      className="inline-flex items-center px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-                    >
-                      Next
-                      <ChevronRight className="w-4 h-4 ml-2" />
-                    </button>
+        {/* Progress Steps */}
+        <div className="mb-8">
+          <div className="flex items-center justify-center space-x-4">
+            {steps.map((stepItem, index) => (
+              <div key={stepItem.id} className="flex items-center">
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
+                  step >= stepItem.id 
+                    ? 'bg-blue-600 border-blue-600 text-white' 
+                    : 'bg-white border-gray-300 text-gray-500'
+                }`}>
+                  {step > stepItem.id ? (
+                    <CheckCircle className="w-5 h-5" />
                   ) : (
-                    <button 
-                      type="submit" 
-                      disabled={loading} 
-                      className="inline-flex items-center px-8 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
-                    >
-                      {loading ? (
-                        <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                          Processing...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-4 h-4 mr-2" />
-                          Submit Registration
-                        </>
-                      )}
-            </button>
-          )}
-        </div>
-      </form>
-            </div>
+                    <stepItem.icon className="w-5 h-5" />
+                  )}
+                </div>
+                {index < steps.length - 1 && (
+                  <div className={`w-16 h-0.5 mx-2 ${
+                    step > stepItem.id ? 'bg-blue-600' : 'bg-gray-300'
+                  }`} />
+                )}
+              </div>
+            ))}
           </div>
+          <div className="text-center mt-4">
+            <p className="text-sm font-medium text-gray-900">
+              Step {step + 1} of {steps.length}: {steps[step].title}
+            </p>
+          </div>
+        </div>
+
+        {/* Form Container */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          {/* Tuition Application Banner */}
+          {tuitionCode && tuitionDetails && (
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-b border-blue-200 p-6">
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-blue-600" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-blue-900 mb-2">
+                    Applying for Tuition: {tuitionDetails.code}
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                    <div><span className="font-medium text-gray-700">Class:</span> {tuitionDetails.class} - {tuitionDetails.version}</div>
+                    <div><span className="font-medium text-gray-700">Subjects:</span> {tuitionDetails.subjects?.join(', ')}</div>
+                    <div><span className="font-medium text-gray-700">Location:</span> {tuitionDetails.location}</div>
+                    <div><span className="font-medium text-gray-700">Salary:</span> {tuitionDetails.salary}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="p-6">
+            {/* Error and Success Messages */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-800">{error}</p>
+              </div>
+            )}
+            {success && (
+              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-green-800">{success}</p>
+              </div>
+            )}
+
+            {/* Step Content */}
+            {step === 0 && (
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Personal Information</h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={form.name}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={form.phone}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Gender *
+                    </label>
+                    <select
+                      name="gender"
+                      value={form.gender}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    >
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Address
+                    </label>
+                    <textarea
+                      name="address"
+                      value={form.address}
+                      onChange={handleChange}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Continue with other steps... */}
+            {/* Step 1: Academic Background */}
+            {step === 1 && (
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Academic Background</h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Background *
+                    </label>
+                    <select
+                      name="background"
+                      value={form.background}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    >
+                      <option value="Bangla Medium">Bangla Medium</option>
+                      <option value="English Medium">English Medium</option>
+                      <option value="English Version">English Version</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Version *
+                    </label>
+                    <select
+                      name="version"
+                      value={form.version}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    >
+                      <option value="EM">English Medium</option>
+                      <option value="EV">English Version</option>
+                      <option value="BM">Bangla Medium</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Group *
+                    </label>
+                    <select
+                      name="group"
+                      value={form.group}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    >
+                      <option value="Science">Science</option>
+                      <option value="Commerce">Commerce</option>
+                      <option value="Humanities">Humanities</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      SSC Result (GPA)
+                    </label>
+                    <input
+                      type="text"
+                      name="sscResult"
+                      value={form.sscResult}
+                      onChange={handleChange}
+                      placeholder="e.g., 5.00"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      HSC Result (GPA)
+                    </label>
+                    <input
+                      type="text"
+                      name="hscResult"
+                      value={form.hscResult}
+                      onChange={handleChange}
+                      placeholder="e.g., 5.00"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      O-Level Result
+                    </label>
+                    <input
+                      type="text"
+                      name="oLevelResult"
+                      value={form.oLevelResult}
+                      onChange={handleChange}
+                      placeholder="e.g., A* in 6 subjects"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      A-Level Result
+                    </label>
+                    <input
+                      type="text"
+                      name="aLevelResult"
+                      value={form.aLevelResult}
+                      onChange={handleChange}
+                      placeholder="e.g., A* in 3 subjects"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      School Name
+                    </label>
+                    <input
+                      type="text"
+                      name="schoolName"
+                      value={form.schoolName}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      College Name
+                    </label>
+                    <input
+                      type="text"
+                      name="collegeName"
+                      value={form.collegeName}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 2: Preferences */}
+            {step === 2 && (
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Teaching Preferences</h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Preferred Subjects *
+                    </label>
+                    <input
+                      type="text"
+                      name="preferredSubjects"
+                      value={form.preferredSubjects}
+                      onChange={handleChange}
+                      placeholder="e.g., Mathematics, Physics, Chemistry"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Preferred Locations *
+                    </label>
+                    <input
+                      type="text"
+                      name="preferredLocation"
+                      value={form.preferredLocation}
+                      onChange={handleChange}
+                      placeholder="e.g., Dhanmondi, Gulshan, Banani"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Teaching Experience
+                    </label>
+                    <input
+                      type="text"
+                      name="experience"
+                      value={form.experience}
+                      onChange={handleChange}
+                      placeholder="e.g., 2 years teaching experience"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      University
+                    </label>
+                    <input
+                      type="text"
+                      name="university"
+                      value={form.university}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      University Short Form
+                    </label>
+                    <input
+                      type="text"
+                      name="universityShortForm"
+                      value={form.universityShortForm}
+                      onChange={handleChange}
+                      placeholder="e.g., DU, BUET, NSU"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Department
+                    </label>
+                    <input
+                      type="text"
+                      name="department"
+                      value={form.department}
+                      onChange={handleChange}
+                      placeholder="e.g., Computer Science"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Year & Semester
+                    </label>
+                    <input
+                      type="text"
+                      name="yearAndSemester"
+                      value={form.yearAndSemester}
+                      onChange={handleChange}
+                      placeholder="e.g., 3rd Year, 2nd Semester"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 3: Location */}
+            {step === 3 && (
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Location Information</h2>
+                
+                <LocationSelector
+                  location={form.location}
+                  onLocationChange={(location) => setForm(prev => ({ ...prev, location }))}
+                />
+              </div>
+            )}
+
+            {/* Step 4: Documents */}
+            {step === 4 && (
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Document Upload</h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      NID Photo
+                    </label>
+                    <DocumentUpload
+                      onFileChange={handleNidPhotoChange}
+                      preview={nidPreview}
+                      accept="image/*"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Student ID Photo
+                    </label>
+                    <DocumentUpload
+                      onFileChange={handleStudentIdPhotoChange}
+                      preview={studentIdPreview}
+                      accept="image/*"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Additional Documents
+                  </label>
+                  <DocumentUpload
+                    onFileChange={(file) => {
+                      if (file) {
+                        const newDoc: AdditionalDocument = {
+                          id: Date.now().toString(),
+                          label: `Document ${additionalDocuments.length + 1}`,
+                          file,
+                          preview: URL.createObjectURL(file)
+                        };
+                        setAdditionalDocuments(prev => [...prev, newDoc]);
+                      }
+                    }}
+                    accept="image/*,.pdf,.doc,.docx"
+                  />
+                  
+                  {additionalDocuments.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      {additionalDocuments.map((doc, index) => (
+                        <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <img src={doc.preview} alt={doc.label} className="w-10 h-10 object-cover rounded" />
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">{doc.label}</p>
+                              <p className="text-xs text-gray-500">{doc.file.name}</p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setAdditionalDocuments(prev => prev.filter(d => d.id !== doc.id));
+                            }}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Step 5: Review */}
+            {step === 5 && (
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Review & Submit</h2>
+                
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Personal Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div><span className="font-medium">Name:</span> {form.name}</div>
+                    <div><span className="font-medium">Phone:</span> {form.phone}</div>
+                    <div><span className="font-medium">Email:</span> {form.email || 'Not provided'}</div>
+                    <div><span className="font-medium">Gender:</span> {form.gender}</div>
+                    <div className="md:col-span-2"><span className="font-medium">Address:</span> {form.address || 'Not provided'}</div>
+                  </div>
+                </div>
+                
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Academic Background</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div><span className="font-medium">Background:</span> {form.background}</div>
+                    <div><span className="font-medium">Version:</span> {form.version}</div>
+                    <div><span className="font-medium">Group:</span> {form.group}</div>
+                    <div><span className="font-medium">SSC Result:</span> {form.sscResult || 'Not provided'}</div>
+                    <div><span className="font-medium">HSC Result:</span> {form.hscResult || 'Not provided'}</div>
+                    <div><span className="font-medium">University:</span> {form.university || 'Not provided'}</div>
+                  </div>
+                </div>
+                
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Teaching Preferences</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div><span className="font-medium">Preferred Subjects:</span> {form.preferredSubjects}</div>
+                    <div><span className="font-medium">Preferred Locations:</span> {form.preferredLocation}</div>
+                    <div><span className="font-medium">Experience:</span> {form.experience || 'Not provided'}</div>
+                    <div><span className="font-medium">Department:</span> {form.department || 'Not provided'}</div>
+                  </div>
+                </div>
+                
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Location</h3>
+                  <div className="text-sm">
+                    <div><span className="font-medium">Division:</span> {form.location.division}</div>
+                    <div><span className="font-medium">District:</span> {form.location.district}</div>
+                    <div><span className="font-medium">Area:</span> {form.location.area}</div>
+                    <div><span className="font-medium">Subarea:</span> {form.location.subarea}</div>
+                  </div>
+                </div>
+                
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Documents</h3>
+                  <div className="text-sm">
+                    <div><span className="font-medium">NID Photo:</span> {form.nidPhoto ? 'Uploaded' : 'Not uploaded'}</div>
+                    <div><span className="font-medium">Student ID Photo:</span> {form.studentIdPhoto ? 'Uploaded' : 'Not uploaded'}</div>
+                    <div><span className="font-medium">Additional Documents:</span> {additionalDocuments.length} uploaded</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Navigation Buttons */}
+            <div className="flex justify-between mt-8">
+              {step > 0 ? (
+                <button 
+                  type="button" 
+                  onClick={handleBack} 
+                  className="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4 mr-2" />
+                  Previous
+                </button>
+              ) : (
+                <div></div>
+              )}
+              
+              {step < steps.length - 1 ? (
+                <button 
+                  type="button" 
+                  onClick={handleNext} 
+                  className="inline-flex items-center px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4 ml-2" />
+                </button>
+              ) : (
+                <button 
+                  type="submit" 
+                  disabled={loading} 
+                  className="inline-flex items-center px-8 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
+                >
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 mr-2" />
+                      Submit Registration
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+          </form>
         </div>
       </div>
     </div>
+  );
+}
+
+// Loading component for Suspense fallback
+function TutorRegisterLoading() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="mt-4 text-gray-600">Loading registration form...</p>
+      </div>
+    </div>
+  );
+}
+
+// Main component with Suspense wrapper
+export default function TutorRegisterPage() {
+  return (
+    <Suspense fallback={<TutorRegisterLoading />}>
+      <TutorRegisterContent />
+    </Suspense>
   );
 } 
