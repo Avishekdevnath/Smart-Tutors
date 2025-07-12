@@ -67,14 +67,14 @@ function TutorRegisterContent() {
   const [tuitionDetails, setTuitionDetails] = useState<any>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  
   // Add preview URLs for images
   const [nidPreview, setNidPreview] = useState<string | null>(null);
   const [studentIdPreview, setStudentIdPreview] = useState<string | null>(null);
 
   // Handle tuition parameter from URL
   useEffect(() => {
-    const tuition = searchParams.get('tuition');
+    const tuition = searchParams?.get('tuition');
     if (tuition) {
       setTuitionCode(tuition);
       fetchTuitionDetails(tuition);
