@@ -1,0 +1,827 @@
+[{
+  "_id": {
+    "$oid": "67775d1c8237b36304c3e166"
+  },
+  "divisions": [
+    {
+      "name": "Dhaka Division",
+      "districts": [
+        {
+          "name": "Dhaka",
+          "areas": [
+            {
+              "name": "Dhanmondi",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e169"
+              }
+            },
+            {
+              "name": "Gulshan",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e16a"
+              }
+            },
+            {
+              "name": "Banani",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e16b"
+              }
+            },
+            {
+              "name": "Uttara",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e16c"
+              }
+            },
+            {
+              "name": "Motijheel",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1bb"
+              }
+            },
+            {
+              "name": "Gulshan-1",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1bc"
+              }
+            },
+            {
+              "name": "Gulshan-2",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1bd"
+              }
+            },
+            {
+              "name": "Baridhara",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1be"
+              }
+            },
+            {
+              "name": "Tejgaon",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1bf"
+              }
+            },
+            {
+              "name": "Karwan Bazar",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1c0"
+              }
+            },
+            {
+              "name": "Eskaton",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1c1"
+              }
+            },
+            {
+              "name": "Shahbagh",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1c2"
+              }
+            },
+            {
+              "name": "Farmgate",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1c3"
+              }
+            },
+            {
+              "name": "Green Road",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1c4"
+              }
+            },
+            {
+              "name": "Panthapath",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1c5"
+              }
+            },
+            {
+              "name": "Paribagh",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1c6"
+              }
+            },
+            {
+              "name": "Bangla Motor",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1c7"
+              }
+            },
+            {
+              "name": "Paltan",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1c8"
+              }
+            },
+            {
+              "name": "Segunbagicha",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1c9"
+              }
+            },
+            {
+              "name": "Bijoynagar",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1ca"
+              }
+            },
+            {
+              "name": "Kakrail",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1cb"
+              }
+            },
+            {
+              "name": "Bailey Road",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1cc"
+              }
+            },
+            {
+              "name": "Arambagh",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1cd"
+              }
+            },
+            {
+              "name": "Airport Main Area",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1ce"
+              }
+            },
+            {
+              "name": "Ashkona Haji Camp",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1cf"
+              }
+            },
+            {
+              "name": "Ashkona Residential Zone",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1d0"
+              }
+            },
+            {
+              "name": "Nikunja-1",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1d1"
+              }
+            },
+            {
+              "name": "Nikunja-2",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1d2"
+              }
+            },
+            {
+              "name": "Kurmitola",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1d3"
+              }
+            },
+            {
+              "name": "Kawla",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1d4"
+              }
+            },
+            {
+              "name": "Joar Sahara",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1d5"
+              }
+            },
+            {
+              "name": "Dhaka Cantonment",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1d6"
+              }
+            },
+            {
+              "name": "Khilkhet",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1d7"
+              }
+            },
+            {
+              "name": "Barua",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1d8"
+              }
+            },
+            {
+              "name": "Le Meridien Area",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1d9"
+              }
+            },
+            {
+              "name": "Kawlar Mor",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1da"
+              }
+            },
+            {
+              "name": "Khilkhet DOHS",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1db"
+              }
+            },
+            {
+              "name": "Jhigatola",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1dc"
+              }
+            },
+            {
+              "name": "Shankar (Mohammadpur)",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1dd"
+              }
+            },
+            {
+              "name": "Mohammadpur",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1de"
+              }
+            },
+            {
+              "name": "Lalmatia",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1df"
+              }
+            },
+            {
+              "name": "Town Hall",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1e0"
+              }
+            },
+            {
+              "name": "Iqbal Road",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1e1"
+              }
+            },
+            {
+              "name": "Dhaka Uddan (Mohammadpur)",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1e2"
+              }
+            },
+            {
+              "name": "Shyamoli",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1e3"
+              }
+            },
+            {
+              "name": "Adabar",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1e4"
+              }
+            },
+            {
+              "name": "Kallyanpur",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1e5"
+              }
+            },
+            {
+              "name": "Agargaon",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1e6"
+              }
+            },
+            {
+              "name": "Monipur",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1e7"
+              }
+            },
+            {
+              "name": "Taltola",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1e8"
+              }
+            },
+            {
+              "name": "Mirpur-1",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1e9"
+              }
+            },
+            {
+              "name": "Mirpur-2",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1ea"
+              }
+            },
+            {
+              "name": "Mirpur-6",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1eb"
+              }
+            },
+            {
+              "name": "Mirpur-10",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1ec"
+              }
+            },
+            {
+              "name": "Mirpur-11",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1ed"
+              }
+            },
+            {
+              "name": "Mirpur-12",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1ee"
+              }
+            },
+            {
+              "name": "Pallabi",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1ef"
+              }
+            },
+            {
+              "name": "Kazipara",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1f0"
+              }
+            },
+            {
+              "name": "Shewrapara",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1f1"
+              }
+            },
+            {
+              "name": "Mirpur DOHS",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1f2"
+              }
+            },
+            {
+              "name": "Kalachandpur",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1f3"
+              }
+            },
+            {
+              "name": "Bosila",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1f4"
+              }
+            },
+            {
+              "name": "Mohakhali",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1f5"
+              }
+            },
+            {
+              "name": "Mohakhali DOHS",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1f6"
+              }
+            },
+            {
+              "name": "Banasree",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1f7"
+              }
+            },
+            {
+              "name": "Rampura",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1f8"
+              }
+            },
+            {
+              "name": "Malibagh",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1f9"
+              }
+            },
+            {
+              "name": "Khilgaon",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1fa"
+              }
+            },
+            {
+              "name": "Shantibagh",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1fb"
+              }
+            },
+            {
+              "name": "Madartek",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1fc"
+              }
+            },
+            {
+              "name": "Nandipara",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1fd"
+              }
+            },
+            {
+              "name": "Aftabnagar",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1fe"
+              }
+            },
+            {
+              "name": "Bashabo",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e1ff"
+              }
+            },
+            {
+              "name": "Mugda",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e200"
+              }
+            },
+            {
+              "name": "Demra",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e201"
+              }
+            },
+            {
+              "name": "Shonir Akhra",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e202"
+              }
+            },
+            {
+              "name": "Jatrabari",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e203"
+              }
+            },
+            {
+              "name": "Gopibagh",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e204"
+              }
+            },
+            {
+              "name": "Jurain",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e205"
+              }
+            },
+            {
+              "name": "Gandaria",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e206"
+              }
+            },
+            {
+              "name": "Sutrapur",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e207"
+              }
+            },
+            {
+              "name": "Wari",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e208"
+              }
+            },
+            {
+              "name": "Nazirabazar",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e209"
+              }
+            },
+            {
+              "name": "Bangshal",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e20a"
+              }
+            },
+            {
+              "name": "Chawkbazar",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e20b"
+              }
+            },
+            {
+              "name": "Lalbagh",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e20c"
+              }
+            },
+            {
+              "name": "Shankhari Bazar",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e20d"
+              }
+            },
+            {
+              "name": "Islampur",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e20e"
+              }
+            },
+            {
+              "name": "Tikatuli",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e20f"
+              }
+            },
+            {
+              "name": "Doyaganj",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e210"
+              }
+            },
+            {
+              "name": "Sadarghat",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e211"
+              }
+            },
+            {
+              "name": "Malitola",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e212"
+              }
+            },
+            {
+              "name": "Nawabpur",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e213"
+              }
+            }
+          ],
+          "_id": {
+            "$oid": "67775d1c8237b36304c3e168"
+          }
+        },
+        {
+          "name": "Gazipur",
+          "areas": [
+            {
+              "name": "Tongi",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e16e"
+              }
+            },
+            {
+              "name": "Kaliakoir",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e16f"
+              }
+            },
+            {
+              "name": "Konabari",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e170"
+              }
+            },
+            {
+              "name": "Joydebpur",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e214"
+              }
+            },
+            {
+              "name": "Kaliakair",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e215"
+              }
+            },
+            {
+              "name": "Board Bazar",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e216"
+              }
+            },
+            {
+              "name": "Vogra",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e217"
+              }
+            },
+            {
+              "name": "Chandana",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e218"
+              }
+            }
+          ],
+          "_id": {
+            "$oid": "67775d1c8237b36304c3e16d"
+          }
+        },
+        {
+          "name": "Narayanganj",
+          "areas": [
+            {
+              "name": "Siddhirganj",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e21a"
+              }
+            },
+            {
+              "name": "Bandar",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e21b"
+              }
+            },
+            {
+              "name": "Sonargaon",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e21c"
+              }
+            },
+            {
+              "name": "Fatullah",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e21d"
+              }
+            },
+            {
+              "name": "Adamjee",
+              "_id": {
+                "$oid": "67775fdc8237b36304c3e21e"
+              }
+            }
+          ],
+          "_id": {
+            "$oid": "67775fdc8237b36304c3e219"
+          }
+        }
+      ],
+      "_id": {
+        "$oid": "67775d1c8237b36304c3e167"
+      }
+    },
+    {
+      "name": "Chattogram Division",
+      "districts": [
+        {
+          "name": "Chattogram",
+          "areas": [
+            {
+              "name": "Agrabad",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e173"
+              }
+            },
+            {
+              "name": "Pahartoli",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e174"
+              }
+            },
+            {
+              "name": "Kotwali",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e175"
+              }
+            }
+          ],
+          "_id": {
+            "$oid": "67775d1c8237b36304c3e172"
+          }
+        },
+        {
+          "name": "Cox's Bazar",
+          "areas": [
+            {
+              "name": "Laboni Beach",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e177"
+              }
+            },
+            {
+              "name": "Himchari",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e178"
+              }
+            },
+            {
+              "name": "Teknaf",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e179"
+              }
+            }
+          ],
+          "_id": {
+            "$oid": "67775d1c8237b36304c3e176"
+          }
+        }
+      ],
+      "_id": {
+        "$oid": "67775d1c8237b36304c3e171"
+      }
+    },
+    {
+      "name": "Sylhet Division",
+      "districts": [
+        {
+          "name": "Sylhet",
+          "areas": [
+            {
+              "name": "Zindabazar",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e17c"
+              }
+            },
+            {
+              "name": "Bandar Bazar",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e17d"
+              }
+            },
+            {
+              "name": "Khadimnagar",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e17e"
+              }
+            }
+          ],
+          "_id": {
+            "$oid": "67775d1c8237b36304c3e17b"
+          }
+        },
+        {
+          "name": "Sunamganj",
+          "areas": [
+            {
+              "name": "Tahirpur",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e180"
+              }
+            },
+            {
+              "name": "Dharampasha",
+              "_id": {
+                "$oid": "67775d1c8237b36304c3e181"
+              }
+            }
+          ],
+          "_id": {
+            "$oid": "67775d1c8237b36304c3e17f"
+          }
+        }
+      ],
+      "_id": {
+        "$oid": "67775d1c8237b36304c3e17a"
+      }
+    }
+  ],
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "677bb35a79d82f137a38363b"
+  },
+  "divisions": [
+    {
+      "name": "Dhaka",
+      "districts": [
+        {
+          "name": "Dhaka",
+          "areas": [
+            {
+              "name": "Dhanmondi",
+              "_id": {
+                "$oid": "677bb35a79d82f137a38363e"
+              }
+            }
+          ],
+          "_id": {
+            "$oid": "677bb35a79d82f137a38363d"
+          }
+        },
+        {
+          "name": "Dhaka City",
+          "areas": [],
+          "_id": {
+            "$oid": "677bb6205ca64e2cf4b5b892"
+          }
+        }
+      ],
+      "_id": {
+        "$oid": "677bb35a79d82f137a38363c"
+      }
+    }
+  ],
+  "__v": 1
+}]

@@ -1,0 +1,1468 @@
+[{
+  "_id": {
+    "$oid": "678002a0b1cb3f9ee8a104bb"
+  },
+  "collectionName": "Mirpur",
+  "slug": "mirpur",
+  "groups": [
+    {
+      "name": "Tuition Media (Only Mirpur)",
+      "link": "https://www.facebook.com/groups/671058950781008",
+      "memberCount": 54000,
+      "locations": [
+        "Mirpur"
+      ],
+      "_id": {
+        "$oid": "678092432dc7c06fb1532057"
+      }
+    },
+    {
+      "name": "Mirpur Tuition Wanted",
+      "link": "https://www.facebook.com/groups/1663162087200825",
+      "memberCount": 17000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780990c2dc7c06fb1533452"
+      }
+    },
+    {
+      "name": "Mirpur DOHS Tuition Media",
+      "link": "https://www.facebook.com/groups/316492199749324",
+      "memberCount": 27300,
+      "locations": [
+        "Mirpur"
+      ],
+      "_id": {
+        "$oid": "6780a0be2dc7c06fb15347ec"
+      }
+    },
+    {
+      "name": "Mirpur Tuition Wanted",
+      "link": "https://www.facebook.com/groups/4891915457575374",
+      "memberCount": 24000,
+      "locations": [
+        "Mirpur"
+      ],
+      "_id": {
+        "$oid": "678005a5781a4fca53554ead"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-09T17:08:48.146Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T06:01:02.291Z"
+  },
+  "__v": 12
+},
+{
+  "_id": {
+    "$oid": "6780061c781a4fca53554ec0"
+  },
+  "collectionName": "All Top Groups",
+  "slug": "all-top-groups",
+  "groups": [
+    {
+      "name": "Tuition Wanted",
+      "link": "https://www.facebook.com/groups/bdtuitionwanted",
+      "memberCount": 400000,
+      "locations": [],
+      "_id": {
+        "$oid": "67800657781a4fca53554ed9"
+      }
+    },
+    {
+      "name": "TUITION WANTED",
+      "link": "https://www.facebook.com/groups/567226827150715",
+      "memberCount": 215000,
+      "locations": [],
+      "_id": {
+        "$oid": "67800678781a4fca53554edd"
+      }
+    },
+    {
+      "name": "Tuition wanted",
+      "link": "https://www.facebook.com/groups/634856713642476",
+      "memberCount": 20000,
+      "locations": [],
+      "_id": {
+        "$oid": "678006ca781a4fca53554ee8"
+      }
+    },
+    {
+      "name": "Tuition Wanted",
+      "link": "https://www.facebook.com/groups/TutionWantedbd",
+      "memberCount": 42000,
+      "locations": [],
+      "_id": {
+        "$oid": "6780071d781a4fca53554ef6"
+      }
+    },
+    {
+      "name": "Tuition Wanted",
+      "link": "https://www.facebook.com/groups/487087266015171",
+      "memberCount": 10000,
+      "locations": [],
+      "_id": {
+        "$oid": "67800736781a4fca53554f07"
+      }
+    },
+    {
+      "name": "TUITION WANTED",
+      "link": "https://www.facebook.com/groups/tuitionmanage2017",
+      "memberCount": 74000,
+      "locations": [],
+      "_id": {
+        "$oid": "6780074f781a4fca53554f0f"
+      }
+    },
+    {
+      "name": "TUITION WANTED (BEST TUTOR)",
+      "link": "https://www.facebook.com/groups/974981242702277",
+      "memberCount": 20000,
+      "locations": [],
+      "_id": {
+        "$oid": "6780076a781a4fca53554f26"
+      }
+    },
+    {
+      "name": "Tuition Wanted (Dhaka)",
+      "link": "https://www.facebook.com/groups/2098648650366625",
+      "memberCount": 30000,
+      "locations": [],
+      "_id": {
+        "$oid": "6780077f781a4fca53554f30"
+      }
+    },
+    {
+      "name": "TUITION WANTED (টিউশন চাই )",
+      "link": "https://www.facebook.com/groups/1007014802781846",
+      "memberCount": 168000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67805930e67ff98693702d54"
+      }
+    },
+    {
+      "name": "Tuition Dhaka",
+      "link": "https://www.facebook.com/groups/tuitiondhakacity",
+      "memberCount": 145700,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67805b39e67ff98693702ecb"
+      }
+    },
+    {
+      "name": "Tuition Wanted",
+      "link": "https://www.facebook.com/groups/195807056581376",
+      "memberCount": 102100,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67806a89b37a8d027c0997e7"
+      }
+    },
+    {
+      "name": "Tuition Wanted/টিউশন চাই",
+      "link": "https://www.facebook.com/groups/689725098159219",
+      "memberCount": 87300,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67808c8a2dc7c06fb153196e"
+      }
+    },
+    {
+      "name": "Tutor Academy",
+      "link": "https://www.facebook.com/groups/tutoracademy.com.bd",
+      "memberCount": 112000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780905e2dc7c06fb1531cb5"
+      }
+    },
+    {
+      "name": "Tutor & Tuition Wanted (Dhaka)",
+      "link": "https://www.facebook.com/groups/TutorBD24",
+      "memberCount": 58000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780956b2dc7c06fb15327cf"
+      }
+    },
+    {
+      "name": "Tuition World-Dhaka (Group)",
+      "link": "https://www.facebook.com/groups/356990021144435",
+      "memberCount": 63000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780970f2dc7c06fb1532d1b"
+      }
+    },
+    {
+      "name": "Tuition Wanted (Dhaka & Chittagong)",
+      "link": "https://www.facebook.com/groups/206109956450474",
+      "memberCount": 85000,
+      "locations": [
+        "ALL",
+        "Chittagong",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780999c2dc7c06fb1533687"
+      }
+    },
+    {
+      "name": "IDEAL TUITION DHAKA",
+      "link": "https://www.facebook.com/groups/1802350650031849",
+      "memberCount": 69000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67809b002dc7c06fb1534080"
+      }
+    },
+    {
+      "name": "Dhaka Tuition Media",
+      "link": "https://www.facebook.com/groups/dhakatuitionmedia1",
+      "memberCount": 152000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780a0f82dc7c06fb1534800"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-09T17:23:40.060Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T04:24:24.681Z"
+  },
+  "__v": 18
+},
+{
+  "_id": {
+    "$oid": "67800b4f781a4fca53554f36"
+  },
+  "collectionName": "Dhanmondi",
+  "slug": "dhanmondi",
+  "groups": [
+    {
+      "name": "Tuition Wanted [ Dhanmondi ]",
+      "link": "https://www.facebook.com/groups/2162539987326419",
+      "memberCount": 44000,
+      "locations": [
+        "dhanmondi"
+      ],
+      "_id": {
+        "$oid": "67800b7c781a4fca53554f41"
+      }
+    },
+    {
+      "name": "Dhanmondi Tuition Media",
+      "link": "https://www.facebook.com/groups/575737397322230",
+      "memberCount": 529,
+      "locations": [
+        "Dhanmondi"
+      ],
+      "_id": {
+        "$oid": "678091b92dc7c06fb1531f7d"
+      }
+    },
+    {
+      "name": "TUITION WANTED",
+      "link": "https://www.facebook.com/groups/403717056729403",
+      "memberCount": 13000,
+      "locations": [
+        "DHANMONDI",
+        "FARMGATE"
+      ],
+      "_id": {
+        "$oid": "67809a932dc7c06fb1533d31"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-09T17:45:51.015Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T03:57:07.617Z"
+  },
+  "__v": 3
+},
+{
+  "_id": {
+    "$oid": "6780568acc4d73b6b231996c"
+  },
+  "collectionName": "Other Groups",
+  "slug": "other-groups",
+  "groups": [],
+  "createdAt": {
+    "$date": "2025-01-09T23:06:50.775Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-09T23:06:50.775Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67805696cc4d73b6b231996f"
+  },
+  "collectionName": "Mohammadpur",
+  "slug": "mohammadpur",
+  "groups": [],
+  "createdAt": {
+    "$date": "2025-01-09T23:07:02.337Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-09T23:07:02.337Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6780569ecc4d73b6b2319972"
+  },
+  "collectionName": "Uttara",
+  "slug": "uttara",
+  "groups": [
+    {
+      "name": "Uttara Tuition Media",
+      "link": "https://www.facebook.com/groups/1071271393659619",
+      "memberCount": 11000,
+      "locations": [
+        "Uttara"
+      ],
+      "_id": {
+        "$oid": "6780932d2dc7c06fb1532269"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-09T23:07:10.571Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T03:25:33.393Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "678056b0cc4d73b6b2319975"
+  },
+  "collectionName": "Paltan",
+  "slug": "paltan",
+  "groups": [],
+  "createdAt": {
+    "$date": "2025-01-09T23:07:28.028Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-09T23:07:28.028Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "678056b8cc4d73b6b2319978"
+  },
+  "collectionName": "Mogbazar",
+  "slug": "mogbazar",
+  "groups": [],
+  "createdAt": {
+    "$date": "2025-01-09T23:07:36.732Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-09T23:07:36.732Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "678056e5cc4d73b6b231997b"
+  },
+  "collectionName": "Agargaon",
+  "slug": "agargaon",
+  "groups": [],
+  "createdAt": {
+    "$date": "2025-01-09T23:08:21.527Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-09T23:08:21.527Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6780572fcc4d73b6b2319980"
+  },
+  "collectionName": "Airport",
+  "slug": "airport",
+  "groups": [],
+  "createdAt": {
+    "$date": "2025-01-09T23:09:35.348Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-09T23:09:35.348Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "678058c7e67ff98693702cfc"
+  },
+  "collectionName": "General Groups",
+  "slug": "general-groups",
+  "groups": [
+    {
+      "name": "Dhaka City Tuition",
+      "link": "https://www.facebook.com/groups/1153352538593265",
+      "memberCount": 5400,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678058f9e67ff98693702d2d"
+      }
+    },
+    {
+      "name": "Tutor Sheba",
+      "link": "https://www.facebook.com/groups/199976626521077",
+      "memberCount": 1500,
+      "locations": [
+        "All",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67805aa5e67ff98693702e4a"
+      }
+    },
+    {
+      "name": "Halal Tuition",
+      "link": "https://www.facebook.com/groups/1212914659405837",
+      "memberCount": 4100,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67805aefe67ff98693702e73"
+      }
+    },
+    {
+      "name": "Tuition Media",
+      "link": "https://www.facebook.com/groups/671091642938241",
+      "memberCount": 2200,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67805b14e67ff98693702e9b"
+      }
+    },
+    {
+      "name": "Tuition Care Dhaka",
+      "link": "https://www.facebook.com/groups/1238317756317158",
+      "memberCount": 8700,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67805cb5e67ff98693702fca"
+      }
+    },
+    {
+      "name": "Tuition Media, Dhaka",
+      "link": "https://www.facebook.com/groups/321463203682233",
+      "memberCount": 14300,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67806a50b37a8d027c0997ac"
+      }
+    },
+    {
+      "name": "Expert Tuition Media",
+      "link": "https://www.facebook.com/groups/494751404548116",
+      "memberCount": 10200,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67806ad2b37a8d027c09985e"
+      }
+    },
+    {
+      "name": "Tuition Point",
+      "link": "https://www.facebook.com/groups/289222889746878",
+      "memberCount": 23200,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67806bdcb37a8d027c0999c4"
+      }
+    },
+    {
+      "name": "TUITION SERVICE ( টিউশন চাই)",
+      "link": "https://www.facebook.com/groups/936487043565297",
+      "memberCount": 28400,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67808c5a2dc7c06fb1531920"
+      }
+    },
+    {
+      "name": "Tuition Unit",
+      "link": "https://www.facebook.com/groups/tuitionunit",
+      "memberCount": 12400,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67808cb72dc7c06fb15319bc"
+      }
+    },
+    {
+      "name": "Virtual Tutor Media",
+      "link": "https://www.facebook.com/groups/600202573507484",
+      "memberCount": 6500,
+      "locations": [
+        "ALL",
+        "dhaka"
+      ],
+      "_id": {
+        "$oid": "67808d812dc7c06fb1531a5b"
+      }
+    },
+    {
+      "name": "Bashundhara tuition media",
+      "link": "https://www.facebook.com/groups/149360358216023",
+      "memberCount": 600,
+      "locations": [
+        "ALL",
+        "dhaka"
+      ],
+      "_id": {
+        "$oid": "67808da42dc7c06fb1531aa9"
+      }
+    },
+    {
+      "name": "Sust Tutor Media",
+      "link": "https://www.facebook.com/groups/177797715903405",
+      "memberCount": 4600,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67808de22dc7c06fb1531afa"
+      }
+    },
+    {
+      "name": "Anti Log Tutor Media",
+      "link": "https://www.facebook.com/groups/1520381191379240",
+      "memberCount": 7300,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67808e062dc7c06fb1531b4e"
+      }
+    },
+    {
+      "name": "Savar Tuition",
+      "link": "https://www.facebook.com/groups/624328513185567",
+      "memberCount": 7000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67808ea22dc7c06fb1531c50"
+      }
+    },
+    {
+      "name": "Tuition King",
+      "link": "https://www.facebook.com/groups/3671127973212030",
+      "memberCount": 15400,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678090832dc7c06fb1531d13"
+      }
+    },
+    {
+      "name": "Tuition King টিউশন কিং",
+      "link": "https://www.facebook.com/groups/tuitionking",
+      "memberCount": 4600,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678090bc2dc7c06fb1531d80"
+      }
+    },
+    {
+      "name": "TUITION MEDIA (Dhaka)",
+      "link": "https://www.facebook.com/groups/569403883259166",
+      "memberCount": 22000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678090db2dc7c06fb1531df0"
+      }
+    },
+    {
+      "name": "My Tutor - Tution Media",
+      "link": "https://www.facebook.com/groups/mytutorbd",
+      "memberCount": 2700,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678091712dc7c06fb1531ebb"
+      }
+    },
+    {
+      "name": "Dhaka Tuition Media",
+      "link": "https://www.facebook.com/groups/259917374822917",
+      "memberCount": 3900,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678091e22dc7c06fb1531feb"
+      }
+    },
+    {
+      "name": "Tuition Media",
+      "link": "https://www.facebook.com/groups/568772489983934",
+      "memberCount": 27000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678092ee2dc7c06fb1532206"
+      }
+    },
+    {
+      "name": "NS Tuition Media Dhaka",
+      "link": "https://www.facebook.com/groups/2259284571011882",
+      "memberCount": 74000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678093842dc7c06fb15322e3"
+      }
+    },
+    {
+      "name": "Tuition Media ( All Dhaka city)",
+      "link": "https://www.facebook.com/groups/284088225513973",
+      "memberCount": 2000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678093ce2dc7c06fb15323ca"
+      }
+    },
+    {
+      "name": "Tuition Media Perfect",
+      "link": "https://www.facebook.com/groups/perfecttuiton",
+      "memberCount": 4400,
+      "locations": [
+        "All",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678093eb2dc7c06fb153245a"
+      }
+    },
+    {
+      "name": "BUET Tuition MFT",
+      "link": "https://www.facebook.com/groups/1650247709125377",
+      "memberCount": 1400,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780941b2dc7c06fb15324df"
+      }
+    },
+    {
+      "name": "Bright Tuition Media",
+      "link": "https://www.facebook.com/groups/261753399172853",
+      "memberCount": 6500,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780946e2dc7c06fb1532575"
+      }
+    },
+    {
+      "name": "Dhaka University Tuition Media",
+      "link": "https://www.facebook.com/groups/261206596647376",
+      "memberCount": 12000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780949b2dc7c06fb153260e"
+      }
+    },
+    {
+      "name": "TUITION MEDIA -(BANGLADESH)",
+      "link": "https://www.facebook.com/groups/366309610486820",
+      "memberCount": 10000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678094c92dc7c06fb153269c"
+      }
+    },
+    {
+      "name": "Dhaka Tuition Media",
+      "link": "https://www.facebook.com/groups/699228848291715",
+      "memberCount": 505,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678094fa2dc7c06fb153272d"
+      }
+    },
+    {
+      "name": "Dhaka Tuition Media",
+      "link": "https://www.facebook.com/groups/636022036945756",
+      "memberCount": 24600,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678095de2dc7c06fb1532865"
+      }
+    },
+    {
+      "name": "Daffodil Tuition Media",
+      "link": "https://www.facebook.com/groups/BestTuitionInDhaka",
+      "memberCount": 13000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678096132dc7c06fb15328fe"
+      }
+    },
+    {
+      "name": "Tuition Platform",
+      "link": "https://www.facebook.com/groups/1252657388105425",
+      "memberCount": 8000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678096342dc7c06fb153299a"
+      }
+    },
+    {
+      "name": "Dhaka University Tuition Media",
+      "link": "https://www.facebook.com/groups/474688424697832",
+      "memberCount": 23000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678096f12dc7c06fb1532c86"
+      }
+    },
+    {
+      "name": "Dhaka Tuition Media",
+      "link": "https://www.facebook.com/groups/618004262853071",
+      "memberCount": 10400,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678097352dc7c06fb1532dc6"
+      }
+    },
+    {
+      "name": "Excellent Tuition Media",
+      "link": "https://www.facebook.com/groups/630588251613079",
+      "memberCount": 18400,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678097542dc7c06fb1532e74"
+      }
+    },
+    {
+      "name": "Rectifier Tuition Media",
+      "link": "https://www.facebook.com/groups/3842129795810329",
+      "memberCount": 22000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780983e2dc7c06fb1533186"
+      }
+    },
+    {
+      "name": "TUITION WANTED",
+      "link": "https://www.facebook.com/groups/1456772224453018",
+      "memberCount": 20000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780989b2dc7c06fb1533240"
+      }
+    },
+    {
+      "name": "দেশটিউটর.কম",
+      "link": "https://www.facebook.com/groups/deshtutor",
+      "memberCount": 6000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678098ca2dc7c06fb15332f9"
+      }
+    },
+    {
+      "name": "Tuition Wanted",
+      "link": "https://www.facebook.com/groups/privatetutorsbd",
+      "memberCount": 19000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678098ef2dc7c06fb15333b9"
+      }
+    },
+    {
+      "name": "Urban Tuition Dhaka",
+      "link": "https://www.facebook.com/groups/urbantuitiondhk",
+      "memberCount": 2500,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678099332dc7c06fb1533517"
+      }
+    },
+    {
+      "name": "Dhaka MaaTutor's24",
+      "link": "https://www.facebook.com/groups/d.maatutors24",
+      "memberCount": 18000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780996f2dc7c06fb15335db"
+      }
+    },
+    {
+      "name": "Tuition Wanted",
+      "link": "https://www.facebook.com/groups/300009168693953",
+      "memberCount": 7000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678099f42dc7c06fb1533936"
+      }
+    },
+    {
+      "name": "TUITION WANTED",
+      "link": "https://www.facebook.com/groups/2191406281087634",
+      "memberCount": 4200,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67809a0e2dc7c06fb1533a04"
+      }
+    },
+    {
+      "name": "Tutors Place",
+      "link": "https://www.facebook.com/groups/tutorsplace24",
+      "memberCount": 15000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67809a2f2dc7c06fb1533ad5"
+      }
+    },
+    {
+      "name": "Tuition Wanted",
+      "link": "https://www.facebook.com/groups/732708147085603",
+      "memberCount": 13000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67809a4d2dc7c06fb1533bad"
+      }
+    },
+    {
+      "name": "Tuition Wanted BD",
+      "link": "https://www.facebook.com/groups/613332083845870",
+      "memberCount": 2300,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67809a682dc7c06fb1533c84"
+      }
+    },
+    {
+      "name": "Tuition Wanted (টিউশন চাই)",
+      "link": "https://www.facebook.com/groups/694006131088785",
+      "memberCount": 5400,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67809ac22dc7c06fb1533ee0"
+      }
+    },
+    {
+      "name": "TUITION WANTED",
+      "link": "https://www.facebook.com/groups/154173865331855",
+      "memberCount": 10000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67809add2dc7c06fb1533fbf"
+      }
+    },
+    {
+      "name": "Tuition Wanted (Dhaka)",
+      "link": "https://www.facebook.com/groups/191115091609902",
+      "memberCount": 25000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67809bc42dc7c06fb1534164"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-09T23:16:23.687Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T05:53:26.419Z"
+  },
+  "__v": 53
+},
+{
+  "_id": {
+    "$oid": "678059b3e67ff98693702d8f"
+  },
+  "collectionName": "Old Dhaka",
+  "slug": "old-dhaka",
+  "groups": [
+    {
+      "name": "Azimpur Tuition/Teacher MFT",
+      "link": "https://www.facebook.com/groups/6417586478356109",
+      "memberCount": 14000,
+      "locations": [
+        "Old Dhaka",
+        "Azimpur"
+      ],
+      "_id": {
+        "$oid": "678059ffe67ff98693702dc8"
+      }
+    },
+    {
+      "name": "Easy Tuition Media(Puran Dhaka)",
+      "link": "https://www.facebook.com/groups/3326202680927552",
+      "memberCount": 1600,
+      "locations": [
+        "Old Dhaka"
+      ],
+      "_id": {
+        "$oid": "678093ab2dc7c06fb153234b"
+      }
+    },
+    {
+      "name": "Tuition Media (Puran Dhaka)",
+      "link": "https://www.facebook.com/groups/tuitionwantedpurandhaka",
+      "memberCount": 14200,
+      "locations": [
+        "Old Dhaka"
+      ],
+      "_id": {
+        "$oid": "678096ce2dc7c06fb1532be0"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-09T23:20:19.418Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T03:41:02.864Z"
+  },
+  "__v": 3
+},
+{
+  "_id": {
+    "$oid": "67805a45e67ff98693702deb"
+  },
+  "collectionName": "English Medium",
+  "slug": "english-medium",
+  "groups": [
+    {
+      "name": "Tuition for English Medium",
+      "link": "https://www.facebook.com/groups/185482910371563",
+      "memberCount": 272,
+      "locations": [
+        "All",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67805a78e67ff98693702e28"
+      }
+    },
+    {
+      "name": "English Medium Tuition & Tutor",
+      "link": "https://www.facebook.com/groups/englishmediumtutors",
+      "memberCount": 7100,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67805c77e67ff98693702f53"
+      }
+    },
+    {
+      "name": "English Medium Tuitions",
+      "link": "https://www.facebook.com/groups/3163295680408590",
+      "memberCount": 3500,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67805cd6e67ff98693702ffc"
+      }
+    },
+    {
+      "name": "English Medium Tuition",
+      "link": "https://www.facebook.com/groups/269142302599516",
+      "memberCount": 2800,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67808ce52dc7c06fb1531a06"
+      }
+    },
+    {
+      "name": "ENGLISH MEDIUM TUITION MEDIA",
+      "link": "https://www.facebook.com/groups/1316558442337918",
+      "memberCount": 259,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67808e4a2dc7c06fb1531beb"
+      }
+    },
+    {
+      "name": "ENGLISH MEDIUM",
+      "link": "https://www.facebook.com/groups/263927403403684",
+      "memberCount": 106,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780918f2dc7c06fb1531f23"
+      }
+    },
+    {
+      "name": "ENGLISH MEDIUM TUTOR",
+      "link": "https://www.facebook.com/groups/108923813121830/",
+      "memberCount": 32000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6785c1d393cc28cfeceba69b"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-09T23:22:45.964Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-14T01:45:55.407Z"
+  },
+  "__v": 7
+},
+{
+  "_id": {
+    "$oid": "67805b64e67ff98693702ef4"
+  },
+  "collectionName": "Khillgaon",
+  "slug": "khillgaon",
+  "groups": [
+    {
+      "name": "Khilgaon Tuition Media",
+      "link": "https://www.facebook.com/groups/202455737468825",
+      "memberCount": 30000,
+      "locations": [
+        "Khilgaon"
+      ],
+      "_id": {
+        "$oid": "678092bc2dc7c06fb1532191"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-09T23:27:32.208Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T03:23:40.519Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "67805b6fe67ff98693702ef7"
+  },
+  "collectionName": "Motijheel",
+  "slug": "motijheel",
+  "groups": [],
+  "createdAt": {
+    "$date": "2025-01-09T23:27:43.371Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-09T23:27:43.371Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67805b7ce67ff98693702efa"
+  },
+  "collectionName": "Malibagh",
+  "slug": "malibagh",
+  "groups": [],
+  "createdAt": {
+    "$date": "2025-01-09T23:27:56.955Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-09T23:27:56.955Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67805b96e67ff98693702efd"
+  },
+  "collectionName": "Mirpur 10",
+  "slug": "mirpur-10",
+  "groups": [],
+  "createdAt": {
+    "$date": "2025-01-09T23:28:22.973Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T05:54:54.181Z"
+  },
+  "__v": 2
+},
+{
+  "_id": {
+    "$oid": "67806b21b37a8d027c0998a3"
+  },
+  "collectionName": "Bashundhara",
+  "slug": "bashundhara",
+  "groups": [
+    {
+      "name": "Tuition Wanted (Uttara & Bashundhara R/A)",
+      "link": "https://www.facebook.com/groups/2774857472659436",
+      "memberCount": 35000,
+      "locations": [
+        "uttara",
+        "bashundhara"
+      ],
+      "_id": {
+        "$oid": "67806b71b37a8d027c09993e"
+      }
+    },
+    {
+      "name": "Bashundhara Tuition Media",
+      "link": "https://www.facebook.com/groups/1566915813689410",
+      "memberCount": 5000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "678096a62dc7c06fb1532b5b"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-10T00:34:41.994Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T03:40:22.121Z"
+  },
+  "__v": 2
+},
+{
+  "_id": {
+    "$oid": "678097d02dc7c06fb1532f01"
+  },
+  "collectionName": "Badda",
+  "slug": "badda",
+  "groups": [
+    {
+      "name": "BADDA TUITION MEDIA",
+      "link": "https://www.facebook.com/groups/751792856980459",
+      "memberCount": 2300,
+      "locations": [
+        "Badda"
+      ],
+      "_id": {
+        "$oid": "678097ee2dc7c06fb153301a"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-10T03:45:20.729Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T03:45:50.896Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "678099b52dc7c06fb153372a"
+  },
+  "collectionName": "Khilkhet",
+  "slug": "khilkhet",
+  "groups": [
+    {
+      "name": "Tuition Wanted (Khilkhet/Nikunja)",
+      "link": "https://www.facebook.com/groups/6316189705159475",
+      "memberCount": 1700,
+      "locations": [
+        "Khilkhet",
+        "Nikunja"
+      ],
+      "_id": {
+        "$oid": "678099d62dc7c06fb1533867"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-10T03:53:25.222Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T03:53:58.433Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "67809a9f2dc7c06fb1533de2"
+  },
+  "collectionName": "Farmgate",
+  "slug": "farmgate",
+  "groups": [],
+  "createdAt": {
+    "$date": "2025-01-10T03:57:19.216Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T03:57:19.216Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67809bf72dc7c06fb1534219"
+  },
+  "collectionName": "Medical",
+  "slug": "medical",
+  "groups": [
+    {
+      "name": "Tuition Media - মেডি টিউশন ",
+      "link": "https://www.facebook.com/groups/medi.tution.media",
+      "memberCount": 36000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780a11e2dc7c06fb1534803"
+      }
+    },
+    {
+      "name": "Dhaka University Tuition Media",
+      "link": "https://www.facebook.com/groups/764717818430785",
+      "memberCount": 13000,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780a1442dc7c06fb1534807"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-10T04:03:03.705Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T04:25:40.766Z"
+  },
+  "__v": 2
+},
+{
+  "_id": {
+    "$oid": "67809c012dc7c06fb153421c"
+  },
+  "collectionName": "Buet",
+  "slug": "buet",
+  "groups": [],
+  "createdAt": {
+    "$date": "2025-01-10T04:03:13.149Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T04:03:13.149Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67809c072dc7c06fb153421f"
+  },
+  "collectionName": "Du",
+  "slug": "du",
+  "groups": [
+    {
+      "name": "Dhaka University Tuition Media",
+      "link": "https://www.facebook.com/groups/474688424697832",
+      "memberCount": 23000,
+      "locations": [
+        "DU",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "67809ca22dc7c06fb1534388"
+      }
+    },
+    {
+      "name": "Du tuition Media",
+      "link": "https://www.facebook.com/groups/973035166188013",
+      "memberCount": 27200,
+      "locations": [
+        "ALL",
+        "Dhaka"
+      ],
+      "_id": {
+        "$oid": "6780965f2dc7c06fb1532a39"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-10T04:03:19.327Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-10T05:54:54.236Z"
+  },
+  "__v": 2
+}]
