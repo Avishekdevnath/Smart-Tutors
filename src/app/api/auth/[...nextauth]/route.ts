@@ -6,6 +6,15 @@ import Tutor from '@/models/Tutor';
 import Admin from '@/models/Admin';
 import bcrypt from 'bcryptjs';
 
+// Helper function to get base URL
+function getBaseUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL || 
+         process.env.NEXTAUTH_URL || 
+         process.env.VERCEL_URL ? 
+         `https://${process.env.VERCEL_URL}` : 
+         'http://localhost:3000';
+}
+
 export const authOptions = {
   providers: [
     CredentialsProvider({
@@ -125,25 +134,27 @@ export const authOptions = {
       return session;
     },
     async redirect({ url, baseUrl, token }) {
+      const dynamicBaseUrl = getBaseUrl();
+      
       // If user is signing in
       if (url === baseUrl || url === `${baseUrl}/`) {
-        // Check user type from token or URL parameters to determine redirect
+        // Check user type from token to determine redirect
         const userType = token?.userType;
         
         if (userType === 'admin') {
-          return `${baseUrl}/dashboard`;
+          return `${dynamicBaseUrl}/dashboard`;
         } else if (userType === 'tutor') {
-          return `${baseUrl}/tutor/dashboard`;
+          return `${dynamicBaseUrl}/tutor/dashboard`;
         }
       }
       
       // Allow relative callback URLs
-      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      if (url.startsWith('/')) return `${dynamicBaseUrl}${url}`;
       
       // Allow callback URLs on the same origin
-      if (new URL(url).origin === baseUrl) return url;
+      if (new URL(url).origin === dynamicBaseUrl) return url;
       
-      return baseUrl;
+      return dynamicBaseUrl;
     },
   },
   pages: {

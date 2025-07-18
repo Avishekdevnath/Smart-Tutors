@@ -1,4 +1,18 @@
 import nodemailer from 'nodemailer';
+import { dbConnect } from './mongodb';
+import Tutor from '@/models/Tutor';
+import Guardian from '@/models/Guardian';
+import Tuition from '@/models/Tuition';
+import { generateResetToken } from '@/utils/tutorUtils';
+
+// Helper function to get base URL
+function getBaseUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL || 
+         process.env.NEXTAUTH_URL || 
+         process.env.VERCEL_URL ? 
+         `https://${process.env.VERCEL_URL}` : 
+         'http://localhost:3000';
+}
 
 // Email transporter configuration
 const transporter = nodemailer.createTransport({
@@ -59,8 +73,9 @@ export async function sendWelcomeEmail(
   tutorId: string, 
   loginPhone: string
 ): Promise<void> {
-  const loginUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/tutors`;
-  const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/tutor`;
+  const baseUrl = getBaseUrl();
+  const loginUrl = `${baseUrl}/tutors`;
+  const dashboardUrl = `${baseUrl}/tutor/dashboard`;
   
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">
@@ -277,7 +292,8 @@ export async function sendPasswordResetEmail(
   resetToken: string,
   userName: string
 ): Promise<void> {
-  const resetUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password?token=${resetToken}`;
+  const baseUrl = getBaseUrl();
+  const resetUrl = `${baseUrl}/reset-password?token=${resetToken}`;
   
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -385,7 +401,8 @@ export async function sendApplicationStatusUpdate(
   };
 
   const config = statusConfig[newStatus as keyof typeof statusConfig];
-  const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/tutor`;
+  const baseUrl = getBaseUrl();
+  const dashboardUrl = `${baseUrl}/tutor/dashboard`;
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px;">

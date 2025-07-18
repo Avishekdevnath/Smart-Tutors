@@ -39,6 +39,9 @@ A comprehensive tuition management platform built with Next.js 15, connecting tu
    NEXTAUTH_URL=http://localhost:3000
    JWT_SECRET=your-jwt-secret-here
    
+   # Site URL (for production, set to your domain)
+   NEXT_PUBLIC_SITE_URL=http://localhost:3000
+   
    # AI Integration (Optional)
    GOOGLE_AI_API_KEY=your-google-ai-key
    
@@ -72,6 +75,46 @@ A comprehensive tuition management platform built with Next.js 15, connecting tu
    - **Main Site**: http://localhost:3000
    - **Admin Dashboard**: http://localhost:3000/dashboard
    - **Admin Login**: http://localhost:3000/admin/login
+
+## 🌐 Production Deployment
+
+### Environment Variables for Production
+
+When deploying to production (e.g., Vercel), make sure to set these environment variables:
+
+```env
+# Required for production
+NEXTAUTH_URL=https://your-domain.vercel.app
+NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
+NEXTAUTH_SECRET=your-production-secret-key
+JWT_SECRET=your-production-jwt-secret
+MONGODB_URI=your-production-mongodb-uri
+
+# Optional (if using these services)
+GOOGLE_AI_API_KEY=your-google-ai-key
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+```
+
+### Vercel Deployment
+
+1. **Connect your repository to Vercel**
+2. **Set environment variables** in Vercel dashboard:
+   - Go to Project Settings → Environment Variables
+   - Add all the production environment variables listed above
+3. **Deploy**: Vercel will automatically deploy on git push
+
+### Important Notes for Production
+
+- **URL Configuration**: The `NEXTAUTH_URL` and `NEXT_PUBLIC_SITE_URL` must match your production domain
+- **Secrets**: Use strong, unique secrets for `NEXTAUTH_SECRET` and `JWT_SECRET`
+- **Database**: Use a production MongoDB instance (Atlas recommended)
+- **HTTPS**: Ensure your domain uses HTTPS in production
 
 ## 📱 Features
 
