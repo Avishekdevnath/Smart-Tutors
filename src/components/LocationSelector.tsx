@@ -51,6 +51,17 @@ export default function LocationSelector({
   // Error states
   const [error, setError] = useState<string>('');
   
+  // Area input mode state
+  const [areaInputMode, setAreaInputMode] = useState<'select' | 'input'>('select');
+  const [customArea, setCustomArea] = useState('');
+
+  // Synchronize customArea with normalizedValue.area when in input mode
+  useEffect(() => {
+    if (areaInputMode === 'input') {
+      setCustomArea(normalizedValue.area);
+    }
+  }, [areaInputMode, normalizedValue.area]);
+
   // Cache for API responses
   const [cache, setCache] = useState<{
     divisions: string[];
@@ -241,6 +252,8 @@ export default function LocationSelector({
 
   const handleDivisionChange = useCallback((division: string) => {
     setError('');
+    setAreaInputMode('select');
+    setCustomArea('');
     onChange({ 
       division, 
       district: '', 
@@ -251,6 +264,8 @@ export default function LocationSelector({
 
   const handleDistrictChange = useCallback((district: string) => {
     setError('');
+    setAreaInputMode('select');
+    setCustomArea('');
     onChange({ 
       ...normalizedValue, 
       district, 
@@ -268,6 +283,16 @@ export default function LocationSelector({
     });
   }, [normalizedValue, onChange]);
 
+  const handleCustomAreaChange = useCallback((area: string) => {
+    setCustomArea(area);
+    setError('');
+    onChange({ 
+      ...normalizedValue, 
+      area, 
+      subarea: '' 
+    });
+  }, [normalizedValue, onChange]);
+
   const handleSubareaChange = useCallback((subarea: string) => {
     setError('');
     onChange({ 
@@ -275,6 +300,20 @@ export default function LocationSelector({
       subarea 
     });
   }, [normalizedValue, onChange]);
+
+  const toggleAreaInputMode = useCallback(() => {
+    setAreaInputMode(prev => prev === 'select' ? 'input' : 'select');
+    if (areaInputMode === 'select') {
+      setCustomArea(normalizedValue.area);
+    } else {
+      setCustomArea('');
+      onChange({ 
+        ...normalizedValue, 
+        area: '', 
+        subarea: '' 
+      });
+    }
+  }, [areaInputMode, normalizedValue.area, onChange]);
 
   // Validation state
   const isValid = useMemo(() => {
@@ -344,27 +383,60 @@ export default function LocationSelector({
 
       {/* Area */}
       <div>
-        <label className="block font-semibold mb-1">
-          Area {required && <span className="text-red-500">*</span>}
-        </label>
-        <select
-          value={normalizedValue.area}
-          onChange={(e) => handleAreaChange(e.target.value)}
-          className={`w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200 ${
-            !normalizedValue.district || disabled || loadingAreas ? 'bg-gray-100 cursor-not-allowed' : ''
-          }`}
-          disabled={!normalizedValue.district || disabled || loadingAreas}
-          required={required}
-        >
-          <option value="">Select Area</option>
-          {areas.map((area) => (
-            <option key={area} value={area}>
-              {area}
-            </option>
-          ))}
-        </select>
-        {loadingAreas && (
+        <div className="flex items-center justify-between mb-1">
+          <label className="block font-semibold">
+            Area {required && <span className="text-red-500">*</span>}
+          </label>
+          {normalizedValue.division && normalizedValue.district && (
+            <button
+              type="button"
+              onClick={toggleAreaInputMode}
+              className="text-sm text-blue-600 hover:text-blue-800 underline"
+            >
+              {areaInputMode === 'select' ? 'Add New Area' : 'Select Existing'}
+            </button>
+          )}
+        </div>
+        
+        {areaInputMode === 'select' ? (
+          <select
+            value={normalizedValue.area}
+            onChange={(e) => handleAreaChange(e.target.value)}
+            className={`w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200 ${
+              !normalizedValue.district || disabled || loadingAreas ? 'bg-gray-100 cursor-not-allowed' : ''
+            }`}
+            disabled={!normalizedValue.district || disabled || loadingAreas}
+            required={required}
+          >
+            <option value="">Select Area</option>
+            {areas.map((area) => (
+              <option key={area} value={area}>
+                {area}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            type="text"
+            value={customArea || ''}
+            onChange={(e) => handleCustomAreaChange(e.target.value)}
+            placeholder="Enter new area name"
+            className={`w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200 ${
+              disabled ? 'bg-gray-100 cursor-not-allowed' : ''
+            }`}
+            disabled={disabled}
+            required={required}
+          />
+        )}
+        
+        {loadingAreas && areaInputMode === 'select' && (
           <div className="text-sm text-gray-500 mt-1">Loading areas...</div>
+        )}
+        
+        {areaInputMode === 'input' && (
+          <div className="text-sm text-gray-500 mt-1">
+            Type the name of the new area you want to add
+          </div>
         )}
       </div>
 

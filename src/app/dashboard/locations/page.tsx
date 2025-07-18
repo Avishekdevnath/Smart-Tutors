@@ -418,8 +418,19 @@ export default function LocationsPage() {
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <LocationSelector
-                value={formData}
-                onChange={setFormData}
+                value={{
+                  division: formData.division,
+                  district: formData.district,
+                  area: formData.area,
+                  subarea: formData.subarea
+                }}
+                onChange={(location) => setFormData({
+                  ...formData,
+                  division: location.division,
+                  district: location.district,
+                  area: location.area,
+                  subarea: location.subarea
+                })}
                 required={true}
               />
               
