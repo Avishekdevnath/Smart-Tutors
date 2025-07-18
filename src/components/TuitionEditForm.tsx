@@ -27,6 +27,14 @@ export default function TuitionEditForm({ tuition, onSubmit, onCancel, loading =
     subarea: tuition.location?.subarea || '',
   });
   
+  // Ensure location values are always strings
+  const normalizedLocation = {
+    division: location.division || '',
+    district: location.district || '',
+    area: location.area || '',
+    subarea: location.subarea || '',
+  };
+  
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm({
     defaultValues: {
       guardianName: tuition.guardianName || '',
@@ -83,7 +91,7 @@ export default function TuitionEditForm({ tuition, onSubmit, onCancel, loading =
     const formData = {
       ...data,
       subjects: selectedSubjects,
-      location: location
+      location: normalizedLocation
     };
     onSubmit(formData);
   };
@@ -225,9 +233,9 @@ export default function TuitionEditForm({ tuition, onSubmit, onCancel, loading =
                 </div>
               )}
 
-              {/* Subject Selection */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                {Array.isArray(subjects) && subjects.map(subject => (
+              {/* Available Subjects */}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                {subjects.map(subject => (
                   <label key={subject._id} className="flex items-center space-x-2">
                     <input
                       type="checkbox"
@@ -311,7 +319,7 @@ export default function TuitionEditForm({ tuition, onSubmit, onCancel, loading =
               Location
             </label>
             <LocationSelector
-              value={location}
+              value={normalizedLocation}
               onChange={setLocation}
             />
           </div>

@@ -64,6 +64,14 @@ export default function LocationSelector({
     subareas: {}
   });
 
+  // Normalize value to ensure all properties are strings
+  const normalizedValue = useMemo(() => ({
+    division: value.division || '',
+    district: value.district || '',
+    area: value.area || '',
+    subarea: value.subarea || ''
+  }), [value]);
+
   // Fetch all divisions on mount (only once)
   useEffect(() => {
     fetchDivisions();
@@ -71,42 +79,42 @@ export default function LocationSelector({
 
   // Fetch districts when division changes (with caching)
   useEffect(() => {
-    if (value.division && !cache.districts[value.division]) {
-      fetchDistricts(value.division);
-    } else if (value.division && cache.districts[value.division]) {
-      setDistricts(cache.districts[value.division]);
+    if (normalizedValue.division && !cache.districts[normalizedValue.division]) {
+      fetchDistricts(normalizedValue.division);
+    } else if (normalizedValue.division && cache.districts[normalizedValue.division]) {
+      setDistricts(cache.districts[normalizedValue.division]);
     } else {
       setDistricts([]);
     }
-  }, [value.division, cache.districts]);
+  }, [normalizedValue.division, cache.districts]);
 
   // Fetch areas when district changes (with caching)
   useEffect(() => {
-    if (value.division && value.district) {
-      const cacheKey = `${value.division}-${value.district}`;
+    if (normalizedValue.division && normalizedValue.district) {
+      const cacheKey = `${normalizedValue.division}-${normalizedValue.district}`;
       if (!cache.areas[cacheKey]) {
-        fetchAreas(value.division, value.district);
+        fetchAreas(normalizedValue.division, normalizedValue.district);
       } else {
         setAreas(cache.areas[cacheKey]);
       }
     } else {
       setAreas([]);
     }
-  }, [value.division, value.district, cache.areas]);
+  }, [normalizedValue.division, normalizedValue.district, cache.areas]);
 
   // Fetch subareas when area changes (with caching)
   useEffect(() => {
-    if (value.division && value.district && value.area) {
-      const cacheKey = `${value.division}-${value.district}-${value.area}`;
+    if (normalizedValue.division && normalizedValue.district && normalizedValue.area) {
+      const cacheKey = `${normalizedValue.division}-${normalizedValue.district}-${normalizedValue.area}`;
       if (!cache.subareas[cacheKey]) {
-        fetchSubareas(value.division, value.district, value.area);
+        fetchSubareas(normalizedValue.division, normalizedValue.district, normalizedValue.area);
       } else {
         setSubareas(cache.subareas[cacheKey]);
       }
     } else {
       setSubareas([]);
     }
-  }, [value.division, value.district, value.area, cache.subareas]);
+  }, [normalizedValue.division, normalizedValue.district, normalizedValue.area, cache.subareas]);
 
   const fetchDivisions = useCallback(async () => {
     if (cache.divisions.length > 0) {
@@ -244,34 +252,34 @@ export default function LocationSelector({
   const handleDistrictChange = useCallback((district: string) => {
     setError('');
     onChange({ 
-      ...value, 
+      ...normalizedValue, 
       district, 
       area: '', 
       subarea: '' 
     });
-  }, [value, onChange]);
+  }, [normalizedValue, onChange]);
 
   const handleAreaChange = useCallback((area: string) => {
     setError('');
     onChange({ 
-      ...value, 
+      ...normalizedValue, 
       area, 
       subarea: '' 
     });
-  }, [value, onChange]);
+  }, [normalizedValue, onChange]);
 
   const handleSubareaChange = useCallback((subarea: string) => {
     setError('');
     onChange({ 
-      ...value, 
+      ...normalizedValue, 
       subarea 
     });
-  }, [value, onChange]);
+  }, [normalizedValue, onChange]);
 
   // Validation state
   const isValid = useMemo(() => {
-    return value.division && value.district && value.area;
-  }, [value.division, value.district, value.area]);
+    return normalizedValue.division && normalizedValue.district && normalizedValue.area;
+  }, [normalizedValue.division, normalizedValue.district, normalizedValue.area]);
 
   return (
     <div className={`space-y-4 ${className}`}>
@@ -288,7 +296,7 @@ export default function LocationSelector({
           Division {required && <span className="text-red-500">*</span>}
         </label>
         <select
-          value={value.division}
+          value={normalizedValue.division}
           onChange={(e) => handleDivisionChange(e.target.value)}
           className={`w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200 ${
             disabled || loadingDivisions ? 'bg-gray-100 cursor-not-allowed' : ''
@@ -314,12 +322,12 @@ export default function LocationSelector({
           District {required && <span className="text-red-500">*</span>}
         </label>
         <select
-          value={value.district}
+          value={normalizedValue.district}
           onChange={(e) => handleDistrictChange(e.target.value)}
           className={`w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200 ${
-            !value.division || disabled || loadingDistricts ? 'bg-gray-100 cursor-not-allowed' : ''
+            !normalizedValue.division || disabled || loadingDistricts ? 'bg-gray-100 cursor-not-allowed' : ''
           }`}
-          disabled={!value.division || disabled || loadingDistricts}
+          disabled={!normalizedValue.division || disabled || loadingDistricts}
           required={required}
         >
           <option value="">Select District</option>
@@ -340,12 +348,12 @@ export default function LocationSelector({
           Area {required && <span className="text-red-500">*</span>}
         </label>
         <select
-          value={value.area}
+          value={normalizedValue.area}
           onChange={(e) => handleAreaChange(e.target.value)}
           className={`w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200 ${
-            !value.district || disabled || loadingAreas ? 'bg-gray-100 cursor-not-allowed' : ''
+            !normalizedValue.district || disabled || loadingAreas ? 'bg-gray-100 cursor-not-allowed' : ''
           }`}
-          disabled={!value.district || disabled || loadingAreas}
+          disabled={!normalizedValue.district || disabled || loadingAreas}
           required={required}
         >
           <option value="">Select Area</option>
@@ -365,12 +373,12 @@ export default function LocationSelector({
         <div>
           <label className="block font-semibold mb-1">Sub-area (Optional)</label>
           <select
-            value={value.subarea || ''}
+            value={normalizedValue.subarea}
             onChange={(e) => handleSubareaChange(e.target.value)}
             className={`w-full border px-3 py-2 rounded focus:ring-2 focus:ring-blue-200 ${
-              !value.area || disabled || loadingSubareas ? 'bg-gray-100 cursor-not-allowed' : ''
+              !normalizedValue.area || disabled || loadingSubareas ? 'bg-gray-100 cursor-not-allowed' : ''
             }`}
-            disabled={!value.area || disabled || loadingSubareas}
+            disabled={!normalizedValue.area || disabled || loadingSubareas}
           >
             <option value="">Select Sub-area</option>
             {subareas.map((subarea) => (

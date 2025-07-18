@@ -614,8 +614,8 @@ function TutorRegisterContent() {
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Location Information</h2>
                 
                 <LocationSelector
-                  location={form.location}
-                  onLocationChange={(location) => setForm(prev => ({ ...prev, location }))}
+                  value={form.location}
+                  onChange={(location) => setForm(prev => ({ ...prev, location }))}
                 />
               </div>
             )}
