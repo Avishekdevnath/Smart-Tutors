@@ -10,8 +10,17 @@
 
 Transform Smart Tutors from a manual tuition listing platform into an AI-powered tuition media platform with two core features:
 
-1. **AI Chat Widget ("কামরুল")** — Conversational tuition posting for guardians + customer care (FAQ, status tracking, escalation to WhatsApp)
-2. **AI Tutor Smart Search** — Natural language tuition search with AI match scoring for tutors
+1. **AI Chat Widget ("কামরুল")** — Conversational tuition posting for guardians + customer care (FAQ, status tracking, escalation to WhatsApp). This is the platform's **USP** — the differentiator that makes Smart Tutors stand out.
+2. **Traditional Guardian Form** — Standard form-based tuition posting for guardians who prefer structured input. Parallel path alongside the chat.
+3. **AI Tutor Smart Search** — Natural language tuition search with AI match scoring for tutors
+
+### Tuition Posting: Two Paths
+
+Guardians choose whichever they prefer:
+- **Option A: AI Chat (কামরুল)** — conversational, no-friction, the "wow" factor
+- **Option B: Traditional Form** — structured, familiar, always available (also serves as Gemini-down fallback)
+
+Both paths create `draft` tuitions → admin reviews → publishes. Same pipeline, different entry points.
 
 ### Core Principles
 
@@ -20,6 +29,7 @@ Transform Smart Tutors from a manual tuition listing platform into an AI-powered
 - **Multilingual** — Bengali, English, Banglish, broken/misspelled words all handled.
 - **AI persona and questions are fully admin-customizable** — zero code deployments to change chat behavior.
 - **Gemini Pro** powers all AI features (already integrated).
+- **Track adoption** — monitor chat vs form conversion rates to inform future investment (WhatsApp bot if chat adoption is low).
 
 ---
 
@@ -30,8 +40,9 @@ Transform Smart Tutors from a manual tuition listing platform into an AI-powered
 Everything lives inside the existing Next.js 15 app. No new services, no new infrastructure.
 
 - **Chat Widget** → React components + `/api/ai/chat` endpoint
+- **Guardian Form** → Public tuition posting form at `/post-tuition` (Gemini-down fallback + alternative path)
 - **Conversation state** → New `Conversation` MongoDB model
-- **Tuition creation** → Chat extracts fields → creates Tuition as `draft`
+- **Tuition creation** → Chat OR form creates Tuition as `draft`
 - **Tutor search** → `/api/ai/search` endpoint → Gemini parses query → MongoDB aggregation with scoring
 - **Escalation** → AI detects "real person" intent → WhatsApp link to admin
 - **Admin review** → Dashboard page to view conversations, review drafts, publish tuitions
@@ -207,6 +218,19 @@ locationData: {
 
 This is required for hierarchical location scoring in search (same area=100%, same district=70%, same division=40%). The existing `location` string is kept for backward compatibility and display. The new `locationData` is used for scoring.
 
+**Source tracking — know where tuitions come from:**
+
+```typescript
+// Add to Tuition model
+source: {
+  type: String,
+  enum: ['chat', 'form', 'admin'],   // chat = AI কামরুল, form = guardian form, admin = dashboard
+  default: 'admin'
+}
+```
+
+This enables tracking chat vs form adoption rates in the admin dashboard.
+
 **Code generation — conditional for drafts:**
 
 The existing `pre('validate')` hook auto-generates ST codes. Modify to **skip code generation when status is 'draft'**. Code is generated when admin publishes (changes status from 'draft' to 'open').
@@ -289,11 +313,44 @@ interface ChatState {
 }
 ```
 
-### 4.5 Error Handling
+### 4.5 Error Handling & Gemini-Down Fallback
 
 - Gemini API fails → show admin-configured `errorMessage` from SiteSettings
 - Network offline → "ইন্টারনেট সংযোগ নেই, আবার চেষ্টা করুন"
 - Rate limit hit → "এই মুহূর্তে অনেক মানুষ কথা বলছে, কিছুক্ষণ পর আসুন"
+- **Gemini down for extended period** → Chat widget shows: "আমাদের AI এখন ব্যস্ত। আপনি সরাসরি ফর্ম পূরণ করে টিউশন পোস্ট করতে পারেন!" with a button linking to `/post-tuition` (the traditional form). This ensures tuition posting is **never fully blocked** by AI downtime.
+
+---
+
+## 4B. Guardian Tuition Form (Traditional Path)
+
+### Public page: `/post-tuition`
+
+A standard form-based tuition posting page for guardians who prefer structured input or when the AI chat is unavailable.
+
+**Fields** (match the same data the chat collects):
+- Student class (dropdown)
+- Subjects (multi-select)
+- Location (area, district — using existing LocationSearch component)
+- Medium (radio: Bangla Medium / English Medium / English Version)
+- Preferred tutor gender (radio: Male / Female / Any)
+- Days per week (dropdown: 1-7)
+- Salary range (min-max number inputs)
+- Guardian name (text)
+- Phone number (text, validated Bangladesh format)
+- Additional notes (textarea, optional)
+
+**Behavior:**
+- No login required
+- Submits to the same draft pipeline — creates Tuition with `status: 'draft'`
+- Guardian sees: "আপনার টিউশনের তথ্য জমা হয়েছে! ৩০ মিনিট থেকে ১ ঘণ্টার মধ্যে কনফার্ম করে SMS-এ জানাবো।"
+- Admin reviews and publishes — same flow as chat-created drafts
+- Form uses existing brand styling (green/saffron/cream theme)
+
+**Dual CTA on homepage:**
+The homepage should present both options prominently:
+- "কামরুলের সাথে কথা বলুন" → opens chat widget
+- "ফর্ম পূরণ করুন" → navigates to `/post-tuition`
 
 ---
 
@@ -479,7 +536,7 @@ Before searching, show "Recommended for You" — auto-scored tuitions based on t
 - **One API call per search** — parse natural language → structured params
 - **Zero API calls for scoring** — pure MongoDB aggregation
 - **Fallback:** if Gemini can't parse → basic text search against tuition fields
-- As-you-type with 500ms debounce
+- **Button-triggered search** (tutor presses Enter or clicks Search) — not as-you-type. Reduces Gemini API calls significantly. A tutor typing "gulshan e class 9 physics" would trigger 4-5 calls with debounce; button-trigger means 1 call.
 
 ---
 
@@ -563,6 +620,7 @@ POST   /api/ai/chat           — Send message, get AI response (SSE stream)
 GET    /api/ai/chat/[id]      — Resume conversation by sessionId
 POST   /api/ai/search         — Tutor smart search (parse + score)
 GET    /api/ai/config         — Public chat config (persona, greeting)
+POST   /api/tuitions/draft    — Guardian form submission → creates draft tuition
 GET    /api/cron/cleanup-conversations — Vercel Cron: abandon stale conversations
 ```
 
@@ -636,7 +694,37 @@ data: {"conversationId": "uuid", "extractedData": {...}, "completeness": 25, "st
 
 **Response:** Public subset of chatConfig (persona name, greeting — no whatsapp number, no knowledge articles, no rate limits).
 
-### 8.5 GET /api/cron/cleanup-conversations
+### 8.5 POST /api/tuitions/draft
+
+**Request:** Guardian form submission
+```json
+{
+  "class": "8",
+  "subjects": ["Math", "Science"],
+  "location": "Mirpur, Dhaka",
+  "locationData": { "division": "Dhaka", "district": "Dhaka", "area": "Mirpur" },
+  "version": "Bangla Medium",
+  "genderPreference": "male",
+  "daysPerWeek": 3,
+  "salary": { "min": 3000, "max": 4000 },
+  "guardianName": "Karim",
+  "guardianNumber": "01712345678",
+  "requirements": "optional notes",
+  "source": "form"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "আপনার টিউশনের তথ্য জমা হয়েছে!"
+}
+```
+
+Creates Tuition with `status: 'draft'`, `source: 'form'`. Same admin review pipeline as chat-created drafts.
+
+### 8.6 GET /api/cron/cleanup-conversations
 
 Vercel Cron endpoint. Configured in `vercel.json`:
 ```json
@@ -707,7 +795,19 @@ Add `'draft'` to the Mongoose enum. No data migration needed — existing tuitio
 
 Modify the `pre('validate')` hook to skip code generation when `status === 'draft'`. Code is generated when status changes from `draft` to `open` (admin publish action).
 
-### 11.4 Guardian Address
+### 11.4 Location Data Backfill
+
+Existing tuitions have `location` as a plain string (e.g., "Mirpur, Dhaka") but no structured `locationData`. The search scoring algorithm requires structured location data for hierarchical matching.
+
+**Migration script:** Parse existing `location` strings and attempt to match against the Location model's known areas/districts/divisions. For each tuition:
+1. Split the location string by comma/space
+2. Fuzzy-match each part against Location model entries
+3. Populate `locationData` with matched division/district/area
+4. If no match found → leave `locationData` empty (search falls back to text matching for these tuitions)
+
+**Graceful degradation:** Tuitions without `locationData` still appear in search results — they just get a lower location score (0% instead of hierarchical match). New tuitions (from chat or form) will always have structured `locationData`.
+
+### 11.5 Guardian Address
 
 Change `address` from `required: true` to optional. No data migration — existing guardians keep their addresses.
 
@@ -715,11 +815,12 @@ Change `address` from `required: true` to optional. No data migration — existi
 
 ## 12. What's NOT in This Phase
 
-- WhatsApp bot integration (just link for now)
+- WhatsApp bot integration (just link for now — consider if chat widget adoption is low)
 - Push notifications
-- Advanced analytics / demand heatmaps
+- Advanced analytics / demand heatmaps (Phase 2 — source tracking data feeds into this)
 - Tutor reviews / leaderboard
 - Live admin chat (escalation goes to WhatsApp)
 - Voice input
 - Image/document sharing in chat
-- Salary guidance from existing data (marked as Phase 2 optional)
+- Salary guidance from existing data (Phase 2 optional)
+- Auto-publish with "pending verification" badge (consider if admin review becomes a bottleneck past ~30-40 posts/day)
