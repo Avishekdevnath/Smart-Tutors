@@ -42,3 +42,7 @@ next-env.d.ts
 
 # project docs
 /docs/
+/docs/superpowers/
+
+# sample data
+/data_sample/
