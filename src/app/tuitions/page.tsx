@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { Search, Filter, MapPin, Clock, BookOpen, Users, Calendar, CheckCircle } from 'lucide-react';
+import { Search, MapPin, Clock, BookOpen, CheckCircle } from 'lucide-react';
 import Modal from '@/components/Modal';
 import Toast, { useToast } from '@/components/Toast';
+import { useSettings } from '@/hooks/useSettings';
 
 interface Tuition {
   _id: string;
@@ -42,119 +43,66 @@ export default function TuitionsPage() {
   const [applicationLoading, setApplicationLoading] = useState(false);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [registrationLoading, setRegistrationLoading] = useState(false);
-  const [userApplications, setUserApplications] = useState<string[]>([]); // Track applied tuition IDs
+  const [userApplications, setUserApplications] = useState<string[]>([]);
   const [applicationsLoading, setApplicationsLoading] = useState(false);
-  const [applicationForm, setApplicationForm] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    experience: '',
-    message: ''
-  });
   const [confirmationText, setConfirmationText] = useState('');
   const [registrationForm, setRegistrationForm] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
+    name: '', phone: '', email: '', password: '', confirmPassword: ''
   });
 
   const { showToast } = useToast();
+  const { settings: siteSettings } = useSettings();
 
   useEffect(() => {
     loadTuitions();
-    if (session) {
-      loadUserApplications();
-    } else {
-      // Clear applications when user logs out
-      setUserApplications([]);
-    }
+    if (session) loadUserApplications();
+    else setUserApplications([]);
   }, [session]);
 
-  useEffect(() => {
-    filterTuitions();
-  }, [tuitions, searchTerm, selectedClass, selectedVersion, selectedLocation]);
+  useEffect(() => { filterTuitions(); }, [tuitions, searchTerm, selectedClass, selectedVersion, selectedLocation]);
 
   const loadTuitions = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/tuitions');
-      if (response.ok) {
-        const data = await response.json();
-        // Filter only available tuitions
-        const availableTuitions = data.filter((tuition: Tuition) => 
-          ['open', 'available'].includes(tuition.status)
-        );
-        setTuitions(availableTuitions);
-        setFilteredTuitions(availableTuitions);
+      const res = await fetch('/api/tuitions');
+      if (res.ok) {
+        const data = await res.json();
+        const available = data.filter((t: Tuition) => ['open', 'available'].includes(t.status));
+        setTuitions(available);
+        setFilteredTuitions(available);
       }
-    } catch (error) {
-      console.error('Error loading tuitions:', error);
-      showToast('Error loading tuitions', 'error');
-    } finally {
-      setLoading(false);
-    }
+    } catch { showToast('Error loading tuitions', 'error'); }
+    finally { setLoading(false); }
   };
 
   const loadUserApplications = async () => {
     try {
       setApplicationsLoading(true);
-      const response = await fetch('/api/applications');
-      if (response.ok) {
-        const data = await response.json();
-        // Extract tuition IDs from user's applications
-        const appliedTuitionIds = data.applications.map((app: any) => app.tuition._id);
-        setUserApplications(appliedTuitionIds);
+      const res = await fetch('/api/applications');
+      if (res.ok) {
+        const data = await res.json();
+        setUserApplications(data.applications.map((app: any) => app.tuition._id));
       }
-    } catch (error) {
-      console.error('Error loading user applications:', error);
-    } finally {
-      setApplicationsLoading(false);
-    }
+    } catch {}
+    finally { setApplicationsLoading(false); }
   };
 
   const filterTuitions = () => {
-    let filtered = tuitions;
-
-    // Search filter
-    if (searchTerm) {
-      filtered = filtered.filter(tuition =>
-        tuition.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        tuition.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        tuition.subjects.some(subject => 
-          subject.toLowerCase().includes(searchTerm.toLowerCase())
-        ) ||
-        tuition.class.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Class filter
-    if (selectedClass) {
-      filtered = filtered.filter(tuition => tuition.class === selectedClass);
-    }
-
-    // Version filter
-    if (selectedVersion) {
-      filtered = filtered.filter(tuition => tuition.version === selectedVersion);
-    }
-
-    // Location filter
-    if (selectedLocation) {
-      filtered = filtered.filter(tuition => 
-        tuition.location.toLowerCase().includes(selectedLocation.toLowerCase())
-      );
-    }
-
-    setFilteredTuitions(filtered);
+    let f = tuitions;
+    if (searchTerm) f = f.filter(t =>
+      t.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.subjects.some(s => s.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      t.class.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    if (selectedClass) f = f.filter(t => t.class === selectedClass);
+    if (selectedVersion) f = f.filter(t => t.version === selectedVersion);
+    if (selectedLocation) f = f.filter(t => t.location.toLowerCase().includes(selectedLocation.toLowerCase()));
+    setFilteredTuitions(f);
   };
 
   const handleApply = (tuition: Tuition) => {
-    if (!session) {
-      setSelectedTuition(tuition);
-      setShowRegistrationModal(true);
-      return;
-    }
+    if (!session) { setSelectedTuition(tuition); setShowRegistrationModal(true); return; }
     setSelectedTuition(tuition);
     setShowApplicationModal(true);
   };
@@ -162,567 +110,411 @@ export default function TuitionsPage() {
   const handleApplicationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedTuition || !session) return;
-
-    // Check if user agreed to terms
-    if (confirmationText.toLowerCase().trim() !== 'agree') {
-      showToast('Please type "Agree" to confirm you accept the terms and conditions', 'error');
-      return;
+    if (confirmationText.toLowerCase().trim() !== (siteSettings.mediaFeeConfirmText || 'Agree').toLowerCase()) {
+      showToast('Please type "Agree" to confirm', 'error'); return;
     }
-
     try {
       setApplicationLoading(true);
-      const response = await fetch('/api/applications', {
+      const res = await fetch('/api/applications', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          tuitionId: selectedTuition._id,
-          agreedToTerms: true,
-          confirmationText: confirmationText
-        })
+        body: JSON.stringify({ tuitionId: selectedTuition._id, agreedToTerms: true, confirmationText })
       });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        showToast('Application submitted successfully!', 'success');
+      const result = await res.json();
+      if (res.ok) {
+        showToast('আবেদন সফলভাবে জমা হয়েছে!', 'success');
         setShowApplicationModal(false);
         setConfirmationText('');
-        loadUserApplications(); // Reload user applications to update status
-      } else {
-        showToast(result.error || 'Failed to submit application', 'error');
-      }
-    } catch (error) {
-      console.error('Error submitting application:', error);
-      showToast('Error submitting application', 'error');
-    } finally {
-      setApplicationLoading(false);
-    }
-  };
-
-  const clearFilters = () => {
-    setSearchTerm('');
-    setSelectedClass('');
-    setSelectedVersion('');
-    setSelectedLocation('');
-  };
-
-  const hasApplied = (tuitionId: string) => {
-    return userApplications.includes(tuitionId);
-  };
-
-  const handleAppliedClick = (tuition: Tuition) => {
-    showToast('You have already applied for this tuition. Check your applications page for status updates.', 'info');
+        loadUserApplications();
+      } else showToast(result.error || 'Failed to submit application', 'error');
+    } catch { showToast('Error submitting application', 'error'); }
+    finally { setApplicationLoading(false); }
   };
 
   const handleRegistrationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (registrationForm.password !== registrationForm.confirmPassword) {
-      showToast('Passwords do not match', 'error');
-      return;
+      showToast('Passwords do not match', 'error'); return;
     }
-
     try {
       setRegistrationLoading(true);
-      const response = await fetch('/api/tutors/register', {
+      const res = await fetch('/api/tutors/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: registrationForm.name,
-          phone: registrationForm.phone,
-          email: registrationForm.email,
-          password: registrationForm.password
-        })
+        body: JSON.stringify({ name: registrationForm.name, phone: registrationForm.phone, email: registrationForm.email, password: registrationForm.password })
       });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        showToast('Registration successful! You can now apply for tuitions.', 'success');
+      const result = await res.json();
+      if (res.ok) {
+        showToast('Registration successful!', 'success');
         setShowRegistrationModal(false);
-        setRegistrationForm({
-          name: '',
-          phone: '',
-          email: '',
-          password: '',
-          confirmPassword: ''
-        });
-        // Redirect to login
         window.location.href = '/tutors/login';
-      } else {
-        showToast(result.error || 'Registration failed', 'error');
-      }
-    } catch (error) {
-      console.error('Error during registration:', error);
-      showToast('Error during registration', 'error');
-    } finally {
-      setRegistrationLoading(false);
-    }
+      } else showToast(result.error || 'Registration failed', 'error');
+    } catch { showToast('Error during registration', 'error'); }
+    finally { setRegistrationLoading(false); }
   };
 
+  const clearFilters = () => { setSearchTerm(''); setSelectedClass(''); setSelectedVersion(''); setSelectedLocation(''); };
+  const hasApplied = (id: string) => userApplications.includes(id);
+
+  const selectClass = 'w-full px-3 py-2.5 border border-[#E8DDD0] rounded-lg text-sm text-[#1C1917] bg-white focus:outline-none focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]';
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FFFDF7]">
       <Toast />
-      
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Available Tuitions
-            </h1>
-            <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Find the perfect tuition opportunity that matches your expertise and schedule.
-            </p>
-            {!session && (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/tutors/register">
-                <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200">
-                    Register as Tutor
-                </button>
-              </Link>
-                <Link href="/tutors/login">
-                <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors duration-200">
-                    Login
-                </button>
-              </Link>
+
+      {/* ── Page Header ─────────────────────────────────────────── */}
+      <div className="bg-[#006A4E] relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/5 rounded-full" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#E07B2A]/10 rounded-full -translate-x-1/2 translate-y-1/2" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <h1 className="font-heading text-3xl sm:text-4xl font-bold text-white mb-2">
+                সকল টিউশন
+              </h1>
+              <p className="text-green-200 text-sm font-medium uppercase tracking-widest mb-1">Available Tuitions</p>
+              <p className="text-green-100 text-base">
+                আপনার দক্ষতা ও সময়সূচি অনুযায়ী সেরা টিউশন খুঁজে নিন।
+              </p>
             </div>
+            {!session && (
+              <div className="flex gap-3 shrink-0">
+                <Link href="/tutors/register">
+                  <button className="bg-[#E07B2A] hover:bg-[#C96A1A] text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors duration-200 cursor-pointer">
+                    টিউটর হিসেবে যোগ দিন
+                  </button>
+                </Link>
+                <Link href="/tutors/login">
+                  <button className="border border-white/30 bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors duration-200 cursor-pointer">
+                    Login
+                  </button>
+                </Link>
+              </div>
             )}
           </div>
         </div>
+        {/* Wave */}
+        <div className="absolute bottom-0 left-0 right-0" aria-hidden="true">
+          <svg viewBox="0 0 1440 30" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-8">
+            <path d="M0 30 C360 0 1080 0 1440 30 L1440 30 L0 30 Z" fill="#FFFDF7"/>
+          </svg>
+        </div>
       </div>
 
-      {/* Search and Filter Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {/* Search */}
-            <div className="lg:col-span-2">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Search by code, location, subjects..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
 
-            {/* Class Filter */}
-            <div>
-              <select
-                value={selectedClass}
-                onChange={(e) => setSelectedClass(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">All Classes</option>
-                <option value="Class 1">Class 1</option>
-                <option value="Class 2">Class 2</option>
-                <option value="Class 3">Class 3</option>
-                <option value="Class 4">Class 4</option>
-                <option value="Class 5">Class 5</option>
-                <option value="Class 6">Class 6</option>
-                <option value="Class 7">Class 7</option>
-                <option value="Class 8">Class 8</option>
-                <option value="Class 9">Class 9</option>
-                <option value="Class 10">Class 10</option>
-                <option value="Class 11">Class 11</option>
-                <option value="Class 12">Class 12</option>
-                <option value="O Level">O Level</option>
-                <option value="A Level">A Level</option>
-                <option value="University">University</option>
-              </select>
+        {/* ── Filter Bar ────────────────────────────────────────── */}
+        <div className="bg-white border border-[#E8DDD0] rounded-2xl p-5 mb-8 shadow-card">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+            <div className="lg:col-span-2 relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#78716C] w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Code, location, subject দিয়ে খুঁজুন..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-9 pr-4 py-2.5 border border-[#E8DDD0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
+              />
             </div>
-
-            {/* Version Filter */}
-            <div>
-              <select
-                value={selectedVersion}
-                onChange={(e) => setSelectedVersion(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">All Versions</option>
-                <option value="English Medium">English Medium</option>
-                <option value="Bangla Medium">Bangla Medium</option>
-                <option value="English Version">English Version</option>
-                <option value="Others">Others</option>
-              </select>
-        </div>
-
-            {/* Location Filter */}
-            <div>
-              <select
-                value={selectedLocation}
-                onChange={(e) => setSelectedLocation(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">All Locations</option>
-                <option value="Dhaka">Dhaka</option>
-                <option value="Chittagong">Chittagong</option>
-                <option value="Sylhet">Sylhet</option>
-                <option value="Rajshahi">Rajshahi</option>
-                <option value="Khulna">Khulna</option>
-                <option value="Barisal">Barisal</option>
-                <option value="Rangpur">Rangpur</option>
-                <option value="Mymensingh">Mymensingh</option>
-              </select>
-            </div>
+            <select value={selectedClass} onChange={(e) => setSelectedClass(e.target.value)} className={selectClass}>
+              <option value="">সব Class</option>
+              {['Class 1','Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8','Class 9','Class 10','Class 11','Class 12','O Level','A Level','University'].map(c => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+            <select value={selectedVersion} onChange={(e) => setSelectedVersion(e.target.value)} className={selectClass}>
+              <option value="">সব Version</option>
+              <option value="English Medium">English Medium</option>
+              <option value="Bangla Medium">Bangla Medium</option>
+              <option value="English Version">English Version</option>
+              <option value="Others">Others</option>
+            </select>
+            <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className={selectClass}>
+              <option value="">সব Location</option>
+              {['Dhaka','Chittagong','Sylhet','Rajshahi','Khulna','Barisal','Rangpur','Mymensingh'].map(l => (
+                <option key={l} value={l}>{l}</option>
+              ))}
+            </select>
           </div>
 
-          {/* Clear Filters */}
           {(searchTerm || selectedClass || selectedVersion || selectedLocation) && (
-            <div className="mt-4 flex justify-between items-center">
-              <span className="text-sm text-gray-600">
-                {filteredTuitions.length} of {tuitions.length} tuitions found
+            <div className="mt-4 flex items-center justify-between">
+              <span className="text-sm text-[#78716C]">
+                <span className="font-semibold text-[#006A4E]">{filteredTuitions.length}</span> টি টিউশন পাওয়া গেছে
               </span>
-              <button
-                onClick={clearFilters}
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-              >
-                Clear all filters
+              <button onClick={clearFilters} className="text-sm text-[#E07B2A] hover:text-[#C96A1A] font-semibold cursor-pointer">
+                সব ফিল্টার মুছুন
               </button>
             </div>
           )}
         </div>
 
-        {/* Tuitions Grid */}
+        {/* ── Tuitions Grid ─────────────────────────────────────── */}
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-[#E8DDD0] p-5 animate-pulse">
+                <div className="flex justify-between mb-4">
+                  <div className="h-5 bg-[#F5F0E8] rounded w-20" />
+                  <div className="h-5 bg-[#F5F0E8] rounded w-16" />
+                </div>
+                <div className="space-y-3">
+                  <div className="h-3.5 bg-[#F5F0E8] rounded w-full" />
+                  <div className="h-3.5 bg-[#F5F0E8] rounded w-2/3" />
+                  <div className="h-3.5 bg-[#F5F0E8] rounded w-1/2" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : filteredTuitions.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="text-gray-400 mb-4">
-              <Search className="w-16 h-16 mx-auto" />
+          <div className="text-center py-20">
+            <div className="w-16 h-16 bg-[#F5F0E8] rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Search className="w-8 h-8 text-[#78716C]" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No tuitions found</h3>
-            <p className="text-gray-600">Try adjusting your search criteria or check back later for new opportunities.</p>
+            <h3 className="font-heading text-xl font-bold text-[#1C1917] mb-2">কোনো টিউশন পাওয়া যায়নি</h3>
+            <p className="text-[#78716C] text-sm">অনুসন্ধানের মানদণ্ড পরিবর্তন করুন বা পরে আবার চেষ্টা করুন।</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredTuitions.map((tuition) => (
-              <div key={tuition._id} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-                {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-bold">{tuition.code}</h3>
+              <div key={tuition._id} className="group bg-white rounded-2xl border border-[#E8DDD0] hover:border-[#006A4E]/30 hover:shadow-card-hover transition-all duration-200 overflow-hidden flex flex-col">
+
+                {/* Code + badges */}
+                <div className="flex items-center justify-between px-5 pt-5 pb-3">
+                  <span className="font-heading font-bold text-[#1C1917] text-lg">{tuition.code}</span>
+                  <div className="flex items-center gap-2">
                     {tuition.urgent && (
-                      <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                      <span className="inline-flex items-center gap-1 bg-red-50 text-red-600 border border-red-200 px-2 py-0.5 rounded-full text-xs font-semibold">
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
                         URGENT
                       </span>
                     )}
+                    <span className="bg-green-50 text-[#006A4E] border border-green-200 px-2 py-0.5 rounded-full text-xs font-semibold uppercase">
+                      {tuition.status}
+                    </span>
                   </div>
-                  <p className="text-blue-100">{tuition.class} • {tuition.version}</p>
                 </div>
 
-                {/* Content */}
-                <div className="p-6">
-                  {/* Location */}
-                  <div className="flex items-center text-gray-600 mb-4">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    <span>{tuition.location}</span>
+                <p className="px-5 pb-3 text-sm text-[#78716C]">{tuition.class} · {tuition.version}</p>
+
+                <div className="px-5 pb-5 flex flex-col gap-3 flex-1">
+                  {/* Subjects */}
+                  <div className="flex flex-wrap gap-1.5">
+                    {tuition.subjects.slice(0, 4).map((s, i) => (
+                      <span key={i} className="bg-green-50 text-[#006A4E] border border-green-200 px-2.5 py-0.5 rounded-md text-xs font-semibold">{s}</span>
+                    ))}
+                    {tuition.subjects.length > 4 && (
+                      <span className="bg-[#F5F0E8] text-[#78716C] px-2.5 py-0.5 rounded-md text-xs font-medium">+{tuition.subjects.length - 4}</span>
+                    )}
                   </div>
 
-                  {/* Subjects */}
-                  <div className="mb-4">
-                    <h4 className="font-semibold text-gray-900 mb-2 flex items-center">
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      Subjects
-                    </h4>
-                    <div className="flex flex-wrap gap-1">
-                      {tuition.subjects.map((subject, index) => (
-                        <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
-                          {subject}
-                        </span>
-                      ))}
-        </div>
-      </div>
-
-                  {/* Schedule */}
-                  <div className="mb-4">
-                    <h4 className="font-semibold text-gray-900 mb-2 flex items-center">
-                      <Clock className="w-4 h-4 mr-2" />
-                      Schedule
-                    </h4>
-                    <p className="text-gray-600 text-sm">
-                      {tuition.weeklyDays} • {tuition.dailyHours}
-                    </p>
+                  {/* Meta */}
+                  <div className="space-y-2 text-sm text-[#78716C]">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 shrink-0 text-[#E07B2A]" />
+                      <span className="truncate">{tuition.location}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 shrink-0 text-[#006A4E]" />
+                      <span>{tuition.weeklyDays} · {tuition.dailyHours}</span>
+                    </div>
+                    {tuition.startMonth && (
+                      <div className="flex items-center gap-2">
+                        <BookOpen className="w-4 h-4 shrink-0 text-[#78716C]" />
+                        <span>Start: {tuition.startMonth}</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Salary */}
-                  <div className="mb-4">
-                    <h4 className="font-semibold text-gray-900 mb-2 flex items-center">
-                                              <span className="w-4 h-4 mr-2 text-yellow-500 font-semibold text-sm flex items-center justify-center">৳</span>
-                      Salary
-                    </h4>
-                    <p className="text-gray-600 text-sm">{tuition.salary}</p>
-                  </div>
+                  <p className="text-[#006A4E] font-heading font-bold text-xl">৳ {tuition.salary}</p>
 
-                  {/* Additional Info */}
-                  <div className="space-y-2 text-sm text-gray-600">
-                    {tuition.tutorGender !== "Not specified" && (
-                      <p><span className="font-medium">Tutor Gender:</span> {tuition.tutorGender}</p>
-                    )}
-                    {tuition.startMonth && (
-                      <p><span className="font-medium">Start:</span> {tuition.startMonth}</p>
-                    )}
-                    {tuition.specialRemarks && (
-                      <p><span className="font-medium">Remarks:</span> {tuition.specialRemarks}</p>
-                    )}
-                  </div>
+                  {/* Preference */}
+                  {tuition.tutorGender && tuition.tutorGender !== 'Not specified' && (
+                    <p className="text-xs text-[#78716C] bg-[#FFFDF7] border border-[#E8DDD0] rounded-lg px-3 py-2">
+                      <span className="font-semibold text-[#1C1917]">Preferred:</span> {tuition.tutorGender} tutor
+                    </p>
+                  )}
 
-                  {/* Action Buttons */}
-                  <div className="mt-6 space-y-3">
-                    {/* View Details Button */}
-                    <Link href={`/tuition/${tuition.code}`}>
-                      <button className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors duration-200 border border-gray-300">
-                        View Details
+                  {tuition.specialRemarks && (
+                    <p className="text-xs text-[#78716C] line-clamp-2">
+                      <span className="font-semibold text-[#1C1917]">Remarks:</span> {tuition.specialRemarks}
+                    </p>
+                  )}
+
+                  <div className="flex-1" />
+
+                  {/* Actions */}
+                  <div className="flex gap-2 pt-3 border-t border-[#F5F0E8]">
+                    <Link href={`/tuition/${tuition.code}`} className="flex-1">
+                      <button className="w-full border border-[#E8DDD0] text-[#1C1917] hover:border-[#006A4E] hover:text-[#006A4E] py-2 rounded-lg text-sm font-semibold transition-colors duration-200 cursor-pointer">
+                        বিস্তারিত
                       </button>
                     </Link>
-                    
-                    {/* Apply Button */}
+
                     {session ? (
                       applicationsLoading ? (
-                        <button
-                          className="w-full bg-gray-400 text-white py-2 px-4 rounded-lg font-semibold cursor-default flex items-center justify-center"
-                          disabled
-                        >
-                          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        <button disabled className="flex-1 bg-[#F5F0E8] text-[#78716C] py-2 rounded-lg text-sm font-semibold cursor-default flex items-center justify-center gap-1.5">
+                          <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                           </svg>
-                          Checking...
+                          Loading...
                         </button>
                       ) : hasApplied(tuition._id) ? (
                         <button
-                          onClick={() => handleAppliedClick(tuition)}
-                          className="w-full bg-green-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200 flex items-center justify-center"
-                          title="Click to view application status"
+                          onClick={() => showToast('আপনি ইতোমধ্যে আবেদন করেছেন।', 'info')}
+                          className="flex-1 bg-green-50 text-[#006A4E] border border-green-200 py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
                         >
-                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
-                          Applied
+                          <CheckCircle className="w-4 h-4" /> Applied
                         </button>
                       ) : (
                         <button
                           onClick={() => handleApply(tuition)}
-                          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
+                          className="flex-1 bg-[#E07B2A] hover:bg-[#C96A1A] text-white py-2 rounded-lg text-sm font-bold transition-colors duration-200 cursor-pointer"
                         >
-                          Apply Now
+                          আবেদন করুন →
                         </button>
                       )
                     ) : (
-                      <Link href={`/tutors/register?tuition=${tuition.code}`}>
-                        <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200">
+                      <Link href={`/tutors/register?tuition=${tuition.code}`} className="flex-1">
+                        <button className="w-full bg-[#E07B2A] hover:bg-[#C96A1A] text-white py-2 rounded-lg text-sm font-bold transition-colors duration-200 cursor-pointer">
                           Register & Apply
                         </button>
                       </Link>
                     )}
                   </div>
-          </div>
-        </div>
+                </div>
+              </div>
             ))}
           </div>
         )}
       </div>
 
-      {/* Application Modal */}
-             <Modal
-         isOpen={showApplicationModal}
-         onClose={() => setShowApplicationModal(false)}
-         title="Apply for Tuition - Terms & Conditions"
-         size="md"
-         actions={
-           <div className="flex space-x-3">
-             <button
-               type="button"
-               onClick={() => setShowApplicationModal(false)}
-               className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-             >
-               Cancel
-             </button>
-             <button
-               type="submit"
-               form="application-form"
-               disabled={applicationLoading || confirmationText.toLowerCase().trim() !== 'agree'}
-               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-             >
-               {applicationLoading ? 'Submitting...' : 'Submit Application'}
-             </button>
-           </div>
-         }
-       >
-         {selectedTuition && (
-           <form id="application-form" onSubmit={handleApplicationSubmit} className="space-y-4">
-             <div className="bg-blue-50 p-4 rounded-lg mb-4">
-               <h4 className="font-semibold text-blue-900 mb-2">Tuition Details</h4>
-               <p className="text-blue-800 text-sm">
-                 <strong>Code:</strong> {selectedTuition.code} | <strong>Class:</strong> {selectedTuition.class} | <strong>Location:</strong> {selectedTuition.location}
-               </p>
-             </div>
+      {/* ── Application Modal ─────────────────────────────────────── */}
+      <Modal
+        isOpen={showApplicationModal}
+        onClose={() => setShowApplicationModal(false)}
+        title="টিউশনে আবেদন করুন"
+        size="md"
+        actions={
+          <div className="flex gap-3">
+            <button type="button" onClick={() => setShowApplicationModal(false)}
+              className="px-4 py-2 border border-[#E8DDD0] text-[#78716C] rounded-lg hover:bg-[#F5F0E8] text-sm font-medium cursor-pointer">
+              বাতিল
+            </button>
+            <button type="submit" form="application-form"
+              disabled={applicationLoading || confirmationText.toLowerCase().trim() !== (siteSettings.mediaFeeConfirmText || 'Agree').toLowerCase()}
+              className="px-4 py-2 bg-[#006A4E] hover:bg-[#005540] text-white rounded-lg disabled:opacity-50 text-sm font-semibold cursor-pointer">
+              {applicationLoading ? 'জমা হচ্ছে...' : 'আবেদন জমা দিন'}
+            </button>
+          </div>
+        }
+      >
+        {selectedTuition && (
+          <form id="application-form" onSubmit={handleApplicationSubmit} className="space-y-4">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <h4 className="font-heading font-semibold text-[#006A4E] mb-1">Tuition Details</h4>
+              <p className="text-sm text-[#1C1917]">
+                <span className="font-semibold">Code:</span> {selectedTuition.code} &nbsp;·&nbsp;
+                <span className="font-semibold">Class:</span> {selectedTuition.class} &nbsp;·&nbsp;
+                <span className="font-semibold">Location:</span> {selectedTuition.location}
+              </p>
+            </div>
 
-             {/* Terms and Conditions */}
-             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-               <h4 className="font-semibold text-yellow-900 mb-3">আমাদের মিডিয়া ফি এর নিয়ম:</h4>
-               <div className="text-yellow-800 text-sm space-y-2">
-                 <p>
-                   <strong>১.☞</strong> টিউশন কনফার্ম হওয়ার ৫-৭ দিনের মধ্যে স্যালারির ৬০% মিডিয়া ফি দিতে হবে (শুধুমাত্র প্রথম মাসের ক্ষেত্রে প্রযোজ্য)।
-                 </p>
-                 
-                 <div className="mt-4 pt-3 border-t border-yellow-300">
-                   <p className="font-medium mb-2">
-                     আপনি কি আমাদের কন্ডিশনের সাথে একমত? একমত হলে অবশ্যই <strong>"Agree"</strong> Type করবেন।
-                   </p>
-                 </div>
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-900">
+              <h4 className="font-heading font-semibold mb-2">আমাদের মিডিয়া ফি এর নিয়ম:</h4>
+              <ul className="list-disc pl-5 space-y-1">
+                {(siteSettings.mediaFeeRules || []).map((rule, i) => (
+                  <li key={i}>{rule}</li>
+                ))}
+              </ul>
+              {siteSettings.mediaFeeNote && (
+                <div className="mt-3 p-2 bg-amber-100 rounded text-xs font-medium">
+                  {siteSettings.mediaFeeNote}
+                </div>
+              )}
+              <p className="font-medium pt-3">
+                একমত হলে নিচে <strong>"{siteSettings.mediaFeeConfirmText || 'Agree'}"</strong> লিখুন।
+              </p>
+            </div>
 
-                 <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded">
-                   <p className="text-red-800 text-xs">
-                     <strong>বি:দ্র:</strong> টিউশন কনফার্ম করার পর নির্দিষ্ট সময়ের মধ্যে টিউশন ফি না দিলে, কোনো প্রকার প্রতারণা করলে বা করার চেষ্টা করলে আপনার বিরুদ্ধে যথাযথ আইনি ব্যবস্থা নেয়া হবে।
-                   </p>
-                 </div>
-               </div>
-             </div>
+            <div>
+              <label className="block text-sm font-semibold text-[#1C1917] mb-1.5">Confirmation *</label>
+              <input
+                type="text"
+                value={confirmationText}
+                onChange={(e) => setConfirmationText(e.target.value)}
+                placeholder={`Type '${siteSettings.mediaFeeConfirmText || 'Agree'}' to confirm`}
+                className="w-full px-3 py-2.5 border border-[#E8DDD0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#006A4E]"
+                required
+              />
+              {confirmationText.toLowerCase().trim() === (siteSettings.mediaFeeConfirmText || 'Agree').toLowerCase() && (
+                <p className="mt-1 text-xs text-[#006A4E] flex items-center gap-1">
+                  <CheckCircle className="w-3 h-3" /> শর্ত গ্রহণ করা হয়েছে
+                </p>
+              )}
+            </div>
+          </form>
+        )}
+      </Modal>
 
-             {/* Confirmation Input */}
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-2">
-                 Confirmation *
-               </label>
-               <input
-                 type="text"
-                 value={confirmationText}
-                 onChange={(e) => setConfirmationText(e.target.value)}
-                 placeholder="Type 'Agree' to confirm"
-                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                 required
-               />
-               <p className="mt-1 text-xs text-gray-500">
-                 Type exactly "Agree" (case insensitive) to proceed
-               </p>
-               {confirmationText && confirmationText.toLowerCase().trim() === 'agree' && (
-                 <p className="mt-1 text-xs text-green-600 flex items-center">
-                   <CheckCircle className="w-3 h-3 mr-1" />
-                   Terms accepted
-                 </p>
-               )}
-             </div>
-           </form>
-         )}
-       </Modal>
+      {/* ── Registration Modal ─────────────────────────────────────── */}
+      <Modal
+        isOpen={showRegistrationModal}
+        onClose={() => setShowRegistrationModal(false)}
+        title="আবেদন করতে নিবন্ধন করুন"
+        size="md"
+        actions={
+          <div className="flex gap-3">
+            <button type="button" onClick={() => setShowRegistrationModal(false)}
+              className="px-4 py-2 border border-[#E8DDD0] text-[#78716C] rounded-lg hover:bg-[#F5F0E8] text-sm font-medium cursor-pointer">
+              বাতিল
+            </button>
+            <button type="submit" form="registration-form" disabled={registrationLoading}
+              className="px-4 py-2 bg-[#006A4E] hover:bg-[#005540] text-white rounded-lg disabled:opacity-50 text-sm font-semibold cursor-pointer">
+              {registrationLoading ? 'নিবন্ধন হচ্ছে...' : 'Register & Apply'}
+            </button>
+          </div>
+        }
+      >
+        {selectedTuition && (
+          <form id="registration-form" onSubmit={handleRegistrationSubmit} className="space-y-4">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-sm">
+              <p className="font-semibold text-[#006A4E] mb-1">Tuition: {selectedTuition.code}</p>
+              <p className="text-[#1C1917]">{selectedTuition.class} · {selectedTuition.location}</p>
+            </div>
+            <p className="text-sm text-[#78716C] bg-amber-50 border border-amber-200 rounded-lg p-3">
+              আবেদন করতে প্রথমে Tutor হিসেবে নিবন্ধন করুন। নিবন্ধনের পর Login পেজে নিয়ে যাওয়া হবে।
+            </p>
 
-       {/* Registration Modal */}
-       <Modal
-         isOpen={showRegistrationModal}
-         onClose={() => setShowRegistrationModal(false)}
-         title="Register to Apply"
-         size="md"
-         actions={
-           <div className="flex space-x-3">
-             <button
-               type="button"
-               onClick={() => setShowRegistrationModal(false)}
-               className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400"
-             >
-               Cancel
-             </button>
-             <button
-               type="submit"
-               form="registration-form"
-               disabled={registrationLoading}
-               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-             >
-               {registrationLoading ? 'Registering...' : 'Register & Apply'}
-             </button>
-           </div>
-         }
-       >
-         {selectedTuition && (
-           <form id="registration-form" onSubmit={handleRegistrationSubmit} className="space-y-4">
-             <div className="bg-blue-50 p-4 rounded-lg mb-4">
-               <h4 className="font-semibold text-blue-900 mb-2">Tuition Details</h4>
-               <p className="text-blue-800 text-sm">
-                 <strong>Code:</strong> {selectedTuition.code} | <strong>Class:</strong> {selectedTuition.class} | <strong>Location:</strong> {selectedTuition.location}
-               </p>
-             </div>
-
-             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-               <p className="text-yellow-800 text-sm">
-                 <strong>Note:</strong> You need to register as a tutor to apply for this tuition. After registration, you'll be redirected to login.
-               </p>
-             </div>
-
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-2">
-                 Full Name *
-               </label>
-               <input
-                 type="text"
-                 value={registrationForm.name}
-                 onChange={(e) => setRegistrationForm(prev => ({ ...prev, name: e.target.value }))}
-                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                 required
-               />
-             </div>
-
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-2">
-                 Phone Number *
-               </label>
-               <input
-                 type="tel"
-                 value={registrationForm.phone}
-                 onChange={(e) => setRegistrationForm(prev => ({ ...prev, phone: e.target.value }))}
-                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                 required
-               />
-             </div>
-
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-2">
-                 Email Address *
-               </label>
-               <input
-                 type="email"
-                 value={registrationForm.email}
-                 onChange={(e) => setRegistrationForm(prev => ({ ...prev, email: e.target.value }))}
-                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                 required
-               />
-             </div>
-
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-2">
-                 Password *
-               </label>
-               <input
-                 type="password"
-                 value={registrationForm.password}
-                 onChange={(e) => setRegistrationForm(prev => ({ ...prev, password: e.target.value }))}
-                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                 minLength={6}
-                 required
-               />
-               <p className="mt-1 text-xs text-gray-500">Must be at least 6 characters long</p>
-             </div>
-
-             <div>
-               <label className="block text-sm font-medium text-gray-700 mb-2">
-                 Confirm Password *
-               </label>
-               <input
-                 type="password"
-                 value={registrationForm.confirmPassword}
-                 onChange={(e) => setRegistrationForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                 required
-               />
-             </div>
-           </form>
-         )}
-       </Modal>
+            {[
+              { label: 'পুরো নাম', key: 'name', type: 'text' },
+              { label: 'Phone Number', key: 'phone', type: 'tel' },
+              { label: 'Email Address', key: 'email', type: 'email' },
+              { label: 'Password', key: 'password', type: 'password', hint: 'কমপক্ষে ৬ অক্ষর' },
+              { label: 'Confirm Password', key: 'confirmPassword', type: 'password' },
+            ].map(({ label, key, type, hint }) => (
+              <div key={key}>
+                <label className="block text-sm font-semibold text-[#1C1917] mb-1.5">{label} *</label>
+                <input
+                  type={type}
+                  value={registrationForm[key as keyof typeof registrationForm]}
+                  onChange={(e) => setRegistrationForm(prev => ({ ...prev, [key]: e.target.value }))}
+                  className="w-full px-3 py-2.5 border border-[#E8DDD0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#006A4E]"
+                  minLength={key === 'password' ? 6 : undefined}
+                  required
+                />
+                {hint && <p className="mt-1 text-xs text-[#78716C]">{hint}</p>}
+              </div>
+            ))}
+          </form>
+        )}
+      </Modal>
     </div>
   );
-} 
+}

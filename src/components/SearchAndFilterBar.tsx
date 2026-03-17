@@ -61,7 +61,7 @@ export default function SearchAndFilterBar({
             placeholder="Search collections or groups..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base text-gray-900 placeholder-gray-500"
+            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E] text-sm sm:text-base text-gray-900 placeholder-gray-500"
           />
         </div>
 
@@ -72,7 +72,7 @@ export default function SearchAndFilterBar({
             <select
               value={sortBy}
               onChange={(e) => onSortByChange(e.target.value)}
-              className="flex-1 sm:flex-initial px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-900 bg-white"
+              className="flex-1 sm:flex-initial px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E] text-sm text-gray-900 bg-white"
             >
               <option value="">Sort by...</option>
               <option value="name">Name</option>
@@ -85,7 +85,7 @@ export default function SearchAndFilterBar({
               onClick={() => onSortOrderChange(sortOrder === 'asc' ? 'desc' : 'asc')}
               className={`px-3 py-2.5 border rounded-lg transition-all duration-200 ${
                 sortBy 
-                  ? 'border-blue-300 text-blue-700 bg-blue-50 hover:bg-blue-100' 
+                  ? 'border-[#006A4E]/30 text-[#006A4E] bg-[#006A4E]/8 hover:bg-[#006A4E]/15' 
                   : 'border-gray-300 text-gray-500 bg-gray-50 cursor-not-allowed'
               }`}
               disabled={!sortBy}
@@ -101,7 +101,7 @@ export default function SearchAndFilterBar({
               onClick={onToggleFilters}
               className={`flex items-center gap-2 px-3 py-2.5 border rounded-lg transition-all duration-200 flex-1 sm:flex-initial justify-center ${
                 showFilters 
-                  ? 'bg-blue-50 border-blue-300 text-blue-700' 
+                  ? 'bg-[#006A4E]/8 border-[#006A4E]/30 text-[#006A4E]' 
                   : 'border-gray-300 text-gray-700 hover:bg-gray-50'
               }`}
             >
@@ -109,7 +109,7 @@ export default function SearchAndFilterBar({
               <span className="font-medium text-sm">Filters</span>
               {showFilters ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               {hasActiveFilters && (
-                <span className="bg-blue-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[1rem] h-4 flex items-center justify-center">
+                <span className="bg-[#006A4E] text-white text-xs rounded-full px-1.5 py-0.5 min-w-[1rem] h-4 flex items-center justify-center">
                   !
                 </span>
               )}
@@ -143,7 +143,7 @@ export default function SearchAndFilterBar({
                 placeholder="e.g., Mirpur, Dhaka"
                 value={locationFilter}
                 onChange={(e) => onLocationFilterChange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-900 placeholder-gray-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E] text-sm text-gray-900 placeholder-gray-500"
               />
               <p className="text-xs text-gray-500">
                 Shows collections with groups in this location
@@ -161,7 +161,7 @@ export default function SearchAndFilterBar({
                 placeholder="Exclude from location"
                 value={excludeLocations}
                 onChange={(e) => onExcludeLocationsChange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-900 placeholder-gray-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E] text-sm text-gray-900 placeholder-gray-500"
               />
               <p className="text-xs text-gray-500">
                 Hides collections with groups from this location
@@ -179,7 +179,7 @@ export default function SearchAndFilterBar({
                 placeholder="1000"
                 value={minMemberCount}
                 onChange={(e) => onMinMemberCountChange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-900 placeholder-gray-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E] text-sm text-gray-900 placeholder-gray-500"
               />
               <p className="text-xs text-gray-500">
                 Minimum member count per group
@@ -197,7 +197,7 @@ export default function SearchAndFilterBar({
                 placeholder="50000"
                 value={maxMemberCount}
                 onChange={(e) => onMaxMemberCountChange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-900 placeholder-gray-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E] text-sm text-gray-900 placeholder-gray-500"
               />
               <p className="text-xs text-gray-500">
                 Maximum member count per group
@@ -215,7 +215,7 @@ export default function SearchAndFilterBar({
                 placeholder="Member count"
                 value={memberCountFilter}
                 onChange={(e) => onMemberCountFilterChange(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-900 placeholder-gray-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E] text-sm text-gray-900 placeholder-gray-500"
               />
               <p className="text-xs text-gray-500">
                 Legacy member count filter

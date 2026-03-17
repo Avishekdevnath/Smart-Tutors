@@ -613,7 +613,7 @@ export default function TutorEditForm({ tutor, onSave, onCancel, loading = false
           <button
             type="submit"
             disabled={loading}
-            className="w-full sm:w-auto bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition-colors flex items-center justify-center space-x-2"
+            className="w-full sm:w-auto bg-[#006A4E] text-white px-4 py-2 rounded-lg hover:bg-[#005a40] disabled:opacity-50 transition-colors flex items-center justify-center space-x-2"
           >
             {loading ? (
               <>

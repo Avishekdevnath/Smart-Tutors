@@ -2,21 +2,23 @@ import { NextRequest, NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/mongodb';
 import Admin from '@/models/Admin';
 import { sign } from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+import { getAdminJwtSecret } from '@/lib/adminAuth';
+import { validateAdminLoginPayload } from '@/lib/adminAuthValidation';
 
 export async function POST(request: NextRequest) {
   try {
     await dbConnect();
-    const { username, password } = await request.json();
+    const body = await request.json();
+    const validationResult = validateAdminLoginPayload(body);
 
-    // Validate input
-    if (!username || !password) {
+    if ('error' in validationResult) {
       return NextResponse.json(
-        { error: 'Username and password are required' },
+        { error: validationResult.error },
         { status: 400 }
       );
     }
+
+    const { username, password } = validationResult.data;
 
     // Find admin by username or email
     const admin = await Admin.findOne({
@@ -63,7 +65,7 @@ export async function POST(request: NextRequest) {
         name: admin.name,
         role: admin.role
       },
-      JWT_SECRET,
+      getAdminJwtSecret(),
       { expiresIn: '24h' }
     );
 
@@ -89,6 +91,14 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error) {
     console.error('Login error:', error);
+
+    if (error instanceof Error && error.message.includes('JWT_SECRET')) {
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

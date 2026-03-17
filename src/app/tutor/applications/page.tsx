@@ -102,7 +102,7 @@ export default function TutorApplicationsPage() {
       case "confirmed-fee-pending":
         return <CheckSquare className="w-5 h-5 text-green-500" />;
       case "completed":
-        return <Award className="w-5 h-5 text-blue-500" />;
+        return <Award className="w-5 h-5 text-[#006A4E]" />;
       case "rejected":
         return <XSquare className="w-5 h-5 text-red-500" />;
       case "withdrawn":
@@ -228,7 +228,7 @@ export default function TutorApplicationsPage() {
       
       <div className="space-y-6">
         {/* Header with Stats */}
-        <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl shadow-sm border border-green-200 p-6">
+        <div className="bg-[#006A4E]/8 rounded-xl border border-[#006A4E]/20 p-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">📋 My Applications</h1>
@@ -266,7 +266,7 @@ export default function TutorApplicationsPage() {
               <div className="text-sm text-gray-600 font-medium">Confirmed</div>
             </div>
             <div className="bg-white rounded-lg p-4 text-center shadow-sm border border-blue-200">
-              <div className="text-2xl font-bold text-blue-600 mb-1">{stats.completed}</div>
+              <div className="text-2xl font-bold text-[#006A4E] mb-1">{stats.completed}</div>
               <div className="text-sm text-gray-600 font-medium">Completed</div>
             </div>
             <div className="bg-white rounded-lg p-4 text-center shadow-sm border border-red-200">
@@ -424,7 +424,7 @@ export default function TutorApplicationsPage() {
                       </div>
                     )}
                     {application.completedAt && (
-                      <div className="flex items-center text-sm text-blue-600 mb-2">
+                      <div className="flex items-center text-sm text-[#006A4E] mb-2">
                         <Award className="w-4 h-4 mr-2" />
                         <span>Completed {formatTimeAgo(application.completedAt)}</span>
                       </div>

@@ -62,7 +62,7 @@ export default function FacebookGroupCard({
           <div className="flex items-center gap-2">
             <button
               onClick={openGroupLink}
-              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              className="p-2 text-[#006A4E] hover:bg-[#006A4E]/8 rounded-lg transition-colors"
               title="Visit Group"
             >
               <ExternalLink size={16} />
@@ -86,7 +86,7 @@ export default function FacebookGroupCard({
             {/* Info grid - mobile responsive */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Users size={16} className="text-blue-500 flex-shrink-0" />
+                <Users size={16} className="text-[#006A4E] flex-shrink-0" />
                 <span>{group.memberCount?.toLocaleString() || 'N/A'} members</span>
               </div>
               
@@ -99,7 +99,7 @@ export default function FacebookGroupCard({
               
               {showDate && date && (
                 <div className="flex items-center gap-2 text-sm text-gray-600 sm:col-span-2">
-                  <Calendar size={16} className="text-purple-500 flex-shrink-0" />
+                  <Calendar size={16} className="text-[#E07B2A] flex-shrink-0" />
                   <span>{date}</span>
                 </div>
               )}
@@ -130,7 +130,7 @@ export default function FacebookGroupCard({
             
             <button
               onClick={openGroupLink}
-              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              className="p-2 text-[#006A4E] hover:bg-[#006A4E]/8 rounded-lg transition-colors"
               title="Visit Group"
             >
               <ExternalLink size={18} />

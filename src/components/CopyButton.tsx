@@ -37,7 +37,7 @@ export default function CopyButton({
   };
 
   const variantClasses = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700',
+    primary: 'bg-[#006A4E] text-white hover:bg-[#005a40]',
     secondary: 'bg-gray-600 text-white hover:bg-gray-700',
     outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50'
   };
@@ -53,7 +53,7 @@ export default function CopyButton({
       onClick={copyToClipboard}
       className={`
         inline-flex items-center justify-center rounded-md font-medium transition-colors
-        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+        focus:outline-none focus:ring-2 focus:ring-[#006A4E] focus:ring-offset-2
         disabled:opacity-50 disabled:cursor-not-allowed
         ${sizeClasses[size]}
         ${variantClasses[variant]}

@@ -143,7 +143,7 @@ export default function TutorDashboardSidebar({
                     href={item.href}
                     className={`group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
                       isItemActive
-                        ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-700'
+                        ? 'bg-[#006A4E]/8 text-[#006A4E] border-l-4 border-[#006A4E]'
                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                     }`}
                   >
@@ -225,7 +225,7 @@ export default function TutorDashboardSidebar({
                 href={item.href}
                 className={`group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                   isItemActive
-                    ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-700'
+                    ? 'bg-[#006A4E]/8 text-[#006A4E] border-l-4 border-[#006A4E]'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >

@@ -249,7 +249,7 @@ Location: ${address}
       <div className="mb-6">
         <button 
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 mb-4 group"
+          className="flex items-center gap-2 text-[#006A4E] hover:text-[#005a40] mb-4 group"
         >
           <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
           <span className="font-medium">Back to Tuitions</span>
@@ -290,7 +290,7 @@ Location: ${address}
                 type="text"
                 value={formData.tuitionCode}
                 onChange={(e) => handleInputChange('tuitionCode', e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                 placeholder="e.g., 135 (just the number)"
               />
             </div>
@@ -313,7 +313,7 @@ Location: ${address}
                 type="text"
                 value={formData.guardianName}
                 onChange={(e) => handleInputChange('guardianName', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                 placeholder="Enter guardian's full name"
                 required
               />
@@ -327,7 +327,7 @@ Location: ${address}
                 type="tel"
                 value={formData.guardianNumber}
                 onChange={(e) => handleInputChange('guardianNumber', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                 placeholder="01XXXXXXXXX"
                 required
               />
@@ -340,7 +340,7 @@ Location: ${address}
               <textarea
                 value={formData.address}
                 onChange={(e) => handleInputChange('address', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                 placeholder="Enter detailed address where tuition will be held"
                 rows={3}
                 required
@@ -372,7 +372,7 @@ Location: ${address}
                 type="text"
                 value={formData.studentClass}
                 onChange={(e) => handleInputChange('studentClass', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                 placeholder="e.g., Class 8, Standard 5, KG"
                 required
               />
@@ -385,7 +385,7 @@ Location: ${address}
               <select
                 value={formData.version}
                 onChange={(e) => handleInputChange('version', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                 required
               >
                 <option value="English Medium">English Medium</option>
@@ -427,7 +427,7 @@ Location: ${address}
                 type="text"
                 value={formData.weeklyDays}
                 onChange={(e) => handleInputChange('weeklyDays', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                 placeholder="e.g., 5 days, 6 days, Saturday-Tuesday"
                 required
               />
@@ -441,7 +441,7 @@ Location: ${address}
                 type="text"
                 value={formData.dailyHours}
                 onChange={(e) => handleInputChange('dailyHours', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                 placeholder="e.g., 2 hours, 1.5 hours"
                 required
               />
@@ -455,7 +455,7 @@ Location: ${address}
                 type="text"
                 value={formData.salary}
                 onChange={(e) => handleInputChange('salary', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                 placeholder="e.g., 5K, 8K, Negotiable"
                 required
               />
@@ -469,7 +469,7 @@ Location: ${address}
                 type="text"
                 value={formData.startMonth}
                 onChange={(e) => handleInputChange('startMonth', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                 placeholder="e.g., January, Next Month"
               />
             </div>
@@ -488,7 +488,7 @@ Location: ${address}
               <select
                 value={formData.tutorGender}
                 onChange={(e) => handleInputChange('tutorGender', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
               >
                 <option value="">Not specified</option>
                 <option value="Male">Male</option>
@@ -502,7 +502,7 @@ Location: ${address}
                   type="checkbox"
                   checked={formData.urgent}
                   onChange={(e) => handleInputChange('urgent', e.target.checked)}
-                  className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                  className="rounded border-gray-300 text-[#006A4E] focus:ring-[#006A4E]"
                 />
                 <span className="text-sm font-medium text-gray-700">Mark as Urgent</span>
               </label>
@@ -515,7 +515,7 @@ Location: ${address}
               <textarea
                 value={formData.specialRemarks}
                 onChange={(e) => handleInputChange('specialRemarks', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                 placeholder="Any special requirements, preferences, or additional information"
                 rows={3}
               />
@@ -528,7 +528,7 @@ Location: ${address}
           <button
             type="submit"
             disabled={submitting}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-[#006A4E] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#005a40] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? 'Posting Tuition...' : 'Post Tuition'}
           </button>

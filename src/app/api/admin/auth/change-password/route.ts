@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { dbConnect } from '@/lib/mongodb';
 import Admin from '@/models/Admin';
 import { verifyAdminToken } from '@/lib/adminAuth';
+import { validateChangePasswordPayload } from '@/lib/adminAuthValidation';
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,29 +16,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { currentPassword, newPassword, confirmPassword } = await request.json();
+    const body = await request.json();
+    const validationResult = validateChangePasswordPayload(body);
 
-    // Validate input
-    if (!currentPassword || !newPassword || !confirmPassword) {
+    if ('error' in validationResult) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: validationResult.error },
         { status: 400 }
       );
     }
 
-    if (newPassword !== confirmPassword) {
-      return NextResponse.json(
-        { error: 'New passwords do not match' },
-        { status: 400 }
-      );
-    }
-
-    if (newPassword.length < 6) {
-      return NextResponse.json(
-        { error: 'New password must be at least 6 characters long' },
-        { status: 400 }
-      );
-    }
+    const { currentPassword, newPassword } = validationResult.data;
 
     // Connect to database
     await dbConnect();

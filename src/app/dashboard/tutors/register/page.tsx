@@ -683,7 +683,7 @@ export default function TutorRegistrationPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+            className="bg-[#E07B2A] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#c96a1f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
           >
             {submitting ? (
               <>

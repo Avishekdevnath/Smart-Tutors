@@ -322,7 +322,7 @@ export default function LocationsPage() {
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-lg border border-gray-200">
-            <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
+            <div className="text-2xl font-bold text-[#006A4E]">{stats.total}</div>
             <div className="text-sm text-gray-600">Total Locations</div>
           </div>
           <div className="bg-white p-4 rounded-lg border border-gray-200">
@@ -330,7 +330,7 @@ export default function LocationsPage() {
             <div className="text-sm text-gray-600">Divisions</div>
           </div>
           <div className="bg-white p-4 rounded-lg border border-gray-200">
-            <div className="text-2xl font-bold text-purple-600">{stats.districts}</div>
+            <div className="text-2xl font-bold text-[#E07B2A]">{stats.districts}</div>
             <div className="text-sm text-gray-600">Districts</div>
           </div>
           <div className="bg-white p-4 rounded-lg border border-gray-200">
@@ -350,7 +350,7 @@ export default function LocationsPage() {
                   placeholder="Search locations..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                 />
               </div>
             </div>
@@ -358,7 +358,7 @@ export default function LocationsPage() {
               <select
                 value={selectedDivision}
                 onChange={(e) => setSelectedDivision(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
               >
                 <option value="">All Divisions</option>
                 {divisions.map(division => (
@@ -368,7 +368,7 @@ export default function LocationsPage() {
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
               >
                 <option value="">All Districts</option>
                 {districts.map(district => (
@@ -401,7 +401,7 @@ export default function LocationsPage() {
             </button>
             <button
               onClick={() => setShowAddForm(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] transition-colors"
             >
               <Plus className="w-4 h-4" />
               Add Location
@@ -442,7 +442,7 @@ export default function LocationsPage() {
                   type="text"
                   value={formData.formatted}
                   onChange={(e) => setFormData({ ...formData, formatted: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                   placeholder="e.g., Gulshan-1, Dhaka, Dhaka Division"
                 />
               </div>
@@ -458,7 +458,7 @@ export default function LocationsPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  className="px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] transition-colors disabled:opacity-50"
                 >
                   {submitting ? 'Saving...' : (editingLocation ? 'Update' : 'Add')}
                 </button>
@@ -579,7 +579,7 @@ export default function LocationsPage() {
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleEdit(location)}
-                            className="text-blue-600 hover:text-blue-900"
+                            className="text-[#006A4E] hover:text-[#005a40]"
                           >
                             <Edit className="w-4 h-4" />
                           </button>
@@ -645,7 +645,7 @@ export default function LocationsPage() {
                 <textarea
                   value={bulkInput}
                   onChange={(e) => setBulkInput(e.target.value)}
-                  className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                   placeholder='[{"division":"Dhaka","district":"Dhaka","area":"Agargaon"},...]'
                 />
                 <p className="text-sm text-gray-500 mt-1">

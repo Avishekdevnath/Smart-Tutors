@@ -25,7 +25,7 @@ export default function ProfilePage() {
     return (
       <DashboardLayout title="Profile" description="Manage your profile">
         <div className="flex items-center justify-center min-h-96">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#006A4E]"></div>
         </div>
       </DashboardLayout>
     );
@@ -35,10 +35,10 @@ export default function ProfilePage() {
     <DashboardLayout title="Profile" description="Manage your profile and account settings">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+        <div className="bg-white rounded-xl border border-[#E8DDD0] mb-6">
           <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex items-center space-x-4">
-              <div className="h-16 w-16 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
+              <div className="h-16 w-16 rounded-full bg-[#006A4E] flex items-center justify-center">
                 <span className="text-white font-bold text-2xl">
                   {(user?.name || user?.username || 'U').charAt(0).toUpperCase()}
                 </span>
@@ -58,7 +58,7 @@ export default function ProfilePage() {
         {/* Profile Details */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Basic Information */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white rounded-xl border border-[#E8DDD0]">
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900">Basic Information</h2>
             </div>
@@ -103,7 +103,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Account Information */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white rounded-xl border border-[#E8DDD0]">
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900">Account Information</h2>
             </div>
@@ -152,7 +152,7 @@ export default function ProfilePage() {
 
         {/* Actions */}
         <div className="mt-6">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white rounded-xl border border-[#E8DDD0]">
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900">Account Actions</h2>
             </div>
@@ -160,7 +160,7 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button 
                   onClick={() => window.location.href = '/dashboard/tutors'}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] transition-colors"
                 >
                   Manage Tutors
                 </button>
@@ -172,7 +172,7 @@ export default function ProfilePage() {
                 </button>
                 <button 
                   onClick={() => window.location.href = '/dashboard/applications'}
-                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                  className="px-4 py-2 bg-[#E07B2A] text-white rounded-lg hover:bg-[#c96a1f] transition-colors"
                 >
                   View Applications
                 </button>

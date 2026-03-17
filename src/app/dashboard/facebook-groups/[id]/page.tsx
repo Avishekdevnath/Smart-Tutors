@@ -340,7 +340,7 @@ export default function CollectionDetailsPage() {
           <p className="text-gray-600 mb-6">{error}</p>
           <button 
             onClick={() => router.push('/dashboard/facebook-groups')}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm"
+            className="bg-[#006A4E] text-white px-4 py-2 rounded-md hover:bg-[#005a40] text-sm"
           >
             Back to Collections
           </button>
@@ -357,7 +357,7 @@ export default function CollectionDetailsPage() {
           <p className="text-gray-600 mb-6">The collection you're looking for doesn't exist.</p>
           <button 
             onClick={() => router.push('/dashboard/facebook-groups')}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm"
+            className="bg-[#006A4E] text-white px-4 py-2 rounded-md hover:bg-[#005a40] text-sm"
           >
             Back to Collections
           </button>
@@ -393,7 +393,7 @@ export default function CollectionDetailsPage() {
       <div className="mb-6">
         <button 
           onClick={() => router.push('/dashboard/facebook-groups')}
-          className="flex items-center gap-3 text-blue-600 hover:text-blue-800 mb-4 group px-2 py-1 rounded-md hover:bg-blue-50 transition-colors"
+          className="flex items-center gap-3 text-[#006A4E] hover:text-[#005a40] mb-4 group px-2 py-1 rounded-md hover:bg-[#006A4E]/8 transition-colors"
         >
           <span className="text-lg">←</span>
           <span className="font-medium">Back to Collections</span>
@@ -401,7 +401,7 @@ export default function CollectionDetailsPage() {
       </div>
 
       {/* Collection header - Mobile Responsive */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 p-4 sm:p-6 lg:p-8 mb-8">
+      <div className="bg-[#006A4E]/8 rounded-xl border border-[#006A4E]/20 p-4 sm:p-6 lg:p-8 mb-8">
         <div className="flex flex-col space-y-4 lg:flex-row lg:justify-between lg:items-start lg:space-y-0">
           <div className="flex-1 min-w-0">
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2 break-words">{collection.collectionName}</h1>
@@ -469,7 +469,7 @@ export default function CollectionDetailsPage() {
               <div className="flex flex-col space-y-4 sm:flex-row sm:justify-between sm:items-start sm:space-y-0 mb-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start gap-3 mb-2">
-                    <div className="bg-blue-600 text-white text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="bg-[#006A4E] text-white text-sm font-bold rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1">
                       {index + 1}
                     </div>
                     <h3 className="text-lg sm:text-xl font-semibold text-gray-900 break-words">{group.name}</h3>
@@ -492,7 +492,7 @@ export default function CollectionDetailsPage() {
                     href={group.link} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-700 text-sm text-center"
+                    className="w-full sm:w-auto bg-[#006A4E] text-white px-3 py-1.5 rounded-md hover:bg-[#005a40] text-sm text-center"
                   >
                     Visit Group
                   </a>

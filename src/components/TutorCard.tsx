@@ -48,16 +48,16 @@ export default function TutorCard({
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden hover:shadow-md transition-shadow duration-200">
       {/* Tutor Header - Desktop Horizontal, Mobile Vertical */}
-      <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-4 lg:px-6 py-4 border-b border-gray-200">
+      <div className="bg-[#FFFDF7] px-4 lg:px-6 py-4 border-b border-gray-200">
         <div className="flex flex-col space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
           <div className="flex items-center space-x-3 lg:space-x-4">
-            <div className="h-10 w-10 lg:h-12 lg:w-12 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center relative flex-shrink-0">
+            <div className="h-10 w-10 lg:h-12 lg:w-12 rounded-full bg-[#006A4E] flex items-center justify-center relative flex-shrink-0">
               <span className="text-white font-bold text-sm lg:text-lg">
                 {tutor.tutorId.slice(-2)}
               </span>
               {/* Sort indicator */}
               {sortField === 'tutorId' && (
-                <div className="absolute -top-1 -right-1 bg-purple-600 rounded-full p-1">
+                <div className="absolute -top-1 -right-1 bg-[#E07B2A] rounded-full p-1">
                   {sortOrder === 'desc' ? (
                     <svg className="w-2 h-2 lg:w-3 lg:h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
@@ -91,7 +91,7 @@ export default function TutorCard({
             <div className="flex space-x-2">
               <button
                 onClick={() => onView(tutor)}
-                className="text-blue-600 hover:text-blue-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors"
+                className="text-[#006A4E] hover:text-[#005a40] text-sm font-medium px-3 py-2 rounded-lg hover:bg-[#006A4E]/8 transition-colors"
                 title="View Details"
               >
                 <Eye className="w-4 h-4" />

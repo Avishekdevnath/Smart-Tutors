@@ -199,7 +199,7 @@ const SmsDashboardPage = () => {
           {loadingBalance ? (
             <span className="text-gray-500 animate-pulse">Loading...</span>
           ) : (
-            <span className="text-blue-600 font-semibold">{balance}</span>
+            <span className="text-[#006A4E] font-semibold">{balance}</span>
           )}
           <button
             onClick={() => {
@@ -231,13 +231,13 @@ const SmsDashboardPage = () => {
         </div>
         <div className="mb-6 flex gap-2">
           <button
-            className={`px-4 py-2 rounded-t-md border-b-2 font-medium ${tab === 'single' ? 'border-blue-600 text-blue-700 bg-blue-50' : 'border-transparent text-gray-600 bg-gray-100'}`}
+            className={`px-4 py-2 rounded-t-md border-b-2 font-medium ${tab === 'single' ? 'border-[#006A4E] text-[#006A4E] bg-[#006A4E]/8' : 'border-transparent text-[#78716C] bg-[#F5F0E8]'}`}
             onClick={() => setTab('single')}
           >
             Send Single SMS
           </button>
           <button
-            className={`px-4 py-2 rounded-t-md border-b-2 font-medium ${tab === 'bulk' ? 'border-blue-600 text-blue-700 bg-blue-50' : 'border-transparent text-gray-600 bg-gray-100'}`}
+            className={`px-4 py-2 rounded-t-md border-b-2 font-medium ${tab === 'bulk' ? 'border-[#006A4E] text-[#006A4E] bg-[#006A4E]/8' : 'border-transparent text-[#78716C] bg-[#F5F0E8]'}`}
             onClick={() => setTab('bulk')}
           >
             Send Bulk SMS
@@ -245,7 +245,7 @@ const SmsDashboardPage = () => {
         </div>
         {/* Single SMS Tab */}
         {tab === 'single' && (
-          <form onSubmit={handleSendSingle} className="bg-white rounded-lg shadow p-6 space-y-4">
+          <form onSubmit={handleSendSingle} className="bg-white rounded-xl border border-[#E8DDD0] p-6 space-y-4">
             <div>
               <label className="block font-medium mb-1">Select User (optional)</label>
               <select
@@ -297,7 +297,7 @@ const SmsDashboardPage = () => {
             </div>
             <button
               type="submit"
-              className="bg-blue-600 text-white px-6 py-2 rounded font-semibold hover:bg-blue-700 disabled:opacity-50"
+              className="bg-[#006A4E] text-white px-6 py-2 rounded font-semibold hover:bg-[#005a40] disabled:opacity-50"
               disabled={singleLoading}
             >
               {singleLoading ? 'Sending...' : 'Send SMS'}
@@ -316,7 +316,7 @@ const SmsDashboardPage = () => {
         )}
         {/* Bulk SMS Tab */}
         {tab === 'bulk' && (
-          <form onSubmit={handleSendBulk} className="bg-white rounded-lg shadow p-6 space-y-4">
+          <form onSubmit={handleSendBulk} className="bg-white rounded-xl border border-[#E8DDD0] p-6 space-y-4">
             <div>
               <label className="block font-medium mb-1">Select Users (optional)</label>
               <select
@@ -363,7 +363,7 @@ const SmsDashboardPage = () => {
             </div>
             <button
               type="submit"
-              className="bg-blue-600 text-white px-6 py-2 rounded font-semibold hover:bg-blue-700 disabled:opacity-50"
+              className="bg-[#006A4E] text-white px-6 py-2 rounded font-semibold hover:bg-[#005a40] disabled:opacity-50"
               disabled={bulkLoading}
             >
               {bulkLoading ? 'Sending...' : 'Send Bulk SMS'}

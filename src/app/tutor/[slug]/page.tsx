@@ -300,7 +300,7 @@ export default function PublicTutorProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#FFFDF7] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading tutor profile...</p>
@@ -311,7 +311,7 @@ export default function PublicTutorProfilePage() {
 
   if (error || !tutor) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#FFFDF7] flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-6">
           <div className="bg-white rounded-xl shadow-lg p-8">
             <div className="text-red-500 mb-4">
@@ -332,13 +332,13 @@ export default function PublicTutorProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+    <div className="min-h-screen bg-[#FFFDF7]">
       {/* Header */}
       <div className="bg-white shadow-lg border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center space-x-6 mb-6 lg:mb-0">
-              <div className="h-20 w-20 rounded-full bg-gradient-to-r from-green-600 to-blue-600 flex items-center justify-center shadow-lg">
+              <div className="h-20 w-20 rounded-full bg-[#006A4E] flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-3xl">
                   {tutor.name.charAt(0).toUpperCase()}
                 </span>
@@ -363,7 +363,7 @@ export default function PublicTutorProfilePage() {
               </button>
               <button
                 onClick={handleShare}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2 font-semibold transition-colors shadow-md"
+                className="px-6 py-3 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] flex items-center justify-center gap-2 font-semibold transition-colors shadow-md"
               >
                 <Share2 size={18} />
                 Share Profile
@@ -503,9 +503,9 @@ export default function PublicTutorProfilePage() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                  <div className="flex justify-between items-center p-3 bg-[#006A4E]/8 rounded-lg">
                     <span className="font-medium text-gray-700">SSC Result</span>
-                    <span className="font-bold text-blue-600">{tutor.academicQualifications?.sscResult || "Not specified"}</span>
+                    <span className="font-bold text-[#006A4E]">{tutor.academicQualifications?.sscResult || "Not specified"}</span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
                     <span className="font-medium text-gray-700">HSC Result</span>
@@ -514,9 +514,9 @@ export default function PublicTutorProfilePage() {
                 </div>
                 <div className="space-y-4">
                   {tutor.academicQualifications?.oLevelResult && (
-                    <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+                    <div className="flex justify-between items-center p-3 bg-[#E07B2A]/8 rounded-lg">
                       <span className="font-medium text-gray-700">O-Level Result</span>
-                      <span className="font-bold text-purple-600">{tutor.academicQualifications.oLevelResult}</span>
+                      <span className="font-bold text-[#E07B2A]">{tutor.academicQualifications.oLevelResult}</span>
                     </div>
                   )}
                   {tutor.academicQualifications?.aLevelResult && (
@@ -566,7 +566,7 @@ export default function PublicTutorProfilePage() {
         </div>
 
         {/* Call to Action */}
-        <div className="mt-12 bg-gradient-to-r from-green-600 to-blue-600 rounded-xl shadow-lg p-8 text-center text-white">
+        <div className="mt-12 bg-[#006A4E] rounded-xl shadow-lg p-8 text-center text-white">
           <h3 className="text-2xl font-bold mb-4">Interested in Hiring This Tutor?</h3>
           <p className="text-lg mb-6 opacity-90">
             Contact {tutor.name} directly or reach out to Smart Tutors for professional tuition services.

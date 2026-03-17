@@ -100,7 +100,7 @@ export default function TuitionSearchSortBar({
               onClick={() => onSortOrderChange(sortOrder === 'asc' ? 'desc' : 'asc')}
               className={`px-3 py-2.5 border rounded-lg transition-all duration-200 ${
                 sortField 
-                  ? 'border-purple-300 text-purple-700 bg-purple-50 hover:bg-purple-100' 
+                  ? 'border-[#006A4E]/30 text-[#006A4E] bg-[#006A4E]/8 hover:bg-[#006A4E]/15' 
                   : 'border-gray-300 text-gray-500 bg-gray-50 cursor-not-allowed'
               }`}
               disabled={!sortField}
@@ -116,7 +116,7 @@ export default function TuitionSearchSortBar({
               onClick={() => setShowFilters(!showFilters)}
               className={`flex items-center gap-2 px-3 py-2.5 border rounded-lg transition-all duration-200 flex-1 sm:flex-initial justify-center ${
                 showFilters 
-                  ? 'bg-purple-50 border-purple-300 text-purple-700' 
+                  ? 'bg-[#006A4E]/8 border-[#006A4E]/30 text-[#006A4E]' 
                   : 'border-gray-300 text-gray-700 hover:bg-gray-50'
               }`}
             >
@@ -124,7 +124,7 @@ export default function TuitionSearchSortBar({
               <span className="font-medium text-sm">Filters</span>
               {showFilters ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               {hasActiveFilters && (
-                <span className="bg-purple-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[1rem] h-4 flex items-center justify-center">
+                <span className="bg-[#006A4E] text-white text-xs rounded-full px-1.5 py-0.5 min-w-[1rem] h-4 flex items-center justify-center">
                   !
                 </span>
               )}

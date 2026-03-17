@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { dbConnect } from '@/lib/mongodb';
 import Admin from '@/models/Admin';
 import { verifyAdminToken } from '@/lib/adminAuth';
+import { validateChangeEmailPayload } from '@/lib/adminAuthValidation';
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,24 +16,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { currentPassword, newEmail } = await request.json();
+    const body = await request.json();
+    const validationResult = validateChangeEmailPayload(body);
 
-    // Validate input
-    if (!currentPassword || !newEmail) {
+    if ('error' in validationResult) {
       return NextResponse.json(
-        { error: 'Current password and new email are required' },
+        { error: validationResult.error },
         { status: 400 }
       );
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(newEmail)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
-    }
+    const { currentPassword, newEmail } = validationResult.data;
 
     // Connect to database
     await dbConnect();

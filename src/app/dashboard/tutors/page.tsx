@@ -307,8 +307,8 @@ export default function TutorsDashboardPage() {
                 onClick={() => { setSortField('createdAt'); setSortOrder('desc'); }}
                 className={`px-3 py-1.5 text-sm font-medium rounded-full transition-colors ${
                   sortField === 'createdAt' && sortOrder === 'desc'
-                    ? 'bg-purple-100 text-purple-800 border border-purple-200'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-[#006A4E]/10 text-[#006A4E] border border-[#006A4E]/20'
+                    : 'bg-[#F5F0E8] text-[#78716C] hover:bg-[#E8DDD0]'
                 }`}
               >
                 Latest Tutors
@@ -317,8 +317,8 @@ export default function TutorsDashboardPage() {
                 onClick={() => { setSortField('name'); setSortOrder('asc'); }}
                 className={`px-3 py-1.5 text-sm font-medium rounded-full transition-colors ${
                   sortField === 'name' && sortOrder === 'asc'
-                    ? 'bg-blue-100 text-blue-800 border border-blue-200'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-[#006A4E]/10 text-[#006A4E] border border-[#006A4E]/20'
+                    : 'bg-[#F5F0E8] text-[#78716C] hover:bg-[#E8DDD0]'
                 }`}
               >
                 Name A-Z
@@ -326,7 +326,7 @@ export default function TutorsDashboardPage() {
             </div>
           </div>
           <Link href="/dashboard/tutors/register">
-            <button className="w-full lg:w-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2">
+            <button className="w-full lg:w-auto bg-[#006A4E] hover:bg-[#005a40] text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center space-x-2">
               <Plus className="w-5 h-5" />
               <span>Add New Tutor</span>
             </button>
@@ -337,54 +337,54 @@ export default function TutorsDashboardPage() {
       {/* Stats Cards - Desktop 4 columns, Mobile 2 columns */}
       <div className="mb-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-4 lg:p-6">
+          <div className="bg-white rounded-xl border border-[#E8DDD0] p-4 lg:p-5">
             <div className="flex items-center">
-              <div className="p-2 lg:p-3 rounded-full bg-purple-100">
-                <GraduationCap className="w-5 h-5 lg:w-6 lg:h-6 text-purple-600" />
+              <div className="p-2 lg:p-3 rounded-xl bg-[#006A4E]/10">
+                <GraduationCap className="w-5 h-5 lg:w-6 lg:h-6 text-[#006A4E]" />
               </div>
               <div className="ml-3 lg:ml-4 min-w-0 flex-1">
-                <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">Total Tutors</p>
-                <p className="text-lg lg:text-2xl font-bold text-gray-900">{tutors.length}</p>
+                <p className="text-xs lg:text-sm font-medium text-[#78716C] truncate">Total Tutors</p>
+                <p className="text-lg lg:text-2xl font-bold text-[#1C1917]">{tutors.length}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4 lg:p-6">
+          <div className="bg-white rounded-xl border border-[#E8DDD0] p-4 lg:p-5">
             <div className="flex items-center">
-              <div className="p-2 lg:p-3 rounded-full bg-green-100">
-                <GraduationCap className="w-5 h-5 lg:w-6 lg:h-6 text-green-600" />
+              <div className="p-2 lg:p-3 rounded-xl bg-emerald-50">
+                <GraduationCap className="w-5 h-5 lg:w-6 lg:h-6 text-emerald-600" />
               </div>
               <div className="ml-3 lg:ml-4 min-w-0 flex-1">
-                <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">Active</p>
-                <p className="text-lg lg:text-2xl font-bold text-gray-900">
+                <p className="text-xs lg:text-sm font-medium text-[#78716C] truncate">Active</p>
+                <p className="text-lg lg:text-2xl font-bold text-[#1C1917]">
                   {tutors.filter(t => t.profileStatus === 'active').length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4 lg:p-6">
+          <div className="bg-white rounded-xl border border-[#E8DDD0] p-4 lg:p-5">
             <div className="flex items-center">
-              <div className="p-2 lg:p-3 rounded-full bg-yellow-100">
-                <GraduationCap className="w-5 h-5 lg:w-6 lg:h-6 text-yellow-600" />
+              <div className="p-2 lg:p-3 rounded-xl bg-amber-50">
+                <GraduationCap className="w-5 h-5 lg:w-6 lg:h-6 text-amber-600" />
               </div>
               <div className="ml-3 lg:ml-4 min-w-0 flex-1">
-                <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">Inactive</p>
-                <p className="text-lg lg:text-2xl font-bold text-gray-900">
+                <p className="text-xs lg:text-sm font-medium text-[#78716C] truncate">Inactive</p>
+                <p className="text-lg lg:text-2xl font-bold text-[#1C1917]">
                   {tutors.filter(t => t.profileStatus === 'inactive').length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4 lg:p-6">
+          <div className="bg-white rounded-xl border border-[#E8DDD0] p-4 lg:p-5">
             <div className="flex items-center">
-              <div className="p-2 lg:p-3 rounded-full bg-red-100">
-                <GraduationCap className="w-5 h-5 lg:w-6 lg:h-6 text-red-600" />
+              <div className="p-2 lg:p-3 rounded-xl bg-red-50">
+                <GraduationCap className="w-5 h-5 lg:w-6 lg:h-6 text-red-500" />
               </div>
               <div className="ml-3 lg:ml-4 min-w-0 flex-1">
-                <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">Suspended</p>
-                <p className="text-lg lg:text-2xl font-bold text-gray-900">
+                <p className="text-xs lg:text-sm font-medium text-[#78716C] truncate">Suspended</p>
+                <p className="text-lg lg:text-2xl font-bold text-[#1C1917]">
                   {tutors.filter(t => t.profileStatus === 'suspended').length}
                 </p>
               </div>
@@ -394,7 +394,7 @@ export default function TutorsDashboardPage() {
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-4 lg:p-6">
+      <div className="mb-8 bg-white rounded-xl border border-[#E8DDD0] p-4 lg:p-6">
         <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-4">
           {/* Search */}
           <div className="flex-1">
@@ -405,7 +405,7 @@ export default function TutorsDashboardPage() {
                 placeholder="Search tutors by name, ID, phone, email, address..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
               />
             </div>
           </div>
@@ -415,7 +415,7 @@ export default function TutorsDashboardPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent text-sm"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -426,7 +426,7 @@ export default function TutorsDashboardPage() {
             <select
               value={versionFilter}
               onChange={(e) => setVersionFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent text-sm"
             >
               <option value="all">All Versions</option>
               <option value="EM">English Medium</option>
@@ -437,7 +437,7 @@ export default function TutorsDashboardPage() {
             <select
               value={groupFilter}
               onChange={(e) => setGroupFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent text-sm"
             >
               <option value="all">All Groups</option>
               <option value="Science">Science</option>
@@ -457,13 +457,13 @@ export default function TutorsDashboardPage() {
 
       {/* SMS Selection Controls */}
       {sortedTutors.length > 0 && (
-        <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="mb-6 bg-white rounded-xl border border-[#E8DDD0] p-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <button
                   onClick={selectAllTutors}
-                  className="px-3 py-1.5 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+                  className="px-3 py-1.5 text-sm bg-[#006A4E]/10 text-[#006A4E] rounded-lg hover:bg-[#006A4E]/20 transition-colors"
                 >
                   Select All ({sortedTutors.length})
                 </button>
@@ -483,7 +483,7 @@ export default function TutorsDashboardPage() {
             {selectedTutors.length > 0 && (
               <button
                 onClick={handleSendSMS}
-                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] transition-colors"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>Send SMS ({selectedTutors.length})</span>
@@ -494,47 +494,49 @@ export default function TutorsDashboardPage() {
       )}
 
       {/* Tutors Table (Desktop) */}
-      <div className="hidden md:block overflow-x-auto bg-white rounded-lg shadow">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="hidden md:block overflow-x-auto bg-white rounded-xl border border-[#E8DDD0]">
+        <table className="min-w-full divide-y divide-[#E8DDD0]">
+          <thead className="bg-[#FFFDF7]">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-[11px] font-bold text-[#78716C] uppercase tracking-wide">
                 <input
                   type="checkbox"
                   checked={selectedTutors.length === sortedTutors.length && sortedTutors.length > 0}
                   onChange={() => selectedTutors.length === sortedTutors.length ? clearSelection() : selectAllTutors()}
-                  className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                  className="rounded border-[#E8DDD0] text-[#006A4E] focus:ring-[#006A4E]"
                 />
               </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Tutor ID</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Name</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Version</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">University</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-3 text-left text-[11px] font-bold text-[#78716C] uppercase tracking-wide">Tutor ID</th>
+              <th className="px-6 py-3 text-left text-[11px] font-bold text-[#78716C] uppercase tracking-wide">Name</th>
+              <th className="px-6 py-3 text-left text-[11px] font-bold text-[#78716C] uppercase tracking-wide">Version</th>
+              <th className="px-6 py-3 text-left text-[11px] font-bold text-[#78716C] uppercase tracking-wide">University</th>
+              <th className="px-6 py-3 text-left text-[11px] font-bold text-[#78716C] uppercase tracking-wide">Status</th>
+              <th className="px-6 py-3 text-center text-[11px] font-bold text-[#78716C] uppercase tracking-wide">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-[#F5F0E8]">
             {loading ? (
               <tr>
                 <td colSpan={7} className="text-center py-8">
-                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-600 mx-auto mb-2"></div>
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#006A4E] mx-auto mb-2"></div>
                   <span className="text-gray-600">Loading tutors...</span>
                 </td>
               </tr>
             ) : (
               sortedTutors.map((tutor) => (
-                <tr key={tutor._id} className="hover:bg-gray-50 transition-colors">
+                <tr key={tutor._id} className="hover:bg-[#FFFDF7] transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <input
                       type="checkbox"
                       checked={selectedTutors.some(t => t._id === tutor._id)}
                       onChange={() => toggleTutorSelection(tutor)}
-                      className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                      className="rounded border-gray-300 text-[#006A4E] focus:ring-[#006A4E]"
                     />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap font-mono text-sm text-gray-900">{tutor.tutorId}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{tutor.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="font-mono text-xs font-semibold text-[#006A4E] bg-[#006A4E]/8 px-2 py-1 rounded">{tutor.tutorId}</span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#1C1917]">{tutor.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     {tutor.version ? (
                       <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getVersionColor(tutor.version)}`}>{tutor.version}</span>
@@ -548,7 +550,7 @@ export default function TutorsDashboardPage() {
                     <div className="flex items-center justify-center space-x-2">
                       <button
                         onClick={() => setViewModal(tutor)}
-                        className="text-blue-600 hover:text-blue-900 text-sm font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors"
+                        className="text-[#006A4E] hover:text-[#005a40] text-sm font-medium px-2 py-1 rounded hover:bg-[#006A4E]/8 transition-colors"
                         title="View Details"
                       >
                         <Eye className="w-4 h-4" />
@@ -586,7 +588,7 @@ export default function TutorsDashboardPage() {
                   {!searchTerm && statusFilter === 'all' && versionFilter === 'all' && groupFilter === 'all' && (
                     <div className="mt-6">
                       <Link href="/dashboard/tutors/register">
-                        <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                        <button className="bg-[#006A4E] text-white px-4 py-2 rounded-lg hover:bg-[#005a40] transition-colors">
                           Add First Tutor
                         </button>
                       </Link>
@@ -602,19 +604,19 @@ export default function TutorsDashboardPage() {
       {/* Tutors Card List (Mobile) */}
       <div className="md:hidden space-y-4">
         {loading ? (
-          <div className="bg-white rounded-lg shadow p-8 text-center">
-            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-600 mx-auto mb-2"></div>
+          <div className="bg-white rounded-xl border border-[#E8DDD0] p-8 text-center">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#006A4E] mx-auto mb-2"></div>
             <span className="text-gray-600">Loading tutors...</span>
           </div>
         ) : (
           sortedTutors.map((tutor) => (
-            <div key={tutor._id} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2">
+            <div key={tutor._id} className="bg-white rounded-xl border border-[#E8DDD0] p-4 flex flex-col gap-2">
               <div className="flex items-center gap-3 mb-2">
                 <input
                   type="checkbox"
                   checked={selectedTutors.some(t => t._id === tutor._id)}
                   onChange={() => toggleTutorSelection(tutor)}
-                  className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                  className="rounded border-gray-300 text-[#006A4E] focus:ring-[#006A4E]"
                 />
                 <span className="font-mono text-sm text-gray-500">{tutor.tutorId}</span>
                 <span className="font-semibold text-gray-900 text-base flex-1 truncate">{tutor.name}</span>
@@ -627,7 +629,7 @@ export default function TutorsDashboardPage() {
               <div className="flex items-center gap-2 mt-2">
                 <button
                   onClick={() => setViewModal(tutor)}
-                  className="flex-1 text-blue-600 hover:text-blue-900 text-xs font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors"
+                  className="flex-1 text-[#006A4E] hover:text-[#005a40] text-xs font-medium px-2 py-1 rounded hover:bg-[#006A4E]/8 transition-colors"
                   title="View Details"
                 >
                   <Eye className="w-4 h-4 inline" /> View
@@ -652,7 +654,7 @@ export default function TutorsDashboardPage() {
         )}
         {/* Empty State */}
         {!loading && sortedTutors.length === 0 && (
-          <div className="bg-white rounded-lg shadow text-center py-12 px-4">
+          <div className="bg-white rounded-xl border border-[#E8DDD0] text-center py-12 px-4">
             <GraduationCap className="mx-auto h-12 w-12 text-gray-400" />
             <h3 className="mt-2 text-sm font-medium text-gray-900">No tutors found</h3>
             <p className="mt-1 text-sm text-gray-500">
@@ -663,7 +665,7 @@ export default function TutorsDashboardPage() {
             {!searchTerm && statusFilter === 'all' && versionFilter === 'all' && groupFilter === 'all' && (
               <div className="mt-6">
                 <Link href="/dashboard/tutors/register">
-                  <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                  <button className="bg-[#006A4E] text-white px-4 py-2 rounded-lg hover:bg-[#005a40] transition-colors">
                     Add First Tutor
                   </button>
                 </Link>
@@ -679,7 +681,7 @@ export default function TutorsDashboardPage() {
           <div className="bg-white rounded-lg shadow-lg max-w-3xl mx-auto p-8">
             {/* Avatar and Name */}
             <div className="flex flex-col items-center mb-8">
-              <div className="h-24 w-24 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center mb-2">
+              <div className="h-24 w-24 rounded-full bg-[#006A4E] flex items-center justify-center mb-2">
                 <span className="text-white text-4xl font-bold">{viewModal.name.charAt(0)}</span>
               </div>
               <h2 className="text-3xl font-bold text-gray-900">{viewModal.name}</h2>
@@ -852,8 +854,8 @@ export default function TutorsDashboardPage() {
         <Modal isOpen={smsModal} onClose={() => setSmsModal(false)}>
           <div className="bg-white rounded-lg shadow-lg max-w-md mx-auto p-6">
             <div className="flex items-center mb-4">
-              <MessageSquare className="w-8 h-8 text-purple-500 mr-3" />
-              <h2 className="text-xl font-bold text-purple-600">Send SMS to Selected Tutors</h2>
+              <MessageSquare className="w-8 h-8 text-[#006A4E] mr-3" />
+              <h2 className="text-xl font-bold text-[#006A4E]">Send SMS to Selected Tutors</h2>
             </div>
             <form onSubmit={handleSMSSubmit} className="space-y-4">
               <div>
@@ -863,7 +865,7 @@ export default function TutorsDashboardPage() {
                   value={smsMessage}
                   onChange={(e) => setSmsMessage(e.target.value)}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-[#E8DDD0] rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                   placeholder="Enter your SMS message here..."
                   required
                 ></textarea>
@@ -878,7 +880,7 @@ export default function TutorsDashboardPage() {
                 </button>
                 <button
                   type="submit"
-                  className="w-full sm:w-auto bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+                  className="w-full sm:w-auto bg-[#006A4E] text-white px-4 py-2 rounded-lg hover:bg-[#005a40] transition-colors"
                   disabled={smsLoading}
                 >
                   {smsLoading ? 'Sending...' : 'Send SMS'}

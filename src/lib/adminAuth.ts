@@ -2,8 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verify } from 'jsonwebtoken';
 import { dbConnect } from '@/lib/mongodb';
 import Admin from '@/models/Admin';
+import { getRequiredEnvVar } from '@/lib/env';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+function getAdminJwtSecret(): string {
+  return getRequiredEnvVar('JWT_SECRET');
+}
 
 export interface AdminUser {
   id: string;
@@ -21,7 +24,7 @@ export async function verifyAdminToken(request: NextRequest): Promise<AdminUser 
       return null;
     }
 
-    const decoded = verify(token, JWT_SECRET) as any;
+    const decoded = verify(token, getAdminJwtSecret()) as any;
     
     // Verify admin still exists and is active
     await dbConnect();
@@ -43,6 +46,8 @@ export async function verifyAdminToken(request: NextRequest): Promise<AdminUser 
     return null;
   }
 }
+
+export { getAdminJwtSecret };
 
 export async function requireAdmin(request: NextRequest): Promise<NextResponse | AdminUser> {
   const admin = await verifyAdminToken(request);

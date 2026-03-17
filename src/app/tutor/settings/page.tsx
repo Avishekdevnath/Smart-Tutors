@@ -439,7 +439,7 @@ export default function TutorSettingsPage() {
         </div>
 
         {/* Security Notice */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="bg-[#006A4E]/8 border border-[#006A4E]/20 rounded-lg p-4">
           <div className="flex">
             <div className="flex-shrink-0">
               <ShieldCheckIcon className="h-5 w-5 text-blue-400" />

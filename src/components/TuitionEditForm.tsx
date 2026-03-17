@@ -267,7 +267,7 @@ export default function TuitionEditForm({ tuition, onSubmit, onCancel, loading =
                 <button
                   type="button"
                   onClick={addCustomSubject}
-                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                  className="px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] transition-colors"
                 >
                   Add
                 </button>
@@ -412,7 +412,7 @@ export default function TuitionEditForm({ tuition, onSubmit, onCancel, loading =
         <button
           type="submit"
           disabled={loading || selectedSubjects.length === 0}
-          className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-6 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Saving...' : 'Save Changes'}
         </button>

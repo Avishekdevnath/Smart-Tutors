@@ -231,7 +231,7 @@ export default function AddGuardianPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-gradient-to-r from-green-600 to-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-green-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-[#006A4E] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#005a40] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? 'Adding Guardian...' : 'Add Guardian'}
             </button>

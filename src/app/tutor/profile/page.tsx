@@ -195,7 +195,7 @@ export default function TutorProfilePage() {
           <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="h-16 w-16 rounded-full bg-gradient-to-r from-green-600 to-blue-600 flex items-center justify-center">
+                <div className="h-16 w-16 rounded-full bg-[#006A4E] flex items-center justify-center">
                   <span className="text-white font-bold text-2xl">
                     {(tutorData?.name || user?.name || 'T').charAt(0).toUpperCase()}
                   </span>
@@ -210,7 +210,7 @@ export default function TutorProfilePage() {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={handleViewPublicProfile}
-                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                  className="inline-flex items-center px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] transition-colors text-sm font-medium"
                 >
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V4a2 2 0 114 0v2m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
@@ -441,7 +441,7 @@ export default function TutorProfilePage() {
                       href={tutorData.documents.nidPhoto} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="text-blue-600 hover:text-blue-800 underline text-sm"
+                      className="text-[#006A4E] hover:text-[#005a40] underline text-sm"
                     >
                       View Full Size
                     </a>
@@ -472,7 +472,7 @@ export default function TutorProfilePage() {
                       href={tutorData.documents.studentIdPhoto} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="text-blue-600 hover:text-blue-800 underline text-sm"
+                      className="text-[#006A4E] hover:text-[#005a40] underline text-sm"
                     >
                       View Full Size
                     </a>
@@ -553,7 +553,7 @@ export default function TutorProfilePage() {
                 </button>
                 <button 
                   onClick={handleViewPublicProfile}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] transition-colors"
                 >
                   View Public Profile
                 </button>
@@ -599,7 +599,7 @@ export default function TutorProfilePage() {
               type="submit"
               form="password-form"
               disabled={passwordLoading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] disabled:opacity-50"
             >
               {passwordLoading ? 'Changing...' : 'Change Password'}
             </button>
@@ -616,7 +616,7 @@ export default function TutorProfilePage() {
                 type={showPasswords.current ? 'text' : 'password'}
                 value={passwordFormData.currentPassword}
                 onChange={(e) => setPasswordFormData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E]"
                 required
               />
               <button
@@ -642,7 +642,7 @@ export default function TutorProfilePage() {
                 type={showPasswords.new ? 'text' : 'password'}
                 value={passwordFormData.newPassword}
                 onChange={(e) => setPasswordFormData(prev => ({ ...prev, newPassword: e.target.value }))}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E]"
                 minLength={6}
                 required
               />
@@ -670,7 +670,7 @@ export default function TutorProfilePage() {
                 type={showPasswords.confirm ? 'text' : 'password'}
                 value={passwordFormData.confirmPassword}
                 onChange={(e) => setPasswordFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E]"
                 required
               />
               <button

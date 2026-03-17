@@ -33,7 +33,7 @@ const reviews = [
 
 export default function ReviewsSection() {
   return (
-    <section className="py-20 bg-gradient-to-br from-purple-50 to-blue-50">
+    <section className="py-20 bg-[#FFFDF7]">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">What Our Users Say</h2>

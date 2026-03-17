@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Modal from '@/components/Modal';
 import Toast, { useToast } from '@/components/Toast';
+import { useSettings } from '@/hooks/useSettings';
 
 interface Tuition {
   _id: string;
@@ -32,6 +33,7 @@ export default function TuitionDetailsPage() {
   const params = useParams();
   const { data: session } = useSession();
   const { showToast } = useToast();
+  const { settings: siteSettings } = useSettings();
   const [tuition, setTuition] = useState<Tuition | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -108,7 +110,7 @@ export default function TuitionDetailsPage() {
     if (!tuition || !session) return;
 
     // Check if user agreed to terms
-    if (confirmationText.toLowerCase().trim() !== 'agree') {
+    if (confirmationText.toLowerCase().trim() !== (siteSettings.mediaFeeConfirmText || 'Agree').toLowerCase()) {
       showToast('Please type "Agree" to confirm you accept the terms and conditions', 'error');
       return;
     }
@@ -149,10 +151,10 @@ export default function TuitionDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#FFFDF7] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading tuition details...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#006A4E] mx-auto"></div>
+          <p className="mt-4 text-[#78716C]">টিউশন লোড হচ্ছে...</p>
         </div>
       </div>
     );
@@ -160,16 +162,16 @@ export default function TuitionDetailsPage() {
 
   if (error || !tuition) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#FFFDF7] flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-6">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Tuition Not Found</h1>
-          <p className="text-gray-600 mb-6">{error || 'The tuition you are looking for does not exist.'}</p>
-          <Link 
+          <h1 className="font-heading text-2xl font-bold text-[#1C1917] mb-2">টিউশন পাওয়া যায়নি</h1>
+          <p className="text-[#78716C] mb-6">{error || 'আপনি যে টিউশনটি খুঁজছেন তা বিদ্যমান নেই।'}</p>
+          <Link
             href="/"
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] transition-colors"
           >
-            ← Back to Home
+            ← হোমে ফিরুন
           </Link>
         </div>
       </div>
@@ -213,35 +215,35 @@ export default function TuitionDetailsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FFFDF7]">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-4xl mx-auto px-4 py-6">
+      <div className="bg-[#006A4E]">
+        <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Tuition Details
+              <h1 className="font-heading text-2xl font-bold text-white">
+                টিউশনের বিবরণ
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-green-100 mt-1 text-sm">
                 Code: {tuition.code}
               </p>
             </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={copyLink}
-                className="inline-flex items-center px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                title="Copy link to clipboard"
+                className="inline-flex items-center px-3 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors text-sm"
+                title="লিঙ্ক কপি করুন"
               >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
-                Copy Link
+                লিঙ্ক কপি
               </button>
-              <Link 
+              <Link
                 href="/"
-                className="text-blue-600 hover:text-blue-700 font-medium"
+                className="text-green-100 hover:text-white font-medium text-sm"
               >
-                ← Back to Home
+                ← হোমে ফিরুন
               </Link>
             </div>
           </div>
@@ -252,15 +254,15 @@ export default function TuitionDetailsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+            <div className="bg-white rounded-xl shadow-card border border-[#E8DDD0] p-6 mb-6">
               {/* Header with Status */}
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  <h2 className="font-heading text-xl font-bold text-[#1C1917] mb-1">
                     {tuition.class} - {tuition.version}
                   </h2>
-                  <p className="text-gray-600">
-                    Posted on {formatDate(tuition.createdAt)}
+                  <p className="text-[#78716C] text-sm">
+                    পোস্ট করা হয়েছে {formatDate(tuition.createdAt)}
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -278,12 +280,12 @@ export default function TuitionDetailsPage() {
               {/* Subjects */}
               {tuition.subjects && tuition.subjects.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Subjects</h3>
+                  <h3 className="font-heading font-semibold text-[#1C1917] mb-3">বিষয়সমূহ</h3>
                   <div className="flex flex-wrap gap-2">
                     {tuition.subjects.map((subject, index) => (
-                      <span 
+                      <span
                         key={index}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
+                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#006A4E]/10 text-[#006A4E]"
                       >
                         {subject}
                       </span>
@@ -295,48 +297,48 @@ export default function TuitionDetailsPage() {
               {/* Schedule & Requirements */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Schedule</h3>
-                  <div className="space-y-2">
+                  <h3 className="font-heading font-semibold text-[#1C1917] mb-3">সময়সূচি</h3>
+                  <div className="space-y-2 text-sm">
                     {tuition.weeklyDays && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Days:</span>
-                        <span className="font-medium">{tuition.weeklyDays}</span>
+                        <span className="text-[#78716C]">Days:</span>
+                        <span className="font-medium text-[#1C1917]">{tuition.weeklyDays}</span>
                       </div>
                     )}
                     {tuition.dailyHours && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Hours:</span>
-                        <span className="font-medium">{tuition.dailyHours}</span>
+                        <span className="text-[#78716C]">Hours:</span>
+                        <span className="font-medium text-[#1C1917]">{tuition.dailyHours}</span>
                       </div>
                     )}
                     {tuition.startMonth && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Start Month:</span>
-                        <span className="font-medium">{tuition.startMonth}</span>
+                        <span className="text-[#78716C]">Start Month:</span>
+                        <span className="font-medium text-[#1C1917]">{tuition.startMonth}</span>
                       </div>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Requirements</h3>
-                  <div className="space-y-2">
+                  <h3 className="font-heading font-semibold text-[#1C1917] mb-3">প্রয়োজনীয়তা</h3>
+                  <div className="space-y-2 text-sm">
                     {tuition.salary && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Salary:</span>
-                        <span className="font-medium text-green-600">{tuition.salary}</span>
+                        <span className="text-[#78716C]">Salary:</span>
+                        <span className="font-medium text-[#E07B2A]">{tuition.salary}</span>
                       </div>
                     )}
                     {tuition.tutorGender && tuition.tutorGender !== "Not specified" && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Tutor Gender:</span>
-                        <span className="font-medium">{tuition.tutorGender}</span>
+                        <span className="text-[#78716C]">Tutor Gender:</span>
+                        <span className="font-medium text-[#1C1917]">{tuition.tutorGender}</span>
                       </div>
                     )}
                     {tuition.location && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Location:</span>
-                        <span className="font-medium">{tuition.location}</span>
+                        <span className="text-[#78716C]">Location:</span>
+                        <span className="font-medium text-[#1C1917]">{tuition.location}</span>
                       </div>
                     )}
                   </div>
@@ -345,32 +347,29 @@ export default function TuitionDetailsPage() {
 
               {/* Additional Details */}
               {(tuition.specificLocation || tuition.description || tuition.tutorRequirement || tuition.specialRemarks) && (
-                <div className="space-y-4">
+                <div className="space-y-4 text-sm">
                   {tuition.specificLocation && (
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Specific Location</h3>
-                      <p className="text-gray-700">{tuition.specificLocation}</p>
+                      <h3 className="font-heading font-semibold text-[#1C1917] mb-1">নির্দিষ্ট এলাকা</h3>
+                      <p className="text-[#78716C]">{tuition.specificLocation}</p>
                     </div>
                   )}
-                  
                   {tuition.description && (
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
-                      <p className="text-gray-700">{tuition.description}</p>
+                      <h3 className="font-heading font-semibold text-[#1C1917] mb-1">বিবরণ</h3>
+                      <p className="text-[#78716C]">{tuition.description}</p>
                     </div>
                   )}
-                  
                   {tuition.tutorRequirement && (
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Tutor Requirements</h3>
-                      <p className="text-gray-700">{tuition.tutorRequirement}</p>
+                      <h3 className="font-heading font-semibold text-[#1C1917] mb-1">টিউটর প্রয়োজনীয়তা</h3>
+                      <p className="text-[#78716C]">{tuition.tutorRequirement}</p>
                     </div>
                   )}
-                  
                   {tuition.specialRemarks && (
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Special Remarks</h3>
-                      <p className="text-gray-700">{tuition.specialRemarks}</p>
+                      <h3 className="font-heading font-semibold text-[#1C1917] mb-1">বিশেষ মন্তব্য</h3>
+                      <p className="text-[#78716C]">{tuition.specialRemarks}</p>
                     </div>
                   )}
                 </div>
@@ -381,10 +380,10 @@ export default function TuitionDetailsPage() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             {/* Apply Button */}
-            <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Apply for this Tuition</h3>
-              <p className="text-gray-600 mb-4">
-                Interested in this tuition? Click below to apply and connect with the guardian.
+            <div className="bg-white rounded-xl shadow-card border border-[#E8DDD0] p-6 mb-6">
+              <h3 className="font-heading font-semibold text-[#1C1917] mb-3">এই টিউশনে আবেদন করুন</h3>
+              <p className="text-[#78716C] text-sm mb-4">
+                এই টিউশনে আগ্রহী? আবেদন করুন এবং অভিভাবকের সাথে যোগাযোগ করুন।
               </p>
               {session ? (
                 applicationsLoading ? (
@@ -413,17 +412,17 @@ export default function TuitionDetailsPage() {
                 ) : (
                   <button
                     onClick={handleApply}
-                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                    className="w-full bg-[#E07B2A] text-white py-3 px-4 rounded-lg font-semibold hover:bg-[#c96d22] transition-colors"
                   >
-                    Apply Now
+                    আবেদন করুন →
                   </button>
                 )
               ) : (
                 <Link
                   href={`/tutors/register?tuition=${tuition.code}`}
-                  className="w-full inline-flex justify-center items-center px-4 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                  className="w-full inline-flex justify-center items-center px-4 py-3 bg-[#E07B2A] text-white font-semibold rounded-lg hover:bg-[#c96d22] transition-colors"
                 >
-                  Register & Apply
+                  রেজিস্ট্রেশন করে আবেদন করুন →
                 </Link>
               )}
             </div>
@@ -449,8 +448,8 @@ export default function TuitionDetailsPage() {
             <button
               type="submit"
               form="application-form"
-              disabled={applicationLoading || confirmationText.toLowerCase().trim() !== 'agree'}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              disabled={applicationLoading || confirmationText.toLowerCase().trim() !== (siteSettings.mediaFeeConfirmText || 'Agree').toLowerCase()}
+              className="px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] disabled:opacity-50"
             >
               {applicationLoading ? 'Submitting...' : 'Submit Application'}
             </button>
@@ -459,9 +458,9 @@ export default function TuitionDetailsPage() {
       >
         {tuition && (
           <form id="application-form" onSubmit={handleApplicationSubmit} className="space-y-4">
-            <div className="bg-blue-50 p-4 rounded-lg mb-4">
-              <h4 className="font-semibold text-blue-900 mb-2">Tuition Details</h4>
-              <p className="text-blue-800 text-sm">
+            <div className="bg-[#006A4E]/5 border border-[#006A4E]/20 p-4 rounded-lg mb-4">
+              <h4 className="font-semibold text-[#006A4E] mb-2">টিউশনের তথ্য</h4>
+              <p className="text-[#1C1917] text-sm">
                 <strong>Code:</strong> {tuition.code} | <strong>Class:</strong> {tuition.class} | <strong>Location:</strong> {tuition.location}
               </p>
             </div>
@@ -469,21 +468,23 @@ export default function TuitionDetailsPage() {
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
               <h4 className="font-semibold text-yellow-900 mb-3">আমাদের মিডিয়া ফি এর নিয়ম:</h4>
               <ul className="list-disc pl-5 text-yellow-800 text-sm space-y-1">
-                <li>গার্ডিয়ান কনফার্ম হলে মিডিয়া ফি (১ দিনের বেতন) অফিসে/বিকাশে প্রদান করতে হবে।</li>
-                <li>গার্ডিয়ান কনফার্ম হওয়ার পর গার্ডিয়ানের নাম্বার দেয়া হবে।</li>
-                <li>মিডিয়া ফি না দিলে পরবর্তী টিউশন/গার্ডিয়ান কনফার্মেশন বন্ধ থাকবে।</li>
-                <li>মিডিয়া ফি অফিসে/বিকাশে প্রদান করতে হবে: 017XXXXXXXX (Smart Tutors)</li>
+                {(siteSettings.mediaFeeRules || []).map((rule, i) => (
+                  <li key={i}>{rule}</li>
+                ))}
               </ul>
+              {siteSettings.mediaFeeNote && (
+                <p className="mt-2 text-xs text-yellow-700 font-medium">{siteSettings.mediaFeeNote}</p>
+              )}
               <div className="mt-3">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Type <span className="font-mono bg-gray-100 px-2 py-1 rounded">Agree</span> to confirm you accept the terms and conditions
+                  Type <span className="font-mono bg-gray-100 px-2 py-1 rounded">{siteSettings.mediaFeeConfirmText || 'Agree'}</span> to confirm you accept the terms
                 </label>
                 <input
                   type="text"
                   value={confirmationText}
                   onChange={e => setConfirmationText(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder="Type Agree to confirm"
+                  className="w-full px-3 py-2 border border-[#E8DDD0] rounded-lg focus:ring-2 focus:ring-[#006A4E]"
+                  placeholder={`Type ${siteSettings.mediaFeeConfirmText || 'Agree'} to confirm`}
                   required
                 />
               </div>

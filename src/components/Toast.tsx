@@ -30,7 +30,7 @@ export default function Toast({ message, type, isVisible, onClose, duration = 30
       case 'error':
         return 'bg-red-500 text-white';
       case 'info':
-        return 'bg-blue-500 text-white';
+        return 'bg-[#006A4E] text-white';
       default:
         return 'bg-gray-500 text-white';
     }

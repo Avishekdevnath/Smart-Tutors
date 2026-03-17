@@ -113,7 +113,7 @@ export default function ContactManagementPage() {
         <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
           <div className="flex items-center">
             <div className="p-2 bg-blue-100 rounded-lg">
-              <Mail className="w-6 h-6 text-blue-600" />
+              <Mail className="w-6 h-6 text-[#006A4E]" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Inquiries</p>
@@ -176,7 +176,7 @@ export default function ContactManagementPage() {
                 placeholder="Search inquiries..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
               />
             </div>
           </div>
@@ -185,7 +185,7 @@ export default function ContactManagementPage() {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
             >
               <option value="">All Status</option>
               <option value="new">New</option>
@@ -269,7 +269,7 @@ export default function ContactManagementPage() {
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleViewInquiry(inquiry)}
-                          className="text-blue-600 hover:text-blue-900"
+                          className="text-[#006A4E] hover:text-blue-900"
                           title="View Details"
                         >
                           <Eye className="w-4 h-4" />
@@ -344,7 +344,7 @@ export default function ContactManagementPage() {
                       onClick={() => setCurrentPage(pageNum)}
                       className={`px-3 py-1 text-sm border rounded ${
                         currentPage === pageNum
-                          ? 'bg-blue-600 text-white border-blue-600'
+                          ? 'bg-[#006A4E] text-white border-[#006A4E]'
                           : 'border-gray-300 hover:bg-gray-50'
                       }`}
                     >
@@ -429,7 +429,7 @@ export default function ContactManagementPage() {
               </button>
               <a
                 href={`mailto:${selectedInquiry.email}?subject=Re: ${selectedInquiry.subject}`}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40]"
               >
                 Reply via Email
               </a>

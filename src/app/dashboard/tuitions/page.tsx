@@ -141,21 +141,21 @@ export default function TuitionManagementDashboard() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'open': return 'bg-green-100 text-green-800';
-      case 'available': return 'bg-blue-100 text-blue-800';
-      case 'demo running': return 'bg-yellow-100 text-yellow-800';
-      case 'booked': return 'bg-purple-100 text-purple-800';
-      case 'booked by other': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'open': return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+      case 'available': return 'bg-[#006A4E]/8 text-[#006A4E] border border-[#006A4E]/20';
+      case 'demo running': return 'bg-amber-50 text-amber-700 border border-amber-200';
+      case 'booked': return 'bg-slate-50 text-slate-600 border border-slate-200';
+      case 'booked by other': return 'bg-red-50 text-red-700 border border-red-200';
+      default: return 'bg-[#F5F0E8] text-[#78716C] border border-[#E8DDD0]';
     }
   };
 
   const getVersionColor = (version: string) => {
     switch (version) {
-      case 'English Medium': return 'bg-blue-100 text-blue-800';
-      case 'Bangla Medium': return 'bg-green-100 text-green-800';
-      case 'English Version': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'English Medium': return 'bg-sky-50 text-sky-700 border border-sky-200';
+      case 'Bangla Medium': return 'bg-[#006A4E]/8 text-[#006A4E] border border-[#006A4E]/20';
+      case 'English Version': return 'bg-violet-50 text-violet-700 border border-violet-200';
+      default: return 'bg-[#F5F0E8] text-[#78716C] border border-[#E8DDD0]';
     }
   };
 
@@ -269,8 +269,8 @@ export default function TuitionManagementDashboard() {
                 onClick={() => handleSort('createdAt')}
                 className={`px-3 py-1.5 text-sm font-medium rounded-full transition-colors ${
                   sortField === 'createdAt' && sortOrder === 'desc'
-                    ? 'bg-purple-100 text-purple-800 border border-purple-200'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-[#006A4E]/10 text-[#006A4E] border border-[#006A4E]/20'
+                    : 'bg-[#F5F0E8] text-[#78716C] hover:bg-[#E8DDD0]'
                 }`}
               >
                 Latest Tuitions
@@ -280,7 +280,7 @@ export default function TuitionManagementDashboard() {
                 className={`px-3 py-1.5 text-sm font-medium rounded-full transition-colors ${
                   sortField === 'urgent' && sortOrder === 'desc'
                     ? 'bg-red-100 text-red-800 border border-red-200'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    : 'bg-[#F5F0E8] text-[#78716C] hover:bg-[#E8DDD0]'
                 }`}
               >
                 Urgent First
@@ -290,7 +290,7 @@ export default function TuitionManagementDashboard() {
                 className={`px-3 py-1.5 text-sm font-medium rounded-full transition-colors ${
                   sortField === 'salary' && sortOrder === 'desc'
                     ? 'bg-green-100 text-green-800 border border-green-200'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    : 'bg-[#F5F0E8] text-[#78716C] hover:bg-[#E8DDD0]'
                 }`}
               >
                 High Salary
@@ -298,7 +298,7 @@ export default function TuitionManagementDashboard() {
             </div>
           </div>
           <Link href="/dashboard/tuitions/add">
-            <button className="w-full lg:w-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2">
+            <button className="w-full lg:w-auto bg-[#006A4E] hover:bg-[#005a40] text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center space-x-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
@@ -337,62 +337,62 @@ export default function TuitionManagementDashboard() {
       {/* Stats Cards - Desktop 4 columns, Mobile 2 columns */}
       <div className="mb-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-4 lg:p-6">
+          <div className="bg-white rounded-xl border border-[#E8DDD0] p-4 lg:p-5">
             <div className="flex items-center">
-              <div className="p-2 lg:p-3 rounded-full bg-purple-100">
-                <svg className="w-5 h-5 lg:w-6 lg:h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-2 lg:p-3 rounded-xl bg-[#006A4E]/10">
+                <svg className="w-5 h-5 lg:w-6 lg:h-6 text-[#006A4E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
               <div className="ml-3 lg:ml-4 min-w-0 flex-1">
-                <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">Total Tuitions</p>
-                <p className="text-lg lg:text-2xl font-bold text-gray-900">{tuitions.length}</p>
+                <p className="text-xs lg:text-sm font-medium text-[#78716C] truncate">Total Tuitions</p>
+                <p className="text-lg lg:text-2xl font-bold text-[#1C1917]">{tuitions.length}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4 lg:p-6">
+          <div className="bg-white rounded-xl border border-[#E8DDD0] p-4 lg:p-5">
             <div className="flex items-center">
-              <div className="p-2 lg:p-3 rounded-full bg-green-100">
-                <svg className="w-5 h-5 lg:w-6 lg:h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-2 lg:p-3 rounded-xl bg-emerald-50">
+                <svg className="w-5 h-5 lg:w-6 lg:h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
               <div className="ml-3 lg:ml-4 min-w-0 flex-1">
-                <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">Open</p>
-                <p className="text-lg lg:text-2xl font-bold text-gray-900">
+                <p className="text-xs lg:text-sm font-medium text-[#78716C] truncate">Open</p>
+                <p className="text-lg lg:text-2xl font-bold text-[#1C1917]">
                   {tuitions.filter(t => t.status === 'open').length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4 lg:p-6">
+          <div className="bg-white rounded-xl border border-[#E8DDD0] p-4 lg:p-5">
             <div className="flex items-center">
-              <div className="p-2 lg:p-3 rounded-full bg-blue-100">
-                <svg className="w-5 h-5 lg:w-6 lg:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-2 lg:p-3 rounded-xl bg-amber-50">
+                <svg className="w-5 h-5 lg:w-6 lg:h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
               <div className="ml-3 lg:ml-4 min-w-0 flex-1">
-                <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">Demo Running</p>
-                <p className="text-lg lg:text-2xl font-bold text-gray-900">
+                <p className="text-xs lg:text-sm font-medium text-[#78716C] truncate">Demo Running</p>
+                <p className="text-lg lg:text-2xl font-bold text-[#1C1917]">
                   {tuitions.filter(t => t.status === 'demo running').length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4 lg:p-6">
+          <div className="bg-white rounded-xl border border-[#E8DDD0] p-4 lg:p-5">
             <div className="flex items-center">
-              <div className="p-2 lg:p-3 rounded-full bg-purple-100">
-                <svg className="w-5 h-5 lg:w-6 lg:h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="p-2 lg:p-3 rounded-xl bg-[#E07B2A]/10">
+                <svg className="w-5 h-5 lg:w-6 lg:h-6 text-[#E07B2A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
               <div className="ml-3 lg:ml-4 min-w-0 flex-1">
-                <p className="text-xs lg:text-sm font-medium text-gray-600 truncate">Booked</p>
-                <p className="text-lg lg:text-2xl font-bold text-gray-900">
+                <p className="text-xs lg:text-sm font-medium text-[#78716C] truncate">Booked</p>
+                <p className="text-lg lg:text-2xl font-bold text-[#1C1917]">
                   {tuitions.filter(t => t.status === 'booked').length}
                 </p>
               </div>
@@ -403,24 +403,24 @@ export default function TuitionManagementDashboard() {
         {/* Tuitions Grid */}
         <div className="space-y-4 lg:space-y-6">
           {loading ? (
-            <div className="bg-white rounded-lg shadow p-8 text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600">Loading tuitions...</p>
+            <div className="bg-white rounded-xl border border-[#E8DDD0] p-8 text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#006A4E] mx-auto"></div>
+              <p className="mt-4 text-[#78716C]">Loading tuitions...</p>
             </div>
           ) : (
             filteredTuitions.map((tuition) => (
-              <div key={tuition._id} className="bg-white rounded-lg shadow overflow-hidden">
+              <div key={tuition._id} className="bg-white rounded-xl border border-[#E8DDD0] overflow-hidden hover:shadow-md hover:border-[#006A4E]/20 transition-all">
                 {/* Tuition Header - Desktop Horizontal, Mobile Vertical */}
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 px-4 lg:px-6 py-4 border-b border-gray-200">
+                <div className="bg-[#FFFDF7] px-4 lg:px-6 py-4 border-b border-[#E8DDD0]">
                   <div className="flex flex-col space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
                     <div className="flex items-center space-x-3 lg:space-x-4">
-                      <div className="h-10 w-10 lg:h-12 lg:w-12 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center relative flex-shrink-0">
+                      <div className="h-10 w-10 lg:h-12 lg:w-12 rounded-xl bg-[#006A4E] flex items-center justify-center relative flex-shrink-0">
                         <span className="text-white font-bold text-sm lg:text-lg">
                           {tuition.code.slice(-2)}
                         </span>
                         {/* Sort indicator */}
                         {sortField === 'code' && (
-                          <div className="absolute -top-1 -right-1 bg-purple-600 rounded-full p-1">
+                          <div className="absolute -top-1 -right-1 bg-[#E07B2A] rounded-full p-1">
                             {sortOrder === 'desc' ? (
                               <svg className="w-2 h-2 lg:w-3 lg:h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
@@ -437,7 +437,7 @@ export default function TuitionManagementDashboard() {
                         <h3 className="text-base lg:text-lg font-semibold text-gray-900 flex flex-wrap items-center gap-2">
                           <span>{tuition.code}</span>
                           {sortField === 'createdAt' && (
-                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#006A4E]/10 text-[#006A4E]">
                               {sortOrder === 'desc' ? (
                                 <>
                                   <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -509,7 +509,7 @@ export default function TuitionManagementDashboard() {
                               showToast('An error occurred while updating status', 'error');
                             }
                           }}
-                          className={`px-3 py-2 text-sm font-semibold rounded-full border-0 focus:ring-2 focus:ring-purple-500 min-w-0 ${getStatusColor(tuition.status)}`}
+                          className={`px-3 py-2 text-sm font-semibold rounded-full border-0 focus:ring-2 focus:ring-[#006A4E] min-w-0 ${getStatusColor(tuition.status)}`}
                         >
                           <option value="open">Open</option>
                           <option value="available">Available</option>
@@ -520,7 +520,7 @@ export default function TuitionManagementDashboard() {
                       </div>
                       <button
                         onClick={() => setSelectedTuitionForPosts(selectedTuitionForPosts === tuition._id ? null : tuition._id)}
-                        className="w-full lg:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                        className="w-full lg:w-auto bg-[#006A4E] text-white px-4 py-2 rounded-lg hover:bg-[#005a40] transition-colors text-sm font-medium"
                       >
                         {selectedTuitionForPosts === tuition._id ? 'Hide Posts' : 'Generate Posts'}
                       </button>
@@ -549,7 +549,7 @@ export default function TuitionManagementDashboard() {
                           <span className="flex items-center space-x-1">
                             <span className="break-words">{tuition.guardianName}</span>
                             {sortField === 'guardianName' && (
-                              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs bg-purple-100 text-purple-800 flex-shrink-0">
+                              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs bg-[#006A4E]/10 text-[#006A4E] flex-shrink-0">
                                 {sortOrder === 'desc' ? (
                                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
@@ -568,7 +568,7 @@ export default function TuitionManagementDashboard() {
                           <span className="flex items-center space-x-1">
                             <span className="break-all">{tuition.guardianNumber}</span>
                             {sortField === 'guardianNumber' && (
-                              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs bg-purple-100 text-purple-800 flex-shrink-0">
+                              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs bg-[#006A4E]/10 text-[#006A4E] flex-shrink-0">
                                 {sortOrder === 'desc' ? (
                                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
@@ -650,12 +650,12 @@ export default function TuitionManagementDashboard() {
                         <Link
                           href={`/tuition/${tuition.code}`}
                           target="_blank"
-                          className="text-purple-600 hover:text-purple-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-purple-50 transition-colors"
+                          className="text-[#006A4E] hover:text-[#005a40] text-sm font-medium px-3 py-2 rounded-lg hover:bg-[#006A4E]/8 transition-colors"
                         >
                           View Public Page
                         </Link>
                         <button 
-                          className="text-blue-600 hover:text-blue-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors" 
+                          className="text-[#006A4E] hover:text-[#005a40] text-sm font-medium px-3 py-2 rounded-lg hover:bg-[#006A4E]/8 transition-colors" 
                           onClick={() => setViewModal(tuition)}
                         >
                           View Details
@@ -679,7 +679,7 @@ export default function TuitionManagementDashboard() {
 
                 {/* Generated Posts */}
                 {selectedTuitionForPosts === tuition._id && (
-                  <div className="border-t border-gray-200 p-4 lg:p-6 bg-gray-50">
+                  <div className="border-t border-[#E8DDD0] p-4 lg:p-6 bg-[#FFFDF7]">
                     <TuitionPostGenerator tuition={tuition} />
                   </div>
                 )}
@@ -690,7 +690,7 @@ export default function TuitionManagementDashboard() {
 
         {/* Empty State */}
         {!loading && filteredTuitions.length === 0 && (
-          <div className="bg-white rounded-lg shadow text-center py-12 px-4">
+          <div className="bg-white rounded-xl border border-[#E8DDD0] text-center py-12 px-4">
             <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
@@ -702,7 +702,7 @@ export default function TuitionManagementDashboard() {
             </p>
             <div className="mt-6">
               <Link href="/dashboard/tuitions/add">
-                <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 touch-target">
+                <button className="bg-[#006A4E] hover:bg-[#005a40] text-white px-4 py-2 rounded-lg font-semibold transition-colors touch-target">
                   Add New Tuition
                 </button>
               </Link>

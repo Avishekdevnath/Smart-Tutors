@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import { ChevronDownIcon, UserIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
+import { useSettings } from '@/hooks/useSettings';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -13,6 +14,7 @@ export default function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const { data: session, status } = useSession();
+  const { settings: siteSettings } = useSettings();
 
   // Define user early to avoid ReferenceError
   const user = session?.user as any;
@@ -77,8 +79,20 @@ export default function Navbar() {
     };
   }, []);
 
+  const annBg = siteSettings.announcementType === 'warning'
+    ? 'bg-yellow-500'
+    : siteSettings.announcementType === 'success'
+    ? 'bg-[#006A4E]'
+    : 'bg-[#006A4E]';
+
   return (
-    <nav className="bg-white shadow-sm border-b">
+    <>
+    {siteSettings.announcementEnabled && siteSettings.announcementText && (
+      <div className={`${annBg} text-white text-center text-xs sm:text-sm py-2 px-4 font-medium`}>
+        {siteSettings.announcementText}
+      </div>
+    )}
+    <nav className="bg-white border-b border-[#E8DDD0] sticky top-0 z-40 shadow-sm bengali-border-top">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo and Brand */}
@@ -93,7 +107,7 @@ export default function Navbar() {
                 priority 
               />
             </Link>
-            <span className="font-bold text-xl text-blue-700 hidden sm:inline">Smart Tutors</span>
+            <span className="font-heading font-bold text-xl text-[#006A4E] hidden sm:inline">Smart Tutors</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -104,8 +118,8 @@ export default function Navbar() {
                 href={item.href}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                   isActive(item.href)
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                    ? 'text-[#006A4E] bg-green-50 font-semibold'
+                    : 'text-[#1C1917] hover:text-[#006A4E] hover:bg-green-50'
                 }`}
               >
                 {item.name}
@@ -122,10 +136,10 @@ export default function Navbar() {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                  className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-[#F5F0E8] hover:bg-[#EBE3D5] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#006A4E]"
                   type="button"
                 >
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-[#006A4E] rounded-full flex items-center justify-center">
                     <span className="text-white font-semibold text-sm">
                       {getUserInitials(getUserName())}
                     </span>
@@ -197,17 +211,17 @@ export default function Navbar() {
               // Not logged in - Show login and registration buttons
               <>
                 <Link href="/tutors/login">
-                  <button className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
+                  <button className="text-[#1C1917] hover:text-[#006A4E] px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 cursor-pointer">
                     Login
                   </button>
                 </Link>
                 <Link href="/tutors/register">
-                  <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105">
+                  <button className="bg-[#006A4E] hover:bg-[#005540] text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200 cursor-pointer">
                     Become a Tutor
                   </button>
                 </Link>
                 <Link href="/hire-a-tutor">
-                  <button className="bg-gradient-to-r from-green-600 to-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-green-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-105">
+                  <button className="bg-[#E07B2A] hover:bg-[#C96A1A] text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200 cursor-pointer">
                     Hire a Tutor
                   </button>
                 </Link>
@@ -219,7 +233,7 @@ export default function Navbar() {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-[#006A4E] hover:bg-[#006A4E]/8 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#006A4E] transition-colors duration-200"
               aria-expanded="false"
             >
               <span className="sr-only">Open main menu</span>
@@ -269,8 +283,8 @@ export default function Navbar() {
               href={item.href}
               className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
                 isActive(item.href)
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                  ? 'text-[#006A4E] bg-[#006A4E]/8 font-semibold'
+                  : 'text-[#1E293B] hover:text-[#006A4E] hover:bg-[#006A4E]/8'
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -283,7 +297,7 @@ export default function Navbar() {
             {session ? (
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center px-3 py-2">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                  <div className="w-8 h-8 bg-[#006A4E] rounded-full flex items-center justify-center mr-3">
                     <span className="text-white font-semibold text-sm">
                       {getUserInitials(getUserName())}
                     </span>
@@ -292,7 +306,7 @@ export default function Navbar() {
                 </div>
                 <Link
                   href={user?.userType === 'admin' ? '/dashboard/profile' : '/tutor/profile'}
-                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-[#006A4E] hover:bg-[#006A4E]/8"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Profile
@@ -300,7 +314,7 @@ export default function Navbar() {
                 {isTutor && (
                   <Link
                     href={`/tutor/${getUserName().toLowerCase().replace(/\s+/g, '-')}`}
-                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-[#006A4E] hover:bg-[#006A4E]/8"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Public Profile
@@ -309,7 +323,7 @@ export default function Navbar() {
                 {isTutor && (
                   <Link
                     href="/tutor/applications"
-                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-[#006A4E] hover:bg-[#006A4E]/8"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Tuition History
@@ -329,18 +343,18 @@ export default function Navbar() {
             ) : (
               <div className="flex flex-col space-y-2">
                 <Link href="/tutors/login">
-                  <button className="w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                  <button className="w-full text-left px-3 py-2 text-base font-medium text-[#1C1917] hover:text-[#006A4E] hover:bg-green-50 rounded-md transition-colors duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}>
                     Login
                   </button>
                 </Link>
                 <Link href="/tutors/register">
-                  <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg text-base font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200">
+                  <button className="w-full bg-[#006A4E] hover:bg-[#005540] text-white px-4 py-2.5 rounded-lg text-base font-semibold transition-colors duration-200 cursor-pointer">
                     Become a Tutor
                   </button>
                 </Link>
                 <Link href="/hire-a-tutor">
-                  <button className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white px-4 py-2 rounded-lg text-base font-medium hover:from-green-700 hover:to-blue-700 transition-all duration-200">
+                  <button className="w-full bg-[#E07B2A] hover:bg-[#C96A1A] text-white px-4 py-2.5 rounded-lg text-base font-semibold transition-colors duration-200 cursor-pointer">
                     Hire a Tutor
                   </button>
                 </Link>
@@ -350,5 +364,6 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
+    </>
   );
 } 

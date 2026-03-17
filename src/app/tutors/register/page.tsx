@@ -198,12 +198,12 @@ function TutorRegisterContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-[#FFFDF7] py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Tutor Registration</h1>
-          <p className="text-gray-600">Join our platform and start your tutoring journey</p>
+          <h1 className="font-heading text-3xl font-bold text-[#1C1917] mb-2">টিউটর রেজিস্ট্রেশন</h1>
+          <p className="text-[#78716C]">আমাদের প্ল্যাটফর্মে যোগ দিন এবং টিউটরিং যাত্রা শুরু করুন</p>
         </div>
 
         {/* Progress Steps */}
@@ -212,9 +212,9 @@ function TutorRegisterContent() {
             {steps.map((stepItem, index) => (
               <div key={stepItem.id} className="flex items-center">
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
-                  step >= stepItem.id 
-                    ? 'bg-blue-600 border-blue-600 text-white' 
-                    : 'bg-white border-gray-300 text-gray-500'
+                  step >= stepItem.id
+                    ? 'bg-[#006A4E] border-[#006A4E] text-white'
+                    : 'bg-white border-[#E8DDD0] text-[#78716C]'
                 }`}>
                   {step > stepItem.id ? (
                     <CheckCircle className="w-5 h-5" />
@@ -224,32 +224,32 @@ function TutorRegisterContent() {
                 </div>
                 {index < steps.length - 1 && (
                   <div className={`w-16 h-0.5 mx-2 ${
-                    step > stepItem.id ? 'bg-blue-600' : 'bg-gray-300'
+                    step > stepItem.id ? 'bg-[#006A4E]' : 'bg-[#E8DDD0]'
                   }`} />
                 )}
               </div>
             ))}
           </div>
           <div className="text-center mt-4">
-            <p className="text-sm font-medium text-gray-900">
-              Step {step + 1} of {steps.length}: {steps[step].title}
+            <p className="text-sm font-medium text-[#1C1917]">
+              ধাপ {step + 1} / {steps.length}: {steps[step].title}
             </p>
           </div>
         </div>
 
         {/* Form Container */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-card border border-[#E8DDD0] overflow-hidden">
           {/* Tuition Application Banner */}
           {tuitionCode && tuitionDetails && (
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-b border-blue-200 p-6">
+            <div className="bg-[#006A4E]/5 border-b border-[#006A4E]/20 p-6">
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <CheckCircle className="w-6 h-6 text-blue-600" />
+                  <div className="w-10 h-10 bg-[#006A4E]/10 rounded-lg flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-[#006A4E]" />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-blue-900 mb-2">
+                  <h3 className="text-lg font-semibold text-[#006A4E] mb-2">
                     Applying for Tuition: {tuitionDetails.code}
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
@@ -292,7 +292,7 @@ function TutorRegisterContent() {
                       name="name"
                       value={form.name}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                       required
                     />
                   </div>
@@ -306,7 +306,7 @@ function TutorRegisterContent() {
                       name="phone"
                       value={form.phone}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                       required
                     />
                   </div>
@@ -320,7 +320,7 @@ function TutorRegisterContent() {
                       name="email"
                       value={form.email}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                   
@@ -332,7 +332,7 @@ function TutorRegisterContent() {
                       name="gender"
                       value={form.gender}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                       required
                     >
                       <option value="Male">Male</option>
@@ -350,7 +350,7 @@ function TutorRegisterContent() {
                       value={form.address}
                       onChange={handleChange}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                 </div>
@@ -372,7 +372,7 @@ function TutorRegisterContent() {
                       name="background"
                       value={form.background}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                       required
                     >
                       <option value="Bangla Medium">Bangla Medium</option>
@@ -389,7 +389,7 @@ function TutorRegisterContent() {
                       name="version"
                       value={form.version}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                       required
                     >
                       <option value="EM">English Medium</option>
@@ -406,7 +406,7 @@ function TutorRegisterContent() {
                       name="group"
                       value={form.group}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                       required
                     >
                       <option value="Science">Science</option>
@@ -425,7 +425,7 @@ function TutorRegisterContent() {
                       value={form.sscResult}
                       onChange={handleChange}
                       placeholder="e.g., 5.00"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                   
@@ -439,7 +439,7 @@ function TutorRegisterContent() {
                       value={form.hscResult}
                       onChange={handleChange}
                       placeholder="e.g., 5.00"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                   
@@ -453,7 +453,7 @@ function TutorRegisterContent() {
                       value={form.oLevelResult}
                       onChange={handleChange}
                       placeholder="e.g., A* in 6 subjects"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                   
@@ -467,7 +467,7 @@ function TutorRegisterContent() {
                       value={form.aLevelResult}
                       onChange={handleChange}
                       placeholder="e.g., A* in 3 subjects"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                   
@@ -480,7 +480,7 @@ function TutorRegisterContent() {
                       name="schoolName"
                       value={form.schoolName}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                   
@@ -493,7 +493,7 @@ function TutorRegisterContent() {
                       name="collegeName"
                       value={form.collegeName}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                 </div>
@@ -516,7 +516,7 @@ function TutorRegisterContent() {
                       value={form.preferredSubjects}
                       onChange={handleChange}
                       placeholder="e.g., Mathematics, Physics, Chemistry"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                       required
                     />
                   </div>
@@ -531,7 +531,7 @@ function TutorRegisterContent() {
                       value={form.preferredLocation}
                       onChange={handleChange}
                       placeholder="e.g., Dhanmondi, Gulshan, Banani"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                       required
                     />
                   </div>
@@ -546,7 +546,7 @@ function TutorRegisterContent() {
                       value={form.experience}
                       onChange={handleChange}
                       placeholder="e.g., 2 years teaching experience"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                   
@@ -559,7 +559,7 @@ function TutorRegisterContent() {
                       name="university"
                       value={form.university}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                   
@@ -573,7 +573,7 @@ function TutorRegisterContent() {
                       value={form.universityShortForm}
                       onChange={handleChange}
                       placeholder="e.g., DU, BUET, NSU"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                   
@@ -587,7 +587,7 @@ function TutorRegisterContent() {
                       value={form.department}
                       onChange={handleChange}
                       placeholder="e.g., Computer Science"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                   
@@ -601,7 +601,7 @@ function TutorRegisterContent() {
                       value={form.yearAndSemester}
                       onChange={handleChange}
                       placeholder="e.g., 3rd Year, 2nd Semester"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-[#006A4E]"
                     />
                   </div>
                 </div>
@@ -774,7 +774,7 @@ function TutorRegisterContent() {
                 <button 
                   type="button" 
                   onClick={handleNext} 
-                  className="inline-flex items-center px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                  className="inline-flex items-center px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-[#006A4E] hover:bg-[#005a40] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#006A4E] transition-colors"
                 >
                   Next
                   <ChevronRight className="w-4 h-4 ml-2" />
@@ -783,7 +783,7 @@ function TutorRegisterContent() {
                 <button 
                   type="submit" 
                   disabled={loading} 
-                  className="inline-flex items-center px-8 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
+                  className="inline-flex items-center px-8 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-[#E07B2A] hover:bg-[#c96d22] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E07B2A] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg"
                 >
                   {loading ? (
                     <>
@@ -811,7 +811,7 @@ function TutorRegisterLoading() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#006A4E] mx-auto"></div>
         <p className="mt-4 text-gray-600">Loading registration form...</p>
       </div>
     </div>

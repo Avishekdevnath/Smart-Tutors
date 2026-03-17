@@ -158,7 +158,7 @@ export default function GuardianManagementDashboard() {
           
           <Link
             href="/dashboard/guardians/add"
-            className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium touch-target"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-3 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] transition-colors font-medium touch-target"
           >
             <PlusIcon className="h-5 w-5 mr-2" />
             Add Guardian
@@ -181,7 +181,7 @@ export default function GuardianManagementDashboard() {
       {/* Loading State */}
       {loading ? (
         <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#006A4E]"></div>
         </div>
       ) : (
         <>
@@ -196,7 +196,7 @@ export default function GuardianManagementDashboard() {
               {!searchTerm && (
                 <Link
                   href="/dashboard/guardians/add"
-                  className="inline-flex items-center px-4 py-3 mt-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium touch-target"
+                  className="inline-flex items-center px-4 py-3 mt-4 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] transition-colors font-medium touch-target"
                 >
                   <PlusIcon className="h-5 w-5 mr-2" />
                   Add First Guardian
@@ -206,13 +206,13 @@ export default function GuardianManagementDashboard() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredGuardians.map((guardian) => (
-                <div key={guardian._id} className="bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow">
+                <div key={guardian._id} className="bg-white rounded-xl border border-[#E8DDD0] hover:shadow-md hover:border-[#006A4E]/20 transition-shadow">
                   <div className="p-4 sm:p-6">
                     {/* Header with Actions - Mobile Responsive */}
                     <div className="flex flex-col space-y-3 sm:flex-row sm:items-start sm:justify-between sm:space-y-0 mb-4">
                       <div className="flex items-center min-w-0 flex-1">
-                        <div className="h-10 w-10 sm:h-12 sm:w-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <UserIcon className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+                        <div className="h-10 w-10 sm:h-12 sm:w-12 bg-[#006A4E]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                          <UserIcon className="h-5 w-5 sm:h-6 sm:w-6 text-[#006A4E]" />
                         </div>
                         <div className="ml-3 min-w-0 flex-1">
                           <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{guardian.name}</h3>
@@ -247,7 +247,7 @@ export default function GuardianManagementDashboard() {
                     </div>
 
                     {/* Actions - Mobile Responsive */}
-                    <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 pt-4 border-t border-gray-200">
+                    <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 pt-4 border-t border-[#E8DDD0]">
                       <span className="text-xs text-gray-500 text-center sm:text-left">
                         Added {new Date(guardian.createdAt).toLocaleDateString()}
                       </span>
@@ -255,14 +255,14 @@ export default function GuardianManagementDashboard() {
                       <div className="flex items-center justify-center sm:justify-end space-x-1">
                         <button
                           onClick={() => setViewModal(guardian)}
-                          className="p-2 sm:p-3 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors touch-target"
+                          className="p-2 sm:p-3 text-gray-400 hover:text-[#006A4E] hover:bg-[#006A4E]/8 rounded-lg transition-colors touch-target"
                           title="View Details"
                         >
                           <EyeIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                         </button>
                         <button
                           onClick={() => onEdit(guardian)}
-                          className="p-2 sm:p-3 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors touch-target"
+                          className="p-2 sm:p-3 text-gray-400 hover:text-[#006A4E] hover:bg-[#006A4E]/8 rounded-lg transition-colors touch-target"
                           title="Edit"
                         >
                           <PencilIcon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -293,7 +293,7 @@ export default function GuardianManagementDashboard() {
       >
         {viewModal && (
           <div className="space-y-4">
-            <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="bg-[#FFFDF7] p-4 rounded-lg border border-[#E8DDD0]">
               <h3 className="font-semibold text-gray-900 mb-3">Basic Information</h3>
               <div className="space-y-3">
                 <div className="flex flex-col space-y-1 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">

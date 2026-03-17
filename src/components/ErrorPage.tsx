@@ -73,7 +73,7 @@ export default function ErrorPage({
                   {showHomeButton && (
                     <Link
                       href="/"
-                      className="w-full flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                      className="w-full flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#006A4E] hover:bg-[#005a40] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#006A4E] transition-colors"
                     >
                       <HomeIcon className="h-4 w-4 mr-2" />
                       Go to Home
@@ -83,7 +83,7 @@ export default function ErrorPage({
                   {showBackButton && (
                     <button
                       onClick={handleGoBack}
-                      className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                      className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#006A4E] transition-colors"
                     >
                       <ArrowLeftIcon className="h-4 w-4 mr-2" />
                       Go Back
@@ -93,7 +93,7 @@ export default function ErrorPage({
                   {showSearchButton && (
                     <Link
                       href="/search"
-                      className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                      className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#006A4E] transition-colors"
                     >
                       <MagnifyingGlassIcon className="h-4 w-4 mr-2" />
                       Search
@@ -107,7 +107,7 @@ export default function ErrorPage({
             <div className="mt-8 pt-6 border-t border-gray-200">
               <p className="text-sm text-gray-500">
                 Need help? Contact our support team at{' '}
-                <a href="mailto:support@smarttutors.com" className="text-blue-600 hover:text-blue-500">
+                <a href="mailto:support@smarttutors.com" className="text-[#006A4E] hover:text-[#005a40]">
                   support@smarttutors.com
                 </a>
               </p>
@@ -154,7 +154,7 @@ export function UnauthorizedPage() {
       customActions={
         <Link
           href="/login"
-          className="w-full flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+          className="w-full flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#006A4E] hover:bg-[#005a40] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#006A4E] transition-colors"
         >
           Log In
         </Link>

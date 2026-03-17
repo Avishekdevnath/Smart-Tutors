@@ -332,7 +332,7 @@ export default function FacebookGroupsPage() {
     return (
       <DashboardLayout title="Facebook Groups" description="Loading...">
         <div className="flex items-center justify-center min-h-96">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#006A4E]"></div>
         </div>
       </DashboardLayout>
     );
@@ -363,7 +363,7 @@ export default function FacebookGroupsPage() {
       )}
 
       {/* Header - Mobile Responsive */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 p-4 sm:p-6 mb-8">
+      <div className="bg-[#006A4E]/8 rounded-xl border border-[#006A4E]/20 p-4 sm:p-6 mb-8">
         <div className="flex flex-col space-y-4 lg:flex-row lg:justify-between lg:items-start lg:space-y-0 lg:gap-4">
           <div className="flex-1 min-w-0">
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Facebook Group Collections</h1>
@@ -381,7 +381,7 @@ export default function FacebookGroupsPage() {
           </div>
           <button 
             onClick={() => setShowCreateModal(true)}
-            className="w-full sm:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2 font-medium shadow-lg hover:shadow-xl transition-all duration-200 touch-target"
+            className="w-full sm:w-auto bg-[#006A4E] text-white px-6 py-3 rounded-lg hover:bg-[#005a40] flex items-center justify-center gap-2 font-medium shadow-lg hover:shadow-xl transition-all duration-200 touch-target"
           >
             <Plus size={20} />
             Create Collection
@@ -431,7 +431,7 @@ export default function FacebookGroupsPage() {
           {collections.length === 0 && (
             <button 
               onClick={() => setShowCreateModal(true)}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium shadow-lg hover:shadow-xl transition-all duration-200 touch-target"
+              className="bg-[#006A4E] text-white px-6 py-3 rounded-lg hover:bg-[#005a40] font-medium shadow-lg hover:shadow-xl transition-all duration-200 touch-target"
             >
               Create First Collection
             </button>
@@ -469,7 +469,7 @@ export default function FacebookGroupsPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 touch-target"
+              className="w-full sm:w-auto bg-[#006A4E] text-white px-4 py-2 rounded-lg hover:bg-[#005a40] disabled:opacity-50 touch-target"
               onClick={handleCreate}
             >
               {submitting ? 'Creating...' : 'Create Collection'}
@@ -486,7 +486,7 @@ export default function FacebookGroupsPage() {
               type="text"
               value={formData.collectionName}
               onChange={(e) => setFormData(prev => ({ ...prev, collectionName: e.target.value }))}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-blue-500 text-base"
               placeholder="e.g., Mirpur, All Top Groups"
               required
             />
@@ -498,7 +498,7 @@ export default function FacebookGroupsPage() {
               <button
                 type="button"
                 onClick={addGroup}
-                className="text-blue-600 text-sm hover:underline w-fit touch-target px-2 py-1"
+                className="text-[#006A4E] text-sm hover:underline w-fit touch-target px-2 py-1"
               >
                 + Add Group
               </button>
@@ -512,7 +512,7 @@ export default function FacebookGroupsPage() {
                     placeholder="Group Name *"
                     value={group.name}
                     onChange={(e) => updateGroup(index, 'name', e.target.value)}
-                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-[#006A4E] text-base"
                     required
                   />
                   <input
@@ -520,7 +520,7 @@ export default function FacebookGroupsPage() {
                     placeholder="Group Link *"
                     value={group.link}
                     onChange={(e) => updateGroup(index, 'link', e.target.value)}
-                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-[#006A4E] text-base"
                     required
                   />
                   <input
@@ -528,7 +528,7 @@ export default function FacebookGroupsPage() {
                     placeholder="Member Count *"
                     value={group.memberCount}
                     onChange={(e) => updateGroup(index, 'memberCount', parseInt(e.target.value) || 0)}
-                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-[#006A4E] text-base"
                     required
                   />
                   <input
@@ -536,7 +536,7 @@ export default function FacebookGroupsPage() {
                     placeholder="Locations (comma-separated)"
                     value={group.locations.join(', ')}
                     onChange={(e) => updateGroupLocations(index, e.target.value)}
-                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-[#006A4E] text-base"
                   />
                 </div>
                 <button
@@ -570,7 +570,7 @@ export default function FacebookGroupsPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 touch-target"
+              className="w-full sm:w-auto bg-[#006A4E] text-white px-4 py-2 rounded-lg hover:bg-[#005a40] disabled:opacity-50 touch-target"
               onClick={handleEdit}
             >
               {submitting ? 'Updating...' : 'Update Collection'}
@@ -587,7 +587,7 @@ export default function FacebookGroupsPage() {
               type="text"
               value={formData.collectionName}
               onChange={(e) => setFormData(prev => ({ ...prev, collectionName: e.target.value }))}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-blue-500 text-base"
               placeholder="e.g., Mirpur, All Top Groups"
               required
             />
@@ -599,7 +599,7 @@ export default function FacebookGroupsPage() {
               <button
                 type="button"
                 onClick={addGroup}
-                className="text-blue-600 text-sm hover:underline w-fit touch-target px-2 py-1"
+                className="text-[#006A4E] text-sm hover:underline w-fit touch-target px-2 py-1"
               >
                 + Add Group
               </button>
@@ -613,7 +613,7 @@ export default function FacebookGroupsPage() {
                     placeholder="Group Name *"
                     value={group.name}
                     onChange={(e) => updateGroup(index, 'name', e.target.value)}
-                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-[#006A4E] text-base"
                     required
                   />
                   <input
@@ -621,7 +621,7 @@ export default function FacebookGroupsPage() {
                     placeholder="Group Link *"
                     value={group.link}
                     onChange={(e) => updateGroup(index, 'link', e.target.value)}
-                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-[#006A4E] text-base"
                     required
                   />
                   <input
@@ -629,7 +629,7 @@ export default function FacebookGroupsPage() {
                     placeholder="Member Count *"
                     value={group.memberCount}
                     onChange={(e) => updateGroup(index, 'memberCount', parseInt(e.target.value) || 0)}
-                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-[#006A4E] text-base"
                     required
                   />
                   <input
@@ -637,7 +637,7 @@ export default function FacebookGroupsPage() {
                     placeholder="Locations (comma-separated)"
                     value={group.locations.join(', ')}
                     onChange={(e) => updateGroupLocations(index, e.target.value)}
-                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-base"
+                    className="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-[#006A4E] text-base"
                   />
                 </div>
                 <button

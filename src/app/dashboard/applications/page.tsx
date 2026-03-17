@@ -274,7 +274,7 @@ export default function AdminApplicationsPage() {
     return (
       <DashboardLayout title="Applications" description="Manage tuition applications">
         <div className="flex items-center justify-center min-h-96">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#006A4E]"></div>
         </div>
       </DashboardLayout>
     );
@@ -298,7 +298,7 @@ export default function AdminApplicationsPage() {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
               >
                 <option value="">All Status</option>
                 <option value="pending">Pending</option>
@@ -330,7 +330,7 @@ export default function AdminApplicationsPage() {
             <div className="text-sm text-gray-600">Confirmed</div>
           </div>
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 text-center">
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-2xl font-bold text-[#006A4E]">
               {applications.filter(app => app.status === 'completed').length}
             </div>
             <div className="text-sm text-gray-600">Completed</div>
@@ -405,7 +405,7 @@ export default function AdminApplicationsPage() {
                           <div className="mt-3 flex gap-2">
                             <button
                               onClick={() => handleViewTutorProfile(application.tutor._id)}
-                              className="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition-colors"
+                              className="px-3 py-1 bg-[#006A4E] text-white rounded text-xs hover:bg-[#005a40] transition-colors"
                             >
                               <Eye className="w-3 h-3 mr-1" />
                               View Profile
@@ -477,7 +477,7 @@ export default function AdminApplicationsPage() {
                         <button
                           onClick={() => updateApplicationStatus(application._id, 'completed')}
                           disabled={updatingStatus === application._id}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 text-sm"
+                          className="px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] disabled:opacity-50 text-sm"
                         >
                           {updatingStatus === application._id ? 'Updating...' : 'Mark Completed'}
                         </button>
@@ -500,7 +500,7 @@ export default function AdminApplicationsPage() {
 
                     {/* Notes */}
                     {application.notes && (
-                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                      <div className="bg-[#FFFDF7] border border-[#E8DDD0] rounded-lg p-3">
                         <p className="text-gray-700 text-sm">
                           <strong>Notes:</strong> {application.notes}
                         </p>
@@ -704,7 +704,7 @@ export default function AdminApplicationsPage() {
                               href={selectedTutor.documents.nidPhoto} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 text-sm underline"
+                              className="text-[#006A4E] hover:text-[#005a40] text-sm underline"
                             >
                               View NID Document
                             </a>
@@ -717,7 +717,7 @@ export default function AdminApplicationsPage() {
                               href={selectedTutor.documents.studentIdPhoto} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 text-sm underline"
+                              className="text-[#006A4E] hover:text-[#005a40] text-sm underline"
                             >
                               View Student ID
                             </a>
@@ -730,7 +730,7 @@ export default function AdminApplicationsPage() {
                               href={doc.url} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 text-sm underline"
+                              className="text-[#006A4E] hover:text-[#005a40] text-sm underline"
                             >
                               View Document
                             </a>
@@ -747,19 +747,19 @@ export default function AdminApplicationsPage() {
                   <div className="lg:col-span-2">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Statistics</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <div className="text-2xl font-bold text-blue-600">{selectedTutor.totalApplications || 0}</div>
+                      <div className="bg-[#006A4E]/8 border border-[#006A4E]/20 rounded-lg p-4">
+                        <div className="text-2xl font-bold text-[#006A4E]">{selectedTutor.totalApplications || 0}</div>
                         <div className="text-sm text-blue-800">Total Applications</div>
                       </div>
                       <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                         <div className="text-2xl font-bold text-green-600">{selectedTutor.successfulTuitions || 0}</div>
                         <div className="text-sm text-green-800">Successful Tuitions</div>
                       </div>
-                      <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                        <div className="text-2xl font-bold text-purple-600">
+                      <div className="bg-[#E07B2A]/8 border border-[#E07B2A]/20 rounded-lg p-4">
+                        <div className="text-2xl font-bold text-[#E07B2A]">
                           {selectedTutor.isProfileComplete ? 'Complete' : 'Incomplete'}
                         </div>
-                        <div className="text-sm text-purple-800">Profile Status</div>
+                        <div className="text-sm text-[#78716C]">Profile Status</div>
                       </div>
                     </div>
                   </div>
@@ -782,7 +782,7 @@ export default function AdminApplicationsPage() {
               <div className="p-6">
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Guardian Information</h3>
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="bg-[#FFFDF7] p-4 rounded-lg border border-[#E8DDD0]">
                     <p><strong>Guardian Name:</strong> {selectedApplication.tuition.guardianName || 'Not provided'}</p>
                     <p><strong>Guardian Phone:</strong> {selectedApplication.tuition.guardianPhone || 'Not provided'}</p>
                     <p><strong>Location:</strong> {selectedApplication.tuition.location}</p>
@@ -856,7 +856,7 @@ export default function AdminApplicationsPage() {
                     value={confirmationText}
                     onChange={(e) => setConfirmationText(e.target.value)}
                     placeholder="Enter your confirmation message to the tutor..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent"
                     rows={4}
                   />
                 </div>

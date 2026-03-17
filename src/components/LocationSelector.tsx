@@ -391,7 +391,7 @@ export default function LocationSelector({
             <button
               type="button"
               onClick={toggleAreaInputMode}
-              className="text-sm text-blue-600 hover:text-blue-800 underline"
+              className="text-sm text-[#006A4E] hover:text-[#005a40] underline"
             >
               {areaInputMode === 'select' ? 'Add New Area' : 'Select Existing'}
             </button>

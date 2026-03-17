@@ -109,7 +109,7 @@ export default function GuardianSearchSortBar({
                 Search: "{searchTerm}"
               </span>
             )}
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-100 text-purple-800">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-[#006A4E]/10 text-[#006A4E]">
               Sort: {sortOptions.find(opt => opt.value === sortField)?.label} ({sortOrder})
             </span>
           </div>

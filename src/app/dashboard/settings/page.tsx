@@ -212,7 +212,7 @@ export default function SettingsPage() {
               <label className="block text-sm font-medium text-gray-700">Role</label>
               <span className={`mt-1 inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                 admin?.role === 'super_admin' 
-                  ? 'bg-purple-100 text-purple-800' 
+                  ? 'bg-[#006A4E]/10 text-[#006A4E]' 
                   : 'bg-blue-100 text-blue-800'
               }`}>
                 {admin?.role === 'super_admin' ? 'Super Admin' : 'Admin'}
@@ -255,7 +255,7 @@ export default function SettingsPage() {
                   value={emailFormData.currentPassword}
                   onChange={handleEmailInputChange}
                   required
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#006A4E] focus:border-[#006A4E]"
                 />
                 <button
                   type="button"
@@ -285,7 +285,7 @@ export default function SettingsPage() {
                   value={emailFormData.newEmail}
                   onChange={handleEmailInputChange}
                   required
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#006A4E] focus:border-[#006A4E]"
                   placeholder="Enter new email address"
                 />
               </div>
@@ -426,7 +426,7 @@ export default function SettingsPage() {
                   value={formData.currentPassword}
                   onChange={handleInputChange}
                   required
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#006A4E] focus:border-[#006A4E]"
                 />
                 <button
                   type="button"
@@ -456,7 +456,7 @@ export default function SettingsPage() {
                   onChange={handleInputChange}
                   required
                   minLength={6}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#006A4E] focus:border-[#006A4E]"
                 />
                 <button
                   type="button"
@@ -486,7 +486,7 @@ export default function SettingsPage() {
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   required
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#006A4E] focus:border-[#006A4E]"
                 />
                 <button
                   type="button"
@@ -507,7 +507,7 @@ export default function SettingsPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#006A4E] hover:bg-[#005a40] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#006A4E] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? 'Changing Password...' : 'Change Password'}
               </button>

@@ -65,7 +65,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
           <div className="flex items-center gap-1 ml-4">
             <button
               onClick={() => onView(collection)}
-              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              className="p-2 text-[#006A4E] hover:bg-[#006A4E]/8 rounded-lg transition-colors"
               title="View Collection"
             >
               <Eye size={18} />
@@ -91,7 +91,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
         <div className="grid grid-cols-3 gap-4 mb-4">
           <div className="text-center">
             <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-lg mb-2 mx-auto">
-              <Globe size={20} className="text-blue-600" />
+              <Globe size={20} className="text-[#006A4E]" />
             </div>
             <div className="text-lg font-bold text-gray-900">{collection.groups.length}</div>
             <div className="text-xs text-gray-500">Groups</div>
@@ -107,7 +107,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
           
           <div className="text-center">
             <div className="flex items-center justify-center w-10 h-10 bg-purple-100 rounded-lg mb-2 mx-auto">
-              <MapPin size={20} className="text-purple-600" />
+              <MapPin size={20} className="text-[#E07B2A]" />
             </div>
             <div className="text-lg font-bold text-gray-900">{uniqueLocations.length}</div>
             <div className="text-xs text-gray-500">Locations</div>
@@ -121,7 +121,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
               {uniqueLocations.slice(0, 3).map((location, index) => (
                 <span 
                   key={index}
-                  className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 border border-blue-200"
+                  className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#006A4E]/8 text-[#006A4E] border border-[#006A4E]/20"
                 >
                   {location}
                 </span>
@@ -148,7 +148,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({
           
           <button
             onClick={() => onView(collection)}
-            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-[#006A4E] text-white text-sm font-medium rounded-lg hover:bg-[#005a40] transition-colors"
           >
             View Details
           </button>

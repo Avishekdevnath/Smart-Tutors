@@ -154,10 +154,10 @@ export default function TrackTuitionPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#FFFDF7] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading tuition tracking...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#006A4E] mx-auto"></div>
+          <p className="mt-4 text-[#78716C]">টিউশন লোড হচ্ছে...</p>
         </div>
       </div>
     );
@@ -165,16 +165,16 @@ export default function TrackTuitionPage() {
 
   if (error || !tuition) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#FFFDF7] flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-6">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Tuition Not Found</h1>
-          <p className="text-gray-600 mb-6">{error || 'The tuition you are looking for does not exist.'}</p>
-          <Link 
+          <h1 className="font-heading text-2xl font-bold text-[#1C1917] mb-2">টিউশন পাওয়া যায়নি</h1>
+          <p className="text-[#78716C] mb-6">{error || 'আপনি যে টিউশনটি খুঁজছেন তা বিদ্যমান নেই।'}</p>
+          <Link
             href="/"
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center px-4 py-2 bg-[#006A4E] text-white rounded-lg hover:bg-[#005a40] transition-colors"
           >
-            ← Back to Home
+            ← হোমে ফিরুন
           </Link>
         </div>
       </div>
@@ -182,24 +182,24 @@ export default function TrackTuitionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FFFDF7]">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="bg-[#006A4E]">
+        <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Tuition Tracking
+              <h1 className="font-heading text-2xl font-bold text-white">
+                টিউশন ট্র্যাকিং
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-green-100 mt-1 text-sm">
                 Code: {tuition.code}
               </p>
             </div>
-            <Link 
+            <Link
               href="/"
-              className="text-blue-600 hover:text-blue-700 font-medium"
+              className="text-green-100 hover:text-white font-medium text-sm"
             >
-              ← Back to Home
+              ← হোমে ফিরুন
             </Link>
           </div>
         </div>
@@ -209,8 +209,8 @@ export default function TrackTuitionPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Tuition Details */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm border p-6 sticky top-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Tuition Details</h2>
+            <div className="bg-white rounded-xl shadow-card border border-[#E8DDD0] p-6 sticky top-8">
+              <h2 className="font-heading text-lg font-bold text-[#1C1917] mb-4">টিউশনের বিবরণ</h2>
               
               <div className="space-y-4">
                 <div>
@@ -276,30 +276,30 @@ export default function TrackTuitionPage() {
 
           {/* Applications */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm border p-6">
+            <div className="bg-white rounded-xl shadow-card border border-[#E8DDD0] p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-900">Tutor Applications</h2>
-                <div className="text-sm text-gray-600">
-                  {applications.length} application{applications.length !== 1 ? 's' : ''}
+                <h2 className="font-heading text-lg font-bold text-[#1C1917]">টিউটর আবেদন</h2>
+                <div className="text-sm text-[#78716C]">
+                  {applications.length}টি আবেদন
                 </div>
               </div>
 
               {applications.length === 0 ? (
                 <div className="text-center py-12">
-                  <div className="text-gray-400 text-6xl mb-4">📝</div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No Applications Yet</h3>
-                  <p className="text-gray-600">
-                    No tutors have applied for this tuition yet. Check back later!
+                  <div className="text-[#78716C] text-6xl mb-4">📝</div>
+                  <h3 className="font-heading text-lg font-medium text-[#1C1917] mb-2">এখনো কোনো আবেদন নেই</h3>
+                  <p className="text-[#78716C]">
+                    কোনো টিউটর এখনো এই টিউশনে আবেদন করেননি। পরে আবার দেখুন।
                   </p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   {applications.map((application) => (
-                    <div key={application._id} className="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+                    <div key={application._id} className="border border-[#E8DDD0] rounded-lg p-4 hover:shadow-card transition-shadow">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center">
-                          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                            <User className="w-5 h-5 text-blue-600" />
+                          <div className="w-10 h-10 bg-[#006A4E]/10 rounded-full flex items-center justify-center mr-3">
+                            <User className="w-5 h-5 text-[#006A4E]" />
                           </div>
                           <div>
                             <h3 className="font-semibold text-gray-900">{application.tutor.name}</h3>
@@ -341,7 +341,7 @@ export default function TrackTuitionPage() {
                       <div className="mt-3 pt-3 border-t border-gray-100">
                         <Link 
                           href={`/tutor/${application.tutor.name.toLowerCase().replace(/\s+/g, '-')}`}
-                          className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                          className="inline-flex items-center px-3 py-2 bg-[#006A4E] text-white text-sm font-medium rounded-lg hover:bg-[#005a40] transition-colors"
                         >
                           <User className="w-4 h-4 mr-2" />
                           View Tutor Details

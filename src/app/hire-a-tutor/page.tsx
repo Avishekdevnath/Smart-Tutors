@@ -4,7 +4,22 @@ import { useState, useEffect } from "react";
 import CreatableSelect from 'react-select/creatable';
 import LocationSearch from "@/components/LocationSearch";
 
-const initialForm = {
+const initialForm: {
+  guardianName: string;
+  guardianNumber: string;
+  address: string;
+  location: string;
+  studentClass: string;
+  version: string;
+  subjects: string[];
+  weeklyDays: string;
+  dailyHours: string;
+  salary: string;
+  startMonth: string;
+  tutorGender: string;
+  specialRemarks: string;
+  urgent: boolean;
+} = {
   guardianName: "",
   guardianNumber: "",
   address: "",
@@ -28,66 +43,46 @@ export default function HireATutorPage() {
   const [error, setError] = useState("");
   const [trackingLink, setTrackingLink] = useState("");
 
-  // Subject management
   const [availableSubjects, setAvailableSubjects] = useState<string[]>([
     'Bangla', 'English', 'Math', 'Science', 'Physics', 'Chemistry', 'Biology',
     'History', 'Geography', 'Civics', 'Economics', 'Accounting', 'Business Studies',
     'ICT', 'Computer Science', 'Religious Studies', 'Literature', 'All'
   ]);
 
-  // Load subjects from database on component mount
-  useEffect(() => {
-    loadSubjects();
-  }, []);
+  useEffect(() => { loadSubjects(); }, []);
 
   const loadSubjects = async () => {
     try {
       const response = await fetch('/api/subjects');
       if (response.ok) {
         const data = await response.json();
-        if (data.subjects) {
-          setAvailableSubjects(prev => [...new Set([...prev, ...data.subjects])]);
-        }
+        if (data.subjects) setAvailableSubjects(prev => [...new Set([...prev, ...data.subjects])]);
       }
     } catch (error) {
       console.error('Failed to load subjects:', error);
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    setForm(prev => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
 
-  const handleLocationChange = (location) => {
-    setForm((prev) => ({ ...prev, location }));
+  const handleLocationChange = (location: string) => setForm(prev => ({ ...prev, location }));
+
+  const subjectOptions = availableSubjects.map(s => ({ value: s, label: s }));
+
+  const handleSubjectSelect = (selected: { value: string; label: string }[] | null) => {
+    if (!selected) { setForm(prev => ({ ...prev, subjects: [] })); return; }
+    const values = selected.map(s => s.value);
+    if (values.includes('All')) setForm(prev => ({ ...prev, subjects: ['All'] }));
+    else setForm(prev => ({ ...prev, subjects: values.filter((v: string) => v !== 'All') }));
   };
 
-  // Helper for react-select options
-  const subjectOptions = availableSubjects.map((subject) => ({ value: subject, label: subject }));
-
-  // Handler for react-select
-  const handleSubjectSelect = (selected) => {
-    if (!selected) {
-      setForm((prev) => ({ ...prev, subjects: [] }));
-      return;
-    }
-    const values = selected.map((s) => s.value);
-    if (values.includes('All')) {
-      setForm((prev) => ({ ...prev, subjects: ['All'] }));
-    } else {
-      setForm((prev) => ({ ...prev, subjects: values.filter((v) => v !== 'All') }));
-    }
-  };
-
-  // Handler for creating a new subject
-  const handleCreateSubject = async (inputValue) => {
+  const handleCreateSubject = async (inputValue: string) => {
     const trimmed = inputValue.trim();
     if (!trimmed) return;
-    // Add to backend
     try {
       const response = await fetch('/api/subjects', {
         method: 'POST',
@@ -95,25 +90,19 @@ export default function HireATutorPage() {
         body: JSON.stringify({ name: trimmed })
       });
       if (response.ok) {
-        setAvailableSubjects((prev) => [...prev, trimmed]);
-        setForm((prev) => ({ ...prev, subjects: [...prev.subjects, trimmed] }));
-      } else {
-        setError('Failed to add new subject');
-      }
-    } catch (error) {
-      setError('Failed to add new subject');
+        setAvailableSubjects(prev => [...prev, trimmed]);
+        setForm(prev => ({ ...prev, subjects: [...prev.subjects, trimmed] }));
+      } else setError('নতুন বিষয় যোগ করতে সমস্যা হয়েছে');
+    } catch {
+      setError('নতুন বিষয় যোগ করতে সমস্যা হয়েছে');
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    setError("");
-    setSuccess("");
-    setTrackingLink("");
-    
+    setError(""); setSuccess(""); setTrackingLink("");
     try {
-      // Prepare the data for the API
       const tuitionData = {
         guardianName: form.guardianName,
         guardianNumber: form.guardianNumber,
@@ -122,7 +111,7 @@ export default function HireATutorPage() {
         version: form.version,
         subjects: form.subjects,
         weeklyDays: form.weeklyDays,
-        weeklyHours: form.dailyHours, // API expects weeklyHours
+        weeklyHours: form.dailyHours,
         salary: form.salary,
         location: form.location,
         startMonth: form.startMonth,
@@ -130,145 +119,165 @@ export default function HireATutorPage() {
         specialRemarks: form.specialRemarks,
         urgent: form.urgent
       };
-
-      // Call the API to create tuition
       const response = await fetch('/api/tuitions', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(tuitionData)
       });
-
       const data = await response.json();
-
       if (response.ok && data.success) {
-        setSuccess("Your tuition post has been created successfully!");
+        setSuccess("আপনার টিউশন পোস্ট সফলভাবে তৈরি হয়েছে!");
         setTrackingLink(`/track-tuition/${data.tuition.code}`);
-        
-        // Reset form after successful submission
         setForm(initialForm);
       } else {
-        setError(data.error || "Failed to create tuition post. Please try again.");
+        setError(data.error || "টিউশন পোস্ট তৈরিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
       }
     } catch (err) {
       console.error('Error submitting form:', err);
-      setError("Failed to submit. Please try again.");
+      setError("সাবমিট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
     } finally {
       setSubmitting(false);
     }
   };
 
+  const inputCls = "w-full px-3 py-2.5 border border-[#E8DDD0] rounded-lg focus:ring-2 focus:ring-[#006A4E] focus:border-transparent bg-white text-[#1C1917] text-sm";
+  const labelCls = "block text-sm font-medium text-[#1C1917] mb-1.5";
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center py-8">
-      <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Hire a Tutor</h1>
-        <p className="text-gray-600 mb-6">Fill out the form below to post your tuition requirement. You will get a link to track tutor applications.</p>
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Guardian Name *</label>
-              <input name="guardianName" value={form.guardianName} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg" placeholder="e.g. John Doe" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Guardian Phone *</label>
-              <input name="guardianNumber" value={form.guardianNumber} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg" placeholder="e.g. 017XXXXXXXX" />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700">Address *</label>
-              <input name="address" value={form.address} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg" placeholder="e.g. House 12, Road 3, Dhanmondi" />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700">Location *</label>
-              <LocationSearch 
-                value={form.location} 
-                onChange={handleLocationChange} 
-                placeholder="Search for your area (e.g., Dhanmondi, Gulshan, Mohammadpur)"
-                required={true}
-              />
-            </div>
+    <div className="min-h-screen bg-[#FFFDF7]">
+      {/* Hero */}
+      <section className="bg-[#006A4E] relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center relative z-10">
+          <h1 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">টিউটর নিয়োগ করুন</h1>
+          <p className="text-lg text-green-100 max-w-2xl mx-auto">
+            নিচের ফর্মটি পূরণ করুন এবং আপনার টিউশন চাহিদা পোস্ট করুন। টিউটর আবেদনকারীদের ট্র্যাক করতে একটি লিঙ্ক পাবেন।
+          </p>
+        </div>
+        <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0,20 C360,40 1080,0 1440,20 L1440,40 L0,40 Z" fill="#FFFDF7" />
+        </svg>
+      </section>
+
+      <div className="max-w-2xl mx-auto px-4 py-12">
+        <div className="bg-white rounded-2xl shadow-card border border-[#E8DDD0] p-8">
+          <div className="mb-6">
+            <h2 className="font-heading text-xl font-bold text-[#1C1917]">টিউশন পোস্ট তৈরি করুন</h2>
+            <p className="text-[#78716C] text-sm mt-1">সব তারকাচিহ্নিত (*) তথ্য পূরণ করা বাধ্যতামূলক</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Student Class *</label>
-              <input name="studentClass" value={form.studentClass} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg" placeholder="e.g. Class 8" />
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className={labelCls}>অভিভাবকের নাম *</label>
+                <input name="guardianName" value={form.guardianName} onChange={handleChange} required className={inputCls} placeholder="যেমন: জন ডো" />
+              </div>
+              <div>
+                <label className={labelCls}>অভিভাবকের ফোন *</label>
+                <input name="guardianNumber" value={form.guardianNumber} onChange={handleChange} required className={inputCls} placeholder="017XXXXXXXX" />
+              </div>
+              <div className="md:col-span-2">
+                <label className={labelCls}>ঠিকানা *</label>
+                <input name="address" value={form.address} onChange={handleChange} required className={inputCls} placeholder="যেমন: বাড়ি ১২, রোড ৩, ধানমন্ডি" />
+              </div>
+              <div className="md:col-span-2">
+                <label className={labelCls}>এলাকা *</label>
+                <LocationSearch
+                  value={form.location}
+                  onChange={handleLocationChange}
+                  placeholder="এলাকা খুঁজুন (যেমন: ধানমন্ডি, গুলশান, মোহাম্মদপুর)"
+                  required={true}
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Version *</label>
-              <select name="version" value={form.version} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg">
-                <option>Bangla Medium</option>
-                <option>English Medium</option>
-                <option>English Version</option>
-                <option>Others</option>
-              </select>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className={labelCls}>শ্রেণি *</label>
+                <input name="studentClass" value={form.studentClass} onChange={handleChange} required className={inputCls} placeholder="যেমন: Class 8" />
+              </div>
+              <div>
+                <label className={labelCls}>ভার্সন *</label>
+                <select name="version" value={form.version} onChange={handleChange} required className={inputCls}>
+                  <option>Bangla Medium</option>
+                  <option>English Medium</option>
+                  <option>English Version</option>
+                  <option>Others</option>
+                </select>
+              </div>
+              <div className="md:col-span-2">
+                <label className={labelCls}>বিষয়সমূহ *</label>
+                <CreatableSelect
+                  isMulti
+                  options={subjectOptions}
+                  value={subjectOptions.filter(opt => Array.isArray(form.subjects) && form.subjects.includes(opt.value))}
+                  onChange={handleSubjectSelect}
+                  onCreateOption={handleCreateSubject}
+                  placeholder="বিষয় টাইপ করুন বা নির্বাচন করুন..."
+                  classNamePrefix="react-select"
+                  isClearable={false}
+                  closeMenuOnSelect={false}
+                  formatCreateLabel={(v: string) => `"${v}" যোগ করুন`}
+                  styles={{
+                    control: (base) => ({ ...base, minHeight: '44px', borderColor: '#E8DDD0', borderRadius: '0.5rem', '&:hover': { borderColor: '#006A4E' } }),
+                    multiValue: (base) => ({ ...base, backgroundColor: '#dcfce7', color: '#166534' }),
+                    multiValueLabel: (base) => ({ ...base, color: '#166534' }),
+                    multiValueRemove: (base) => ({ ...base, color: '#006A4E', ':hover': { backgroundColor: '#006A4E', color: 'white' } }),
+                  }}
+                />
+              </div>
+              <div>
+                <label className={labelCls}>সাপ্তাহিক দিন *</label>
+                <input name="weeklyDays" value={form.weeklyDays} onChange={handleChange} required className={inputCls} placeholder="যেমন: 3 days" />
+              </div>
+              <div>
+                <label className={labelCls}>দৈনিক ঘণ্টা *</label>
+                <input name="dailyHours" value={form.dailyHours} onChange={handleChange} required className={inputCls} placeholder="যেমন: 2 hours" />
+              </div>
+              <div>
+                <label className={labelCls}>বেতন *</label>
+                <input name="salary" value={form.salary} onChange={handleChange} required className={inputCls} placeholder="যেমন: 5000 BDT" />
+              </div>
+              <div>
+                <label className={labelCls}>শুরুর মাস *</label>
+                <input name="startMonth" value={form.startMonth} onChange={handleChange} required className={inputCls} placeholder="যেমন: June 2024" />
+              </div>
+              <div>
+                <label className={labelCls}>টিউটরের লিঙ্গ</label>
+                <select name="tutorGender" value={form.tutorGender} onChange={handleChange} className={inputCls}>
+                  <option value="">যেকোনো</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+              <div>
+                <label className={labelCls}>বিশেষ মন্তব্য</label>
+                <input name="specialRemarks" value={form.specialRemarks} onChange={handleChange} className={inputCls} placeholder="যেমন: মহিলা টিউটর পছন্দ, অভিজ্ঞতা থাকতে হবে" />
+              </div>
+              <div className="flex items-center gap-2 mt-1">
+                <input type="checkbox" name="urgent" id="urgent" checked={form.urgent} onChange={handleChange} className="w-4 h-4 accent-[#E07B2A]" />
+                <label htmlFor="urgent" className="text-sm text-[#1C1917]">জরুরি হিসেবে চিহ্নিত করুন</label>
+              </div>
             </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700">Subjects *</label>
-              <CreatableSelect
-                isMulti
-                options={subjectOptions}
-                value={subjectOptions.filter(opt => Array.isArray(form.subjects) && form.subjects.includes(opt.value))}
-                onChange={handleSubjectSelect}
-                onCreateOption={handleCreateSubject}
-                placeholder="Type or select subjects..."
-                classNamePrefix="react-select"
-                isClearable={false}
-                closeMenuOnSelect={false}
-                formatCreateLabel={inputValue => `Add "${inputValue}"`}
-                styles={{
-                  control: (base) => ({ ...base, minHeight: '44px', borderColor: '#3b82f6' }),
-                  multiValue: (base) => ({ ...base, backgroundColor: '#dbeafe', color: '#1d4ed8' }),
-                  multiValueLabel: (base) => ({ ...base, color: '#1d4ed8' }),
-                  multiValueRemove: (base) => ({ ...base, color: '#3b82f6', ':hover': { backgroundColor: '#3b82f6', color: 'white' } }),
-                }}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Weekly Days *</label>
-              <input name="weeklyDays" value={form.weeklyDays} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg" placeholder="e.g. 3 days" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Daily Hours *</label>
-              <input name="dailyHours" value={form.dailyHours} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg" placeholder="e.g. 2 hours" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Salary *</label>
-              <input name="salary" value={form.salary} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg" placeholder="e.g. 5000 BDT" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Start Month *</label>
-              <input name="startMonth" value={form.startMonth} onChange={handleChange} required className="w-full px-3 py-2 border rounded-lg" placeholder="e.g. June 2024" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Tutor Gender</label>
-              <select name="tutorGender" value={form.tutorGender} onChange={handleChange} className="w-full px-3 py-2 border rounded-lg">
-                <option value="">Any</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Special Remarks</label>
-              <input name="specialRemarks" value={form.specialRemarks} onChange={handleChange} className="w-full px-3 py-2 border rounded-lg" placeholder="e.g. Female tutor preferred, must have experience" />
-            </div>
-            <div className="flex items-center mt-2">
-              <input type="checkbox" name="urgent" checked={form.urgent} onChange={handleChange} className="mr-2" />
-              <span className="text-sm text-gray-700">Mark as urgent</span>
-            </div>
-          </div>
-          {error && <div className="text-red-600 text-sm">{error}</div>}
-          {success && <div className="text-green-600 text-sm">{success}</div>}
-          {trackingLink && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-2">
-              <span className="text-blue-800 text-sm">Track your tuition: </span>
-              <a href={trackingLink} className="text-blue-600 underline break-all">{trackingLink}</a>
-            </div>
-          )}
-          <button type="submit" disabled={submitting} className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold text-lg mt-2 disabled:opacity-60">
-            {submitting ? "Submitting..." : "Post Tuition"}
-          </button>
-        </form>
+
+            {error && <p className="text-red-600 text-sm">{error}</p>}
+            {success && <p className="text-green-700 text-sm font-medium">{success}</p>}
+            {trackingLink && (
+              <div className="bg-[#006A4E]/5 border border-[#006A4E]/20 rounded-lg p-4">
+                <p className="text-[#006A4E] text-sm font-medium mb-1">আপনার টিউশন ট্র্যাক করুন:</p>
+                <a href={trackingLink} className="text-[#E07B2A] underline break-all text-sm">{trackingLink}</a>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full py-3.5 rounded-lg bg-[#E07B2A] hover:bg-[#c96d22] text-white font-semibold text-base transition-colors disabled:opacity-60"
+            >
+              {submitting ? "পোস্ট করা হচ্ছে..." : "টিউশন পোস্ট করুন →"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
-} 
+}

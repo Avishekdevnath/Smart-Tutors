@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/mongodb';
 import Admin from '@/models/Admin';
 import { verifyAdminToken } from '@/lib/adminAuth';
+import { validateChangeUsernamePayload } from '@/lib/adminAuthValidation';
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,31 +17,16 @@ export async function POST(request: NextRequest) {
 
     await dbConnect();
     const body = await request.json();
-    const { currentPassword, newUsername } = body;
 
-    // Validate required fields
-    if (!currentPassword || !newUsername) {
+    const validationResult = validateChangeUsernamePayload(body);
+    if ('error' in validationResult) {
       return NextResponse.json(
-        { error: 'Current password and new username are required' },
+        { error: validationResult.error },
         { status: 400 }
       );
     }
 
-    // Validate username format
-    if (newUsername.length < 3 || newUsername.length > 30) {
-      return NextResponse.json(
-        { error: 'Username must be between 3 and 30 characters' },
-        { status: 400 }
-      );
-    }
-
-    // Check for valid username characters (alphanumeric, underscore, hyphen)
-    if (!/^[a-zA-Z0-9_-]+$/.test(newUsername)) {
-      return NextResponse.json(
-        { error: 'Username can only contain letters, numbers, underscores, and hyphens' },
-        { status: 400 }
-      );
-    }
+    const { currentPassword, newUsername } = validationResult.data;
 
     // Get current admin
     const currentAdmin = await Admin.findById(admin.id);
