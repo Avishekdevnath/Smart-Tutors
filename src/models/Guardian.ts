@@ -17,9 +17,8 @@ const GuardianSchema = new Schema({
       message: (props: any) => `${props.value} is not a valid phone number!`
     }
   },
-  address: { 
-    type: String, 
-    required: true,
+  address: {
+    type: String,
     trim: true
   }
 }, { timestamps: true });
