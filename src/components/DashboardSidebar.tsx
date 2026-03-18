@@ -21,6 +21,7 @@ import {
   EnvelopeIcon,
   BuildingOfficeIcon,
   ChatBubbleLeftEllipsisIcon,
+  ChatBubbleLeftRightIcon,
   ClipboardDocumentListIcon,
   PresentationChartLineIcon,
   ChevronDownIcon,
@@ -39,7 +40,7 @@ interface NavGroup {
   items: NavItem[];
 }
 
-const navGroups: NavGroup[] = [
+const buildNavGroups = (pendingDrafts: number): NavGroup[] => [
   {
     label: 'Overview',
     items: [
@@ -62,6 +63,12 @@ const navGroups: NavGroup[] = [
     items: [
       { name: 'SMS', href: '/dashboard/sms', icon: ChatBubbleLeftEllipsisIcon },
       { name: 'Contact Inbox', href: '/dashboard/contact', icon: EnvelopeIcon },
+      {
+        name: 'Conversations',
+        href: '/dashboard/conversations',
+        icon: ChatBubbleLeftRightIcon,
+        badge: pendingDrafts > 0 ? String(pendingDrafts) : undefined,
+      },
       { name: 'Facebook Groups', href: '/dashboard/facebook-groups', icon: GlobeAltIcon },
     ],
   },
@@ -92,6 +99,18 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
   const { data: session } = useSession();
   const user = session?.user as any;
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+  const [pendingDrafts, setPendingDrafts] = useState(0);
+
+  useEffect(() => {
+    fetch('/api/conversations?limit=1')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.stats?.pendingDrafts !== undefined) setPendingDrafts(d.stats.pendingDrafts);
+      })
+      .catch(() => {});
+  }, []);
+
+  const navGroups = buildNavGroups(pendingDrafts);
 
   const isActive = (href: string) =>
     href === '/dashboard' ? pathname === '/dashboard' : pathname.startsWith(href);
