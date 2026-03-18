@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import TutorDashboardLayout from "@/components/TutorDashboardLayout";
+import TutorSmartSearch from "@/components/TutorSmartSearch";
 import { Clock, CheckCircle, AlertCircle, TrendingUp, Eye, Calendar, MapPin, BookOpen } from "lucide-react";
 
 interface TutorStats {
@@ -238,6 +239,9 @@ export default function TutorDashboard() {
           </div>
         </div>
       </div>
+
+      {/* AI Tuition Smart Search */}
+      <TutorSmartSearch tutorId={dashboardData.tutor.tutorId} />
 
       {/* 2. My Applications - Track Status */}
       <div className="mb-8">
