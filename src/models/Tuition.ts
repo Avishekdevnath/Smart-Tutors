@@ -1,7 +1,7 @@
 import mongoose, { Schema, models, model } from 'mongoose';
 
 const TuitionSchema = new Schema({
-  code: { type: String, required: true, unique: true },
+  code: { type: String, unique: true, sparse: true },
   
   // Guardian Information
   guardianName: { type: String, required: true },
@@ -18,8 +18,21 @@ const TuitionSchema = new Schema({
   subjects: [{ type: String }],
   weeklyDays: { type: String },
   dailyHours: { type: String }, // Changed from weeklyHours
-  salary: { type: String },
+  salary: {
+    type: {
+      min: { type: Number },
+      max: { type: Number }
+    },
+    default: {}
+  },
   location: { type: String },
+  locationData: {
+    division: { type: String },
+    district: { type: String },
+    area: { type: String },
+    subarea: { type: String },
+    locationRef: { type: Schema.Types.ObjectId, ref: 'Location' }
+  },
   startMonth: { type: String },
   
   // Special Requirements
@@ -47,13 +60,22 @@ const TuitionSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['open', 'available', 'demo running', 'booked', 'booked by other'],
+    enum: ['draft', 'open', 'available', 'demo running', 'booked', 'booked by other'],
     default: 'open'
+  },
+  source: {
+    type: String,
+    enum: ['chat', 'form', 'admin'],
+    default: 'admin'
   }
 }, { timestamps: true });
 
 // Auto-generating Tuition Code (only if no code provided)
 TuitionSchema.pre('validate', async function (next) {
+  if (this.status === 'draft') {
+    return next();
+  }
+
   if (!this.code) {
     let attempts = 0;
     const maxAttempts = 10;
