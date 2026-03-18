@@ -21,7 +21,7 @@ import {
   ArrowDownIcon,
 } from '@heroicons/react/24/outline';
 
-type TabId = 'business' | 'fees' | 'homepage' | 'sms' | 'announcement' | 'application';
+type TabId = 'business' | 'fees' | 'homepage' | 'sms' | 'announcement' | 'application' | 'chat' | 'search';
 
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: 'business',     label: 'Business Info',    icon: BuildingOfficeIcon },
@@ -30,6 +30,8 @@ const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: 'sms',          label: 'SMS Templates',    icon: ChatBubbleLeftRightIcon },
   { id: 'announcement', label: 'Announcement',     icon: MegaphoneIcon },
   { id: 'application',  label: 'Application',      icon: Cog6ToothIcon },
+  { id: 'chat',         label: 'AI Chat Settings', icon: ChatBubbleLeftRightIcon },
+  { id: 'search',       label: 'Search Config',    icon: DocumentTextIcon },
 ];
 
 const inputCls = "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#006A4E] focus:border-transparent";
@@ -47,6 +49,78 @@ function SectionHeader({ title, desc }: { title: string; desc?: string }) {
 
 export default function BusinessSettingsPage() {
   const [activeTab, setActiveTab] = useState<TabId>('business');
+
+  // ── chatConfig helpers ──
+  type ChatConfig = NonNullable<SiteSettings['chatConfig']>;
+  type TuitionQuestion = ChatConfig['tuitionQuestions'][number];
+  type KnowledgeArticle = ChatConfig['knowledgeArticles'][number];
+
+  const getChatConfig = (): ChatConfig => (settings as Partial<SiteSettings>).chatConfig ?? {
+    persona: { name: '', greeting: '', personality: '' },
+    tuitionQuestions: [],
+    salaryGuidance: false,
+    confirmationMessage: '',
+    successMessage: '',
+    resumeMessage: '',
+    escalationMessage: '',
+    errorMessage: '',
+    whatsappNumber: '',
+    knowledgeArticles: [],
+    maxConversationsPerHour: 50,
+  };
+
+  const setChatConfig = (updater: (prev: ChatConfig) => ChatConfig) =>
+    setSettings(prev => ({ ...prev, chatConfig: updater(getChatConfig()) }));
+
+  const setPersona = (key: keyof ChatConfig['persona'], value: string) =>
+    setChatConfig(c => ({ ...c, persona: { ...c.persona, [key]: value } }));
+
+  const addQuestion = () =>
+    setChatConfig(c => ({
+      ...c,
+      tuitionQuestions: [
+        ...c.tuitionQuestions,
+        { field: `q${Date.now()}`, question: '', required: false, order: c.tuitionQuestions.length + 1, validationHint: '' },
+      ],
+    }));
+  const updateQuestion = (i: number, patch: Partial<TuitionQuestion>) =>
+    setChatConfig(c => {
+      const arr = [...c.tuitionQuestions];
+      arr[i] = { ...arr[i], ...patch };
+      return { ...c, tuitionQuestions: arr };
+    });
+  const removeQuestion = (i: number) =>
+    setChatConfig(c => ({ ...c, tuitionQuestions: c.tuitionQuestions.filter((_, idx) => idx !== i) }));
+  const moveQuestion = (i: number, dir: -1 | 1) =>
+    setChatConfig(c => {
+      const arr = [...c.tuitionQuestions];
+      const j = i + dir;
+      if (j < 0 || j >= arr.length) return c;
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+      return { ...c, tuitionQuestions: arr };
+    });
+
+  const addArticle = () =>
+    setChatConfig(c => ({ ...c, knowledgeArticles: [...c.knowledgeArticles, { topic: '', content: '' }] }));
+  const updateArticle = (i: number, patch: Partial<KnowledgeArticle>) =>
+    setChatConfig(c => {
+      const arr = [...c.knowledgeArticles];
+      arr[i] = { ...arr[i], ...patch };
+      return { ...c, knowledgeArticles: arr };
+    });
+  const removeArticle = (i: number) =>
+    setChatConfig(c => ({ ...c, knowledgeArticles: c.knowledgeArticles.filter((_, idx) => idx !== i) }));
+
+  // ── searchConfig helpers ──
+  type SearchWeights = SiteSettings['searchConfig']['weights'];
+  const getWeights = (): SearchWeights =>
+    (settings as Partial<SiteSettings>).searchConfig?.weights ??
+    { location: 0.30, subject: 0.25, class: 0.20, salary: 0.15, medium: 0.05, gender: 0.05 };
+  const setWeight = (key: keyof SearchWeights, value: number) =>
+    setSettings(prev => ({
+      ...prev,
+      searchConfig: { ...((prev as Partial<SiteSettings>).searchConfig ?? {}), weights: { ...getWeights(), [key]: value } },
+    }));
   const [settings, setSettings] = useState<Partial<SiteSettings> & { businessHours?: Record<string, string> }>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -487,6 +561,235 @@ export default function BusinessSettingsPage() {
             </div>
           </div>
         )}
+
+        {/* ── AI CHAT SETTINGS ── */}
+        {activeTab === 'chat' && (() => {
+          const chatConfig = getChatConfig();
+          return (
+            <div>
+              {/* Persona */}
+              <div className={sectionCls}>
+                <SectionHeader title="AI পার্সোনা" desc="চ্যাটবটের নাম, স্বাগত বার্তা ও ব্যক্তিত্ব নির্ধারণ করুন" />
+                <div className="space-y-4">
+                  <div>
+                    <label className={labelCls}>Persona Name (পার্সোনার নাম)</label>
+                    <input className={inputCls} value={chatConfig.persona.name} onChange={e => setPersona('name', e.target.value)} placeholder="কামরুল" />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Greeting Message (স্বাগত বার্তা)</label>
+                    <textarea className={`${inputCls} resize-none`} rows={3} value={chatConfig.persona.greeting} onChange={e => setPersona('greeting', e.target.value)} placeholder="আসসালামু আলাইকুম! আমি কামরুল..." />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Personality / Tone (ব্যক্তিত্ব)</label>
+                    <textarea className={`${inputCls} resize-none`} rows={4} value={chatConfig.persona.personality} onChange={e => setPersona('personality', e.target.value)} placeholder="তুমি কামরুল, একজন বড় ভাইয়ের মতো কথা বলো..." />
+                    <p className="text-xs text-gray-400 mt-1">এটি AI-এর ব্যক্তিত্ব নির্ধারণ করে</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tuition Questions */}
+              <div className={sectionCls}>
+                <SectionHeader title="টিউশন প্রশ্নাবলী" desc="চ্যাটে গার্ডিয়ানকে জিজ্ঞেস করা প্রশ্নগুলো নির্ধারণ করুন" />
+                <div className="space-y-3">
+                  {chatConfig.tuitionQuestions.map((q, i) => (
+                    <div key={i} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                      <div className="flex items-start justify-between gap-2 mb-3">
+                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-yellow-100 text-yellow-800 text-xs font-bold flex items-center justify-center mt-0.5">
+                          {i + 1}
+                        </div>
+                        <div className="flex gap-1 ml-auto">
+                          <button onClick={() => moveQuestion(i, -1)} disabled={i === 0} className="p-1 text-gray-300 hover:text-gray-600 disabled:opacity-20">
+                            <ArrowUpIcon className="w-3.5 h-3.5" />
+                          </button>
+                          <button onClick={() => moveQuestion(i, 1)} disabled={i === chatConfig.tuitionQuestions.length - 1} className="p-1 text-gray-300 hover:text-gray-600 disabled:opacity-20">
+                            <ArrowDownIcon className="w-3.5 h-3.5" />
+                          </button>
+                          <button onClick={() => removeQuestion(i)} className="p-1 text-red-400 hover:text-red-600">
+                            <TrashIcon className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div>
+                          <label className={labelCls}>প্রশ্ন</label>
+                          <input className={inputCls} value={q.question} onChange={e => updateQuestion(i, { question: e.target.value })} placeholder="প্রশ্নটি লিখুন..." />
+                        </div>
+                        <div>
+                          <label className={labelCls}>Validation Hint</label>
+                          <input className={inputCls} value={q.validationHint} onChange={e => updateQuestion(i, { validationHint: e.target.value })} placeholder="e.g., class 1-12, HSC" />
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
+                          <button
+                            onClick={() => updateQuestion(i, { required: !q.required })}
+                            className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${q.required ? 'bg-[#006A4E]' : 'bg-gray-300'}`}
+                          >
+                            <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${q.required ? 'translate-x-4' : 'translate-x-1'}`} />
+                          </button>
+                          <span className="text-xs text-gray-600">{q.required ? 'Required (বাধ্যতামূলক)' : 'Optional (ঐচ্ছিক)'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <button onClick={addQuestion} className="flex items-center gap-1 text-sm text-[#006A4E] hover:underline mt-1">
+                    <PlusIcon className="w-4 h-4" /> প্রশ্ন যোগ করুন
+                  </button>
+                </div>
+              </div>
+
+              {/* Knowledge Articles */}
+              <div className={sectionCls}>
+                <SectionHeader title="Knowledge Articles" desc="AI যে তথ্যগুলো জানবে — যেমন ফি, নিয়ম, অফার ইত্যাদি" />
+                <div className="space-y-3">
+                  {chatConfig.knowledgeArticles.map((art, i) => (
+                    <div key={i} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs font-semibold text-gray-500">আর্টিকেল #{i + 1}</span>
+                        <button onClick={() => removeArticle(i)} className="p-1 text-red-400 hover:text-red-600">
+                          <TrashIcon className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <div className="space-y-2">
+                        <div>
+                          <label className={labelCls}>Topic (বিষয়)</label>
+                          <input className={inputCls} value={art.topic} onChange={e => updateArticle(i, { topic: e.target.value })} placeholder="যেমন: মিডিয়া ফি সম্পর্কে" />
+                        </div>
+                        <div>
+                          <label className={labelCls}>Content (বিষয়বস্তু)</label>
+                          <textarea className={`${inputCls} resize-none`} rows={3} value={art.content} onChange={e => updateArticle(i, { content: e.target.value })} placeholder="বিষয়বস্তু লিখুন..." />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <button onClick={addArticle} className="flex items-center gap-1 text-sm text-[#006A4E] hover:underline mt-1">
+                    <PlusIcon className="w-4 h-4" /> আর্টিকেল যোগ করুন
+                  </button>
+                </div>
+              </div>
+
+              {/* Contact & Rate Limit */}
+              <div className={sectionCls}>
+                <SectionHeader title="যোগাযোগ ও সীমা" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className={labelCls}>WhatsApp Number (Escalation)</label>
+                    <input className={inputCls} value={chatConfig.whatsappNumber} onChange={e => setChatConfig(c => ({ ...c, whatsappNumber: e.target.value }))} placeholder="017XXXXXXXX" />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Rate Limit (conversations/hour)</label>
+                    <input type="number" min={1} className={inputCls} value={chatConfig.maxConversationsPerHour} onChange={e => setChatConfig(c => ({ ...c, maxConversationsPerHour: parseInt(e.target.value) || 50 }))} />
+                    <p className="text-xs text-gray-400 mt-1">প্রতি ঘণ্টায় সর্বোচ্চ কনভার্সেশন</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Messages */}
+              <div className={sectionCls}>
+                <SectionHeader title="সিস্টেম বার্তা" desc="বিভিন্ন পরিস্থিতিতে AI যে বার্তা পাঠাবে" />
+                <div className="space-y-4">
+                  {(
+                    [
+                      { key: 'confirmationMessage', label: 'Confirmation Message (নিশ্চিতকরণ)' },
+                      { key: 'successMessage',      label: 'Success Message (সফল)' },
+                      { key: 'resumeMessage',       label: 'Resume Message (পুনরায় শুরু)' },
+                      { key: 'escalationMessage',   label: 'Escalation Message (ট্রান্সফার)' },
+                      { key: 'errorMessage',        label: 'Error Message (ত্রুটি)' },
+                    ] as { key: keyof typeof chatConfig; label: string }[]
+                  ).map(({ key, label }) => (
+                    <div key={key}>
+                      <label className={labelCls}>{label}</label>
+                      <textarea
+                        className={`${inputCls} resize-none`}
+                        rows={2}
+                        value={(chatConfig[key] as string) ?? ''}
+                        onChange={e => setChatConfig(c => ({ ...c, [key]: e.target.value }))}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Salary Guidance Toggle */}
+              <div className={sectionCls}>
+                <SectionHeader title="বেতন গাইডেন্স" desc="AI কি গার্ডিয়ানকে প্রস্তাবিত বেতন রেঞ্জ জানাবে?" />
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setChatConfig(c => ({ ...c, salaryGuidance: !c.salaryGuidance }))}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${chatConfig.salaryGuidance ? 'bg-[#006A4E]' : 'bg-gray-300'}`}
+                  >
+                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${chatConfig.salaryGuidance ? 'translate-x-6' : 'translate-x-1'}`} />
+                  </button>
+                  <span className="text-sm text-gray-700">
+                    {chatConfig.salaryGuidance ? 'বেতন গাইডেন্স চালু আছে' : 'বেতন গাইডেন্স বন্ধ'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* ── SEARCH CONFIG ── */}
+        {activeTab === 'search' && (() => {
+          const weights = getWeights();
+          const weightSum = Object.values(weights).reduce((a, b) => a + b, 0);
+          const sumOk = Math.abs(weightSum - 1) < 0.01;
+          const WEIGHT_FIELDS: { key: keyof typeof weights; label: string; desc: string }[] = [
+            { key: 'location', label: 'লোকেশন (Location)',   desc: 'টিউটর ও গার্ডিয়ানের এলাকার মিল কতটা গুরুত্বপূর্ণ' },
+            { key: 'subject',  label: 'সাবজেক্ট (Subject)',  desc: 'বিষয় মিলের গুরুত্ব' },
+            { key: 'class',    label: 'ক্লাস (Class)',       desc: 'ক্লাস মিলের গুরুত্ব' },
+            { key: 'salary',   label: 'বেতন (Salary)',       desc: 'বেতন রেঞ্জ মিলের গুরুত্ব' },
+            { key: 'medium',   label: 'মাধ্যম (Medium)',     desc: 'শিক্ষার মাধ্যম মিলের গুরুত্ব' },
+            { key: 'gender',   label: 'লিঙ্গ (Gender)',      desc: 'পছন্দের লিঙ্গ মিলের গুরুত্ব' },
+          ];
+          return (
+            <div>
+              <div className={sectionCls}>
+                <SectionHeader
+                  title="সার্চ ওয়েট কনফিগারেশন"
+                  desc="AI টিউটর ম্যাচিং অ্যালগরিদমে প্রতিটি বৈশিষ্ট্যের ওজন নির্ধারণ করুন (মোট ≈ 1.0 হওয়া উচিত)"
+                />
+
+                <div className="mb-5 p-3 rounded-lg border text-sm font-medium flex items-center gap-2"
+                  style={{ background: sumOk ? '#f0fdf4' : '#fffbeb', borderColor: sumOk ? '#bbf7d0' : '#fde68a', color: sumOk ? '#166534' : '#92400e' }}
+                >
+                  {sumOk
+                    ? <><CheckCircleIcon className="w-4 h-4" /> মোট ওজন: {weightSum.toFixed(2)} — ঠিক আছে</>
+                    : <><ExclamationTriangleIcon className="w-4 h-4" /> মোট ওজন: {weightSum.toFixed(2)} — ১.০ হওয়া উচিত (বর্তমান পার্থক্য: {(weightSum - 1).toFixed(2)})</>
+                  }
+                </div>
+
+                <div className="space-y-5">
+                  {WEIGHT_FIELDS.map(({ key, label, desc }) => (
+                    <div key={key}>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className={labelCls + ' mb-0'}>{label}</label>
+                        <span className="text-sm font-bold text-[#006A4E]">{weights[key].toFixed(2)}</span>
+                      </div>
+                      <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.05}
+                        value={weights[key]}
+                        onChange={e => setWeight(key, parseFloat(e.target.value))}
+                        className="w-full h-2 rounded-lg appearance-none bg-gray-200 accent-[#006A4E] cursor-pointer"
+                      />
+                      <div className="flex justify-between text-xs text-gray-400 mt-0.5">
+                        <span>0.00</span>
+                        <span className="text-gray-500">{desc}</span>
+                        <span>1.00</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6 p-4 bg-[#F5F0E8] rounded-lg text-sm text-[#78716C]">
+                  <strong className="text-[#1C1917]">কীভাবে কাজ করে?</strong>
+                  <p className="mt-1">প্রতিটি ওজন AI সার্চে সেই বৈশিষ্ট্যের গুরুত্ব নির্ধারণ করে। উচ্চতর ওজন মানে সেই বৈশিষ্ট্য বেশি গুরুত্বপূর্ণ। সর্বোত্তম ফলাফলের জন্য সমস্ত ওজনের যোগফল ১.০ হওয়া উচিত।</p>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* ── APPLICATION SETTINGS ── */}
         {activeTab === 'application' && (
