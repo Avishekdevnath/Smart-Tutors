@@ -9,6 +9,7 @@ import {
   ClockIcon,
   UserIcon
 } from '@heroicons/react/24/outline';
+import { formatSalary } from '@/utils/formatSalary';
 
 const formatLocation = (location: string | { division: string; district: string; area: string }): string => {
   if (typeof location === 'string') return location;
@@ -41,7 +42,7 @@ interface Tuition {
   subjects: string[];
   weeklyDays: string;
   dailyHours?: string;
-  salary: string;
+  salary: { min?: number; max?: number } | string;
   location: string | { division: string; district: string; area: string };
   tutorGender: string;
   specialRemarks?: string;
@@ -309,7 +310,7 @@ export function LatestTuitionsSection() {
                 </div>
 
                 {/* Salary */}
-                <p className="text-[#006A4E] font-heading font-bold text-lg">৳ {tuition.salary}</p>
+                <p className="text-[#006A4E] font-heading font-bold text-lg">{formatSalary(tuition.salary)}</p>
 
                 {/* Tutor preference */}
                 {tuition.tutorGender && tuition.tutorGender !== 'Not specified' && (

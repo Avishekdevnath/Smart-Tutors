@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Copy, Check, MessageSquare, Sparkles, RefreshCw } from 'lucide-react';
 import { formatLocation, formatAddress } from '@/utils/location';
 import { generateTuitionPost } from '@/lib/google-ai';
+import { formatSalary } from '@/utils/formatSalary';
 
 interface Tuition {
   _id: string;
@@ -16,7 +17,7 @@ interface Tuition {
   weeklyDays: string;
   weeklyHours?: string;
   dailyHours?: string;
-  salary: string;
+  salary: { min?: number; max?: number } | string;
   location?: string;
   startMonth?: string;
   tutorGender: string;
@@ -69,7 +70,7 @@ export default function TuitionPostGenerator({ tuition }: TuitionPostGeneratorPr
           subjects: tuition.subjects,
           weeklyDays: tuition.weeklyDays,
           dailyHours: tuition.dailyHours || tuition.weeklyHours, // Use dailyHours, fallback to weeklyHours
-          salary: tuition.salary,
+          salary: formatSalary(tuition.salary),
           location: locationLine,
           tutorGender: tuition.tutorGender,
           specialRemarks: tuition.specialRemarks,
@@ -107,7 +108,7 @@ export default function TuitionPostGenerator({ tuition }: TuitionPostGeneratorPr
       `✅ ${tutorLine}`,
       `✒️ Class: ${classLine}`,
       `🕒 Weekly: ${tuition.weeklyDays}${hoursText ? ` (${hoursText} hours daily)` : ''}`,
-      `💸 Salary: ${tuition.salary}`,
+      `💸 Salary: ${formatSalary(tuition.salary)}`,
       locationLine ? `🏠 Location: ${locationLine}` : '',
       remarksLine,
       `👉 Only Whatsapp: ${WHATSAPP_NUMBER}`
@@ -115,7 +116,7 @@ export default function TuitionPostGenerator({ tuition }: TuitionPostGeneratorPr
     
     // Generate short post
     const short = [
-      `${tutorLine}, ${shortClassLine}, ${tuition.weeklyDays}${hoursText ? ` (${hoursText} hours daily)` : ''}, ${tuition.salary}, ${locationLine}${tuition.specialRemarks ? `, ${tuition.specialRemarks}` : ''}.`,
+      `${tutorLine}, ${shortClassLine}, ${tuition.weeklyDays}${hoursText ? ` (${hoursText} hours daily)` : ''}, ${formatSalary(tuition.salary)}, ${locationLine}${tuition.specialRemarks ? `, ${tuition.specialRemarks}` : ''}.`,
       `👉 Only Whatsapp: ${WHATSAPP_NUMBER}`
     ].filter(Boolean).join('\n');
     

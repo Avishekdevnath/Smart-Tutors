@@ -101,6 +101,25 @@ export async function POST(request: NextRequest) {
       await existingGuardian.save();
     }
 
+    // Parse salary string into { min, max } object if needed
+    let parsedSalary: { min?: number; max?: number } | undefined = undefined;
+    if (salary !== undefined && salary !== null && salary !== '') {
+      if (typeof salary === 'string') {
+        const salaryStr = salary.trim();
+        if (salaryStr.includes('-')) {
+          const parts = salaryStr.split('-').map((s: string) => parseInt(s.replace(/[^\d]/g, '')));
+          parsedSalary = {};
+          if (!isNaN(parts[0])) parsedSalary.min = parts[0];
+          if (!isNaN(parts[1])) parsedSalary.max = parts[1];
+        } else {
+          const num = parseInt(salaryStr.replace(/[^\d]/g, ''));
+          if (!isNaN(num)) parsedSalary = { min: num, max: num };
+        }
+      } else {
+        parsedSalary = salary;
+      }
+    }
+
     // Create the Tuition Record with the safely generated/validated code
     const tuition = new Tuition({
       code: finalCode,
@@ -112,7 +131,7 @@ export async function POST(request: NextRequest) {
       subjects,
       weeklyDays,
       weeklyHours,
-      salary,
+      salary: parsedSalary,
       location,
       startMonth,
       tutorGender,

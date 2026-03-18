@@ -27,6 +27,7 @@ import {
   MinusCircle
 } from "lucide-react";
 import Toast, { useToast } from "@/components/Toast";
+import { formatSalary } from "@/utils/formatSalary";
 
 interface Application {
   _id: string;
@@ -45,7 +46,7 @@ interface Application {
     class: string;
     version: string;
     location: string;
-    salary: string;
+    salary: { min?: number; max?: number } | string;
     status: string;
     subjects?: string[];
     guardianName?: string;
@@ -195,9 +196,11 @@ export default function TutorApplicationsPage() {
         case "status":
           comparison = a.status.localeCompare(b.status);
           break;
-        case "salary":
-          comparison = parseInt(a.tuition.salary) - parseInt(b.tuition.salary);
+        case "salary": {
+          const getSalaryNum = (s: { min?: number; max?: number } | string) => typeof s === 'string' ? parseInt(s) : (s?.min ?? 0);
+          comparison = getSalaryNum(a.tuition.salary) - getSalaryNum(b.tuition.salary);
           break;
+        }
       }
       return sortOrder === "asc" ? -comparison : comparison;
     });
@@ -404,7 +407,7 @@ export default function TutorApplicationsPage() {
                     </div>
                     <div className="flex items-center text-gray-600">
                       <span className="w-4 h-4 mr-2 text-yellow-500 font-semibold text-sm flex items-center justify-center">৳</span>
-                      <span>{application.tuition.salary}</span>
+                      <span>{formatSalary(application.tuition.salary)}</span>
                     </div>
                   </div>
                 </div>

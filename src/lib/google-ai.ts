@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { formatSalary } from '@/utils/formatSalary';
 
 // Initialize Google AI
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY || '');
@@ -305,7 +306,7 @@ export async function generateTuitionPost(
     subjects: string[];
     weeklyDays: string;
     weeklyHours?: string;
-    salary: string;
+    salary: { min?: number; max?: number } | string;
     location: string;
     tutorGender: string;
     specialRemarks?: string;
@@ -324,7 +325,7 @@ export async function generateTuitionPost(
       - Class: ${tuitionData.class} (${tuitionData.version})
       - Subjects: ${Array.isArray(tuitionData.subjects) ? tuitionData.subjects.join(', ') : tuitionData.subjects || 'Not specified'}
       - Weekly: ${tuitionData.weeklyDays}${tuitionData.weeklyHours ? ` (${tuitionData.weeklyHours})` : ''}
-      - Salary: ${tuitionData.salary}
+      - Salary: ${formatSalary(tuitionData.salary)}
       - Location: ${tuitionData.location}
       - Tutor Gender: ${tuitionData.tutorGender}
       - Special Remarks: ${tuitionData.specialRemarks || 'None'}
@@ -406,7 +407,7 @@ function generateFallbackDetailedPost(tuitionData: any): string {
     `✅ ${tutorLine}`,
     `✒️ Class: ${classLine}`,
     `🕒 Weekly: ${tuitionData.weeklyDays}${tuitionData.weeklyHours ? ` (${tuitionData.weeklyHours})` : ''}`,
-    `💸 Salary: ${tuitionData.salary}`,
+    `💸 Salary: ${formatSalary(tuitionData.salary)}`,
     locationLine,
     remarksLine,
     `👉 Only Whatsapp: 01516539430`
@@ -427,7 +428,7 @@ function generateFallbackShortPost(tuitionData: any): string {
   const location = tuitionData.location || '';
   
   return [
-    `${tutorType} Needed, ${classInfo}, ${subjects}, ${weekly}, ${tuitionData.salary}, ${location}.`,
+    `${tutorType} Needed, ${classInfo}, ${subjects}, ${weekly}, ${formatSalary(tuitionData.salary)}, ${location}.`,
     `👉 Only Whatsapp: 01516539430`
   ].filter(Boolean).join('\n');
 } 

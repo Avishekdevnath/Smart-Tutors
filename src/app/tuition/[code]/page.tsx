@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Modal from '@/components/Modal';
 import Toast, { useToast } from '@/components/Toast';
 import { useSettings } from '@/hooks/useSettings';
+import { formatSalary } from '@/utils/formatSalary';
 
 interface Tuition {
   _id: string;
@@ -16,7 +17,7 @@ interface Tuition {
   subjects: string[];
   weeklyDays: string;
   dailyHours: string;
-  salary: string;
+  salary: { min?: number; max?: number } | string;
   location: string;
   startMonth: string;
   tutorGender: string;
@@ -326,7 +327,7 @@ export default function TuitionDetailsPage() {
                     {tuition.salary && (
                       <div className="flex justify-between">
                         <span className="text-[#78716C]">Salary:</span>
-                        <span className="font-medium text-[#E07B2A]">{tuition.salary}</span>
+                        <span className="font-medium text-[#E07B2A]">{formatSalary(tuition.salary)}</span>
                       </div>
                     )}
                     {tuition.tutorGender && tuition.tutorGender !== "Not specified" && (

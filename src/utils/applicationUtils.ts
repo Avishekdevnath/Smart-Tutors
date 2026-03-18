@@ -1,4 +1,5 @@
 import { formatLocation } from './location';
+import { formatSalary } from './formatSalary';
 
 export interface Application {
   _id: string;
@@ -18,7 +19,7 @@ export interface Application {
     studentClass: string;
     subject: string[];
     location: any;
-    salary: number;
+    salary: { min?: number; max?: number } | number;
     status: string;
   };
   status: string;
@@ -162,10 +163,12 @@ export const sortApplications = (
         aValue = a.status;
         bValue = b.status;
         break;
-      case 'salary':
-        aValue = a.tuition.salary;
-        bValue = b.tuition.salary;
+      case 'salary': {
+        const getSalaryNum = (s: { min?: number; max?: number } | number) => typeof s === 'number' ? s : (s?.min ?? 0);
+        aValue = getSalaryNum(a.tuition.salary);
+        bValue = getSalaryNum(b.tuition.salary);
         break;
+      }
       default:
         aValue = a[field as keyof Application];
         bValue = b[field as keyof Application];
@@ -190,7 +193,7 @@ export const formatApplicationForDisplay = (application: Application) => {
     formattedAppliedDate: new Date(application.appliedAt).toLocaleDateString(),
     formattedSubjects: application.tuition.subject.join(', '),
     formattedLocation: application.tuition.location ? formatLocation(application.tuition.location) : 'N/A',
-    formattedSalary: `৳${application.tuition.salary.toLocaleString()}`,
+    formattedSalary: formatSalary(typeof application.tuition.salary === 'number' ? { min: application.tuition.salary, max: application.tuition.salary } : application.tuition.salary),
     daysAgo: Math.floor((Date.now() - new Date(application.appliedAt).getTime()) / (1000 * 60 * 60 * 24)),
   };
 };

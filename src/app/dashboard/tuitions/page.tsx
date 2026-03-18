@@ -5,6 +5,7 @@ import Link from 'next/link';
 import DashboardLayout from '@/components/DashboardLayout';
 import TuitionPostGenerator from '@/components/TuitionPostGenerator';
 import { formatLocation, formatAddress } from '@/utils/location';
+import { formatSalary } from '@/utils/formatSalary';
 import Modal from '@/components/Modal';
 import TuitionEditForm from '@/components/TuitionEditForm';
 import Toast, { useToast } from '@/components/Toast';
@@ -26,7 +27,7 @@ interface Tuition {
   subjects: string[];
   weeklyDays: string;
   dailyHours?: string; // Changed from weeklyHours
-  salary: string;
+  salary: { min?: number; max?: number } | string;
   location?: string;
   startMonth?: string;
   
@@ -610,7 +611,7 @@ export default function TuitionManagementDashboard() {
                         <p className="flex flex-col lg:flex-row lg:items-center lg:space-x-2">
                           <span className="font-medium">Salary:</span>
                           <span className="flex items-center space-x-1">
-                            <span className="break-words">{tuition.salary}</span>
+                            <span className="break-words">{formatSalary(tuition.salary)}</span>
                             {sortField === 'salary' && (
                               <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs bg-green-100 text-green-800 flex-shrink-0">
                                 {sortOrder === 'desc' ? (
@@ -721,7 +722,7 @@ export default function TuitionManagementDashboard() {
             <p><b>Version:</b> {viewModal.version}</p>
             <p><b>Subjects:</b> {Array.isArray(viewModal.subjects) ? viewModal.subjects.join(', ') : viewModal.subjects || 'Not specified'}</p>
             <p><b>Schedule:</b> {viewModal.weeklyDays} {viewModal.dailyHours || viewModal.weeklyHours}</p>
-            <p><b>Salary:</b> {viewModal.salary}</p>
+            <p><b>Salary:</b> {formatSalary(viewModal.salary)}</p>
             <p><b>Status:</b> {viewModal.status}</p>
             <p><b>Location:</b> {formatLocation(viewModal.location)}</p>
             <p><b>Remarks:</b> {viewModal.specialRemarks}</p>

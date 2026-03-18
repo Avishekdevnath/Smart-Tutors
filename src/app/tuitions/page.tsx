@@ -7,6 +7,7 @@ import { Search, MapPin, Clock, BookOpen, CheckCircle } from 'lucide-react';
 import Modal from '@/components/Modal';
 import Toast, { useToast } from '@/components/Toast';
 import { useSettings } from '@/hooks/useSettings';
+import { formatSalary } from '@/utils/formatSalary';
 
 interface Tuition {
   _id: string;
@@ -19,7 +20,7 @@ interface Tuition {
   subjects: string[];
   weeklyDays: string;
   dailyHours: string;
-  salary: string;
+  salary: { min?: number; max?: number } | string;
   location: string;
   startMonth: string;
   tutorGender: string;
@@ -331,7 +332,7 @@ export default function TuitionsPage() {
                   </div>
 
                   {/* Salary */}
-                  <p className="text-[#006A4E] font-heading font-bold text-xl">৳ {tuition.salary}</p>
+                  <p className="text-[#006A4E] font-heading font-bold text-xl">{formatSalary(tuition.salary)}</p>
 
                   {/* Preference */}
                   {tuition.tutorGender && tuition.tutorGender !== 'Not specified' && (

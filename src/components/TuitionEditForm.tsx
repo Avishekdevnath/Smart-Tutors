@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import LocationSelector from '@/components/LocationSelector';
+import { formatSalary } from '@/utils/formatSalary';
 
 interface TuitionEditFormProps {
   tuition: any;
@@ -45,7 +46,7 @@ export default function TuitionEditForm({ tuition, onSubmit, onCancel, loading =
       weeklyDays: tuition.weeklyDays || '',
       dailyHours: tuition.dailyHours || '',
       weeklyHours: tuition.weeklyHours || '',
-      salary: tuition.salary || '',
+      salary: typeof tuition.salary === 'string' ? tuition.salary : (tuition.salary?.min && tuition.salary?.max && tuition.salary.min !== tuition.salary.max ? `${tuition.salary.min}-${tuition.salary.max}` : tuition.salary?.min ? String(tuition.salary.min) : tuition.salary?.max ? String(tuition.salary.max) : ''),
       location: tuition.location || '',
       startMonth: tuition.startMonth || '',
       tutorGender: tuition.tutorGender || 'Not specified',
@@ -88,8 +89,21 @@ export default function TuitionEditForm({ tuition, onSubmit, onCancel, loading =
   };
 
   const handleFormSubmit = (data: any) => {
+    // Parse salary string into { min, max } object
+    const salaryStr = String(data.salary || '').trim();
+    let salaryObj: { min?: number; max?: number } = {};
+    if (salaryStr.includes('-')) {
+      const parts = salaryStr.split('-').map((s: string) => parseInt(s.replace(/[^\d]/g, '')));
+      if (!isNaN(parts[0])) salaryObj.min = parts[0];
+      if (!isNaN(parts[1])) salaryObj.max = parts[1];
+    } else {
+      const num = parseInt(salaryStr.replace(/[^\d]/g, ''));
+      if (!isNaN(num)) { salaryObj.min = num; salaryObj.max = num; }
+    }
+
     const formData = {
       ...data,
+      salary: Object.keys(salaryObj).length > 0 ? salaryObj : data.salary,
       subjects: selectedSubjects,
       location: normalizedLocation
     };

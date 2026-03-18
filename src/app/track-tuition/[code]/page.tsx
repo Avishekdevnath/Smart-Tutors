@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Clock, CheckCircle, XCircle, AlertCircle, User, MapPin, Phone, Mail, Calendar, DollarSign, BookOpen } from 'lucide-react';
+import { formatSalary } from '@/utils/formatSalary';
 
 interface Tuition {
   _id: string;
@@ -17,7 +18,7 @@ interface Tuition {
   subjects: string[];
   weeklyDays: string;
   dailyHours: string;
-  salary: string;
+  salary: { min?: number; max?: number } | string;
   startMonth: string;
   tutorGender: string;
   specialRemarks: string;
@@ -240,7 +241,7 @@ export default function TrackTuitionPage() {
                   <div className="flex items-center text-sm">
                     <DollarSign className="w-4 h-4 mr-2 text-gray-400" />
                     <span className="font-medium">Salary:</span>
-                    <span className="ml-2 text-gray-600">{tuition.salary}</span>
+                    <span className="ml-2 text-gray-600">{formatSalary(tuition.salary)}</span>
                   </div>
                   
                   <div className="flex items-center text-sm">

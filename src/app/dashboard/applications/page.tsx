@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
 import { Clock, CheckCircle, XCircle, AlertCircle, User, MapPin, Eye, FileText, GraduationCap, Phone, Mail } from 'lucide-react';
 import Toast, { useToast } from '@/components/Toast';
+import { formatSalary } from '@/utils/formatSalary';
 
 interface Application {
   _id: string;
@@ -31,7 +32,7 @@ interface Application {
     class: string;
     version: string;
     location: string;
-    salary: string;
+    salary: { min?: number; max?: number } | string;
     status: string;
     guardianName?: string;
     guardianPhone?: string;
@@ -422,7 +423,7 @@ export default function AdminApplicationsPage() {
                         </h4>
                         <div className="space-y-1 text-sm text-gray-600">
                           <p><span className="font-medium">Location:</span> {application.tuition.location}</p>
-                          <p><span className="font-medium">Salary:</span> {application.tuition.salary}</p>
+                          <p><span className="font-medium">Salary:</span> {formatSalary(application.tuition.salary)}</p>
                           <p><span className="font-medium">Applied:</span> {formatDate(application.appliedAt)}</p>
                         </div>
                       </div>
@@ -786,7 +787,7 @@ export default function AdminApplicationsPage() {
                     <p><strong>Guardian Name:</strong> {selectedApplication.tuition.guardianName || 'Not provided'}</p>
                     <p><strong>Guardian Phone:</strong> {selectedApplication.tuition.guardianPhone || 'Not provided'}</p>
                     <p><strong>Location:</strong> {selectedApplication.tuition.location}</p>
-                    <p><strong>Salary:</strong> {selectedApplication.tuition.salary}</p>
+                    <p><strong>Salary:</strong> {formatSalary(selectedApplication.tuition.salary)}</p>
                   </div>
                 </div>
                 

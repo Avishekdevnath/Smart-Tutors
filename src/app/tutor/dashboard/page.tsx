@@ -35,7 +35,7 @@ interface ActiveTuition {
   class: string;
   subjects: string[];
   location: string;
-  salary: string;
+  salary: { min?: number; max?: number } | string;
   confirmedAt: string;
 }
 

@@ -97,7 +97,23 @@ export async function PUT(
     if (weeklyDays !== undefined) updateData.weeklyDays = weeklyDays;
     if (dailyHours !== undefined) updateData.dailyHours = dailyHours;
     if (weeklyHours !== undefined) updateData.weeklyHours = weeklyHours;
-    if (salary !== undefined) updateData.salary = salary;
+    if (salary !== undefined) {
+      if (typeof salary === 'string' && salary.trim() !== '') {
+        const salaryStr = salary.trim();
+        let parsedSalary: { min?: number; max?: number } = {};
+        if (salaryStr.includes('-')) {
+          const parts = salaryStr.split('-').map((s: string) => parseInt(s.replace(/[^\d]/g, '')));
+          if (!isNaN(parts[0])) parsedSalary.min = parts[0];
+          if (!isNaN(parts[1])) parsedSalary.max = parts[1];
+        } else {
+          const num = parseInt(salaryStr.replace(/[^\d]/g, ''));
+          if (!isNaN(num)) parsedSalary = { min: num, max: num };
+        }
+        updateData.salary = parsedSalary;
+      } else {
+        updateData.salary = salary;
+      }
+    }
     if (location !== undefined) updateData.location = location;
     if (startMonth !== undefined) updateData.startMonth = startMonth;
     if (tutorGender !== undefined) updateData.tutorGender = tutorGender;

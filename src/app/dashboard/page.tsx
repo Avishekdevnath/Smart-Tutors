@@ -14,6 +14,7 @@ import {
   ClockIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
+import { formatSalary } from '@/utils/formatSalary';
 
 interface Stats {
   tutors: number;
@@ -302,7 +303,7 @@ export default function Dashboard() {
                       {t.location || '—'}
                     </td>
                     <td className="px-4 py-3.5 text-xs font-semibold text-[#E07B2A] hidden md:table-cell">
-                      {t.salary || '—'}
+                      {formatSalary(t.salary) || '—'}
                     </td>
                     <td className="px-4 py-3.5">
                       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border ${statusColor[t.status] || 'bg-gray-50 text-gray-600 border-gray-200'}`}>

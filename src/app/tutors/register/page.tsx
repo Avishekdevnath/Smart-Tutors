@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight, CheckCircle, Circle, User, GraduationCap, MapPin, FileText, Eye, Send } from "lucide-react";
 import LocationSelector from "@/components/LocationSelector";
 import DocumentUpload from "@/components/DocumentUpload";
+import { formatSalary } from "@/utils/formatSalary";
 
 const steps = [
   { id: 0, title: "Personal Info", icon: User },
@@ -256,7 +257,7 @@ function TutorRegisterContent() {
                     <div><span className="font-medium text-gray-700">Class:</span> {tuitionDetails.class} - {tuitionDetails.version}</div>
                     <div><span className="font-medium text-gray-700">Subjects:</span> {tuitionDetails.subjects?.join(', ')}</div>
                     <div><span className="font-medium text-gray-700">Location:</span> {tuitionDetails.location}</div>
-                    <div><span className="font-medium text-gray-700">Salary:</span> {tuitionDetails.salary}</div>
+                    <div><span className="font-medium text-gray-700">Salary:</span> {formatSalary(tuitionDetails.salary)}</div>
                   </div>
                 </div>
               </div>

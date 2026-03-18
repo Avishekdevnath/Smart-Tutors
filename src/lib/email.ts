@@ -3,6 +3,7 @@ import { dbConnect } from './mongodb';
 import Tutor from '@/models/Tutor';
 import Guardian from '@/models/Guardian';
 import Tuition from '@/models/Tuition';
+import { formatSalary } from '@/utils/formatSalary';
 import { generateResetToken } from '@/utils/tutorUtils';
 
 // Helper function to get base URL
@@ -362,7 +363,7 @@ export async function sendApplicationStatusUpdate(
     studentClass: string;
     subject: string[];
     location: string;
-    salary: number;
+    salary: { min?: number; max?: number } | number;
   },
   oldStatus: string,
   newStatus: string,
@@ -429,7 +430,7 @@ export async function sendApplicationStatusUpdate(
           <p style="margin: 8px 0; color: #374151;"><strong>Class:</strong> ${tuitionDetails.studentClass}</p>
           <p style="margin: 8px 0; color: #374151;"><strong>Subjects:</strong> ${tuitionDetails.subject.join(', ')}</p>
           <p style="margin: 8px 0; color: #374151;"><strong>Location:</strong> ${tuitionDetails.location}</p>
-          <p style="margin: 8px 0; color: #374151;"><strong>Salary:</strong> ৳${tuitionDetails.salary.toLocaleString()}</p>
+          <p style="margin: 8px 0; color: #374151;"><strong>Salary:</strong> ${formatSalary(typeof tuitionDetails.salary === 'number' ? { min: tuitionDetails.salary, max: tuitionDetails.salary } : tuitionDetails.salary)}</p>
           <p style="margin: 8px 0; color: #374151;"><strong>Status:</strong> 
             <span style="background-color: ${config?.color || '#6b7280'}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
               ${newStatus.toUpperCase()}
