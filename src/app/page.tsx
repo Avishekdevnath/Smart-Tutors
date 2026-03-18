@@ -26,20 +26,17 @@ export default function HomePage() {
               <div>
                 <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-green-100 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
                   <span className="w-2 h-2 bg-[#E07B2A] rounded-full animate-pulse" />
-                  ঢাকার #১ টিউশন প্ল্যাটফর্ম
+                  Dhaka's #1 Tuition Platform
                 </div>
 
                 <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.25rem] font-bold text-white mb-4 leading-tight">
-                  সঠিক টিউটর,<br />
-                  <span className="text-[#E07B2A]">সঠিক সময়ে</span>
+                  The Right Tutor,<br />
+                  <span className="text-[#E07B2A]">At the Right Time</span>
                 </h1>
 
-                <p className="text-green-100 text-lg leading-relaxed mb-2">
-                  যোগ্য ও যাচাইকৃত টিউটরের সাথে সংযুক্ত হন —{' '}
-                  <span className="text-white font-semibold">সব Subject, সব Class।</span>
-                </p>
-                <p className="text-green-200 text-sm mb-8">
-                  Find verified tutors for all subjects and classes across Dhaka.
+                <p className="text-green-100 text-lg leading-relaxed mb-8">
+                  Connect with qualified, verified tutors —{' '}
+                  <span className="text-white font-semibold">every subject, every class across Dhaka.</span>
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -48,12 +45,12 @@ export default function HomePage() {
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                       </svg>
-                      টিউটর খুঁজুন
+                      Find a Tutor
                     </button>
                   </Link>
                   <Link href="/tutors/register">
                     <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white px-7 py-3.5 rounded-xl text-base font-semibold transition-all duration-200 cursor-pointer">
-                      টিউটর হিসেবে যোগ দিন
+                      Join as a Tutor
                     </button>
                   </Link>
                 </div>
@@ -64,7 +61,7 @@ export default function HomePage() {
                     <svg className="w-4 h-4 text-[#E07B2A]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                     </svg>
-                    বিনামূল্যে পোস্ট করুন
+                    Post for Free
                   </div>
                   <div className="flex items-center gap-1.5">
                     <svg className="w-4 h-4 text-[#E07B2A]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
@@ -76,7 +73,7 @@ export default function HomePage() {
                     <svg className="w-4 h-4 text-[#E07B2A]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
                     </svg>
-                    দ্রুত সংযোগ
+                    Fast Matching
                   </div>
                 </div>
               </div>
@@ -92,8 +89,7 @@ export default function HomePage() {
                   <div key={stat.label} className="bg-white/10 border border-white/15 rounded-2xl p-5 backdrop-blur-sm">
                     <p className="text-2xl mb-1" role="img" aria-hidden="true">{stat.icon}</p>
                     <p className="font-heading font-bold text-2xl text-white">{stat.value}</p>
-                    <p className="text-green-100 text-xs font-medium mt-0.5">{stat.bn}</p>
-                    <p className="text-green-300 text-xs">{stat.label}</p>
+                    <p className="text-green-100 text-xs font-medium mt-0.5">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -182,23 +178,23 @@ export default function HomePage() {
           {/* Example link card */}
           <div className="bg-[#FFFDF7] border border-[#E8DDD0] rounded-2xl p-8 max-w-xl mx-auto text-center">
             <h3 className="font-heading text-xl font-bold text-[#1C1917] mb-3">
-              উদাহরণ Tuition Link
+              Example Tuition Link
             </h3>
             <div className="bg-white border border-[#E8DDD0] rounded-lg px-4 py-3 mb-5">
               <code className="text-[#006A4E] font-mono text-sm break-all">https://yoursite.com/tuition/ST150</code>
             </div>
             <p className="text-[#78716C] text-sm mb-6">
-              এই লিংক দিয়ে যে কেউ টিউশনের বিস্তারিত দেখতে ও আবেদন করতে পারবেন।
+              Anyone with this link can view full tuition details and apply directly.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/tuitions">
                 <button className="w-full sm:w-auto bg-[#006A4E] hover:bg-[#005540] text-white px-6 py-2.5 rounded-lg font-semibold text-sm transition-colors duration-200 cursor-pointer">
-                  সব Tuition দেখুন
+                  Browse All Tuitions
                 </button>
               </Link>
               <Link href="/tutors/register">
                 <button className="w-full sm:w-auto border-2 border-[#006A4E] text-[#006A4E] hover:bg-[#006A4E] hover:text-white px-6 py-2.5 rounded-lg font-semibold text-sm transition-colors duration-200 cursor-pointer">
-                  Tutor হিসেবে যোগ দিন
+                  Join as a Tutor
                 </button>
               </Link>
             </div>
