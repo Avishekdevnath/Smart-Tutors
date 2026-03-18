@@ -7,6 +7,7 @@ import { AdminAuthProvider } from '@/contexts/AdminAuthContext';
 import ConditionalNavbar from '@/components/ConditionalNavbar';
 import Footer from '@/components/Footer';
 import DashboardFooterWrapper from '@/components/DashboardFooterWrapper';
+import ChatWidget from '@/components/ChatWidget/ChatWidget';
 import Head from 'next/head';
 
 const geistSans = Geist({
@@ -47,6 +48,7 @@ export default function RootLayout({
               </main>
               <DashboardFooterWrapper />
             </div>
+            <ChatWidget />
           </AdminAuthProvider>
         </AuthProvider>
       </body>
