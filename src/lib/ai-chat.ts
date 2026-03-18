@@ -1,7 +1,6 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import OpenAI from 'openai';
 
-// Initialize Google AI — same pattern as google-ai.ts
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY || '');
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -117,9 +116,12 @@ ${persona.personality}
 Help guardians post tuition requests, answer FAQs, track tuition status, and escalate to a real person when needed.
 
 ## LANGUAGE HANDLING
-- Auto-detect the user's language (Bengali, English, Banglish, or a mix) and reply in the SAME language/style.
+- ALWAYS reply in proper Bengali (বাংলা) script. Never use Banglish (romanized Bengali like "ami valo achi").
+- Even if the user writes in Banglish or English, your reply must be in Bengali script.
+- Exception: Keep subject names and medium names in English (e.g., Math, Physics, English Medium).
 - Handle broken words, typos, and misspellings gracefully — never correct the user rudely.
-- Accept common transliterations: "ami", "amar", "chele", "meye", "din", "taka", etc.
+- Be warm, friendly — like a helpful elder brother (বড় ভাই).
+- NEVER re-introduce yourself or say your name again after the first message. Just continue the conversation naturally.
 
 ## INTENT DETECTION
 Classify every message into one of:
@@ -163,7 +165,8 @@ completeness = (collected required fields / total required fields) * 100, rounde
 
 ## ESCALATION
 If the user says they want a real person, mentions "admin", "manager", "human", "কারো সাথে কথা",
-"real person", "মানুষ", "স্যার", or similar — set shouldEscalate=true immediately.
+"real person", "মানুষ", "স্যার", "call", "phone", "ফোন", or similar — set shouldEscalate=true immediately.
+When escalating, your reply should be brief: just say you are connecting them and they will receive contact info shortly. Do NOT say "অপেক্ষা করুন" or "waiting" — the system will provide the contact details automatically.
 
 ## KNOWLEDGE BASE (use naturally in conversation when relevant)
 ${knowledgeBase}
@@ -210,13 +213,10 @@ Always merge new data with previously extracted data — never drop a field you 
  */
 function buildConversationHistory(
   messages: ChatMessage[]
-): Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }> {
-  // Trim to last 20 messages
-  const recentMessages = messages.slice(-20);
-
-  return recentMessages.map((msg) => ({
-    role: msg.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: msg.content }],
+): Array<{ role: 'user' | 'assistant'; content: string }> {
+  return messages.slice(-20).map((msg) => ({
+    role: msg.role as 'user' | 'assistant',
+    content: msg.content,
   }));
 }
 
@@ -230,12 +230,12 @@ function parseGeminiResponse(
   text: string,
   currentExtractedData: ExtractedData
 ): ChatResponse {
-  // Strip any markdown code fences Gemini might add despite instructions
-  const cleaned = text
-    .replace(/^```json\s*/i, '')
-    .replace(/^```\s*/i, '')
-    .replace(/```\s*$/i, '')
-    .trim();
+  // Extract the JSON object — find first { to last } to handle any preamble/postamble Gemini adds
+  const jsonStart = text.indexOf('{');
+  const jsonEnd = text.lastIndexOf('}');
+  const cleaned = jsonStart !== -1 && jsonEnd !== -1
+    ? text.slice(jsonStart, jsonEnd + 1)
+    : text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
 
   try {
     const parsed = JSON.parse(cleaned);
@@ -295,39 +295,27 @@ function parseGeminiResponse(
 
 // ─── processMessage ──────────────────────────────────────────────────────────
 
-/**
- * Sends a user message to Gemini and returns a structured ChatResponse.
- * Uses gemini-1.5-flash for speed and cost-efficiency in chat.
- */
 export async function processMessage(
   userMessage: string,
   config: ChatConfig,
   conversationHistory: ChatMessage[],
   currentExtractedData: ExtractedData = {}
 ): Promise<ChatResponse> {
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
-    generationConfig: {
-      temperature: 0.7,
-      topP: 0.9,
-      maxOutputTokens: 1024,
-    },
-  });
-
   const systemPrompt = buildSystemPrompt(config, currentExtractedData);
-
-  // Start chat with conversation history
   const history = buildConversationHistory(conversationHistory);
 
-  const chat = model.startChat({
-    history,
-    systemInstruction: { role: 'system', parts: [{ text: systemPrompt }] },
+  const completion = await openai.chat.completions.create({
+    model: 'gpt-4o-mini',
+    temperature: 0.7,
+    max_tokens: 1024,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      ...history,
+      { role: 'user', content: userMessage },
+    ],
   });
 
-  const result = await chat.sendMessage(userMessage);
-  const response = await result.response;
-  const text = response.text();
-
+  const text = completion.choices[0]?.message?.content || '';
   return parseGeminiResponse(text, currentExtractedData);
 }
 
@@ -353,37 +341,30 @@ export async function* streamMessage(
   conversationHistory: ChatMessage[],
   currentExtractedData: ExtractedData = {}
 ): AsyncGenerator<string | ChatResponse> {
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
-    generationConfig: {
-      temperature: 0.7,
-      topP: 0.9,
-      maxOutputTokens: 1024,
-    },
-  });
-
   const systemPrompt = buildSystemPrompt(config, currentExtractedData);
   const history = buildConversationHistory(conversationHistory);
 
-  const chat = model.startChat({
-    history,
-    systemInstruction: { role: 'system', parts: [{ text: systemPrompt }] },
+  // Get full response first (JSON must be complete before parsing)
+  const completion = await openai.chat.completions.create({
+    model: 'gpt-4o-mini',
+    temperature: 0.7,
+    max_tokens: 1024,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      ...history,
+      { role: 'user', content: userMessage },
+    ],
   });
 
-  const streamResult = await chat.sendMessageStream(userMessage);
+  const fullText = completion.choices[0]?.message?.content || '';
+  const finalResponse = parseGeminiResponse(fullText, currentExtractedData);
 
-  let fullText = '';
-
-  // Stream tokens as they arrive
-  for await (const chunk of streamResult.stream) {
-    const chunkText = chunk.text();
-    if (chunkText) {
-      fullText += chunkText;
-      yield chunkText;
-    }
+  // Stream reply in small chunks — split on whitespace boundaries only,
+  // keeping the delimiter attached so Bengali combining marks never get separated.
+  const chunks = finalResponse.reply.split(/(\s+)/);
+  for (const chunk of chunks) {
+    if (chunk) yield chunk;
   }
 
-  // Parse the complete accumulated response and yield final state
-  const finalResponse = parseGeminiResponse(fullText, currentExtractedData);
   yield finalResponse;
 }

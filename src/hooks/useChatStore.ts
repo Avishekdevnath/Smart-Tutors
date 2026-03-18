@@ -1,6 +1,8 @@
 'use client';
 
-import { useReducer, useCallback } from 'react';
+import { useReducer, useCallback, useEffect } from 'react';
+
+const LS_KEY = 'st_chat_session';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -39,8 +41,50 @@ const initialState: ChatState = {
   completeness: 0,
   isStreaming: false,
   status: 'idle',
-  error: null
+  error: null,
 };
+
+// Load persisted session from localStorage (browser-only)
+function loadFromStorage(): Partial<ChatState> {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return {};
+    const saved = JSON.parse(raw);
+    // Skip restoring if saved messages contain raw JSON blobs (legacy corruption)
+    const messages: Message[] = (saved.messages || [])
+      .filter((m: Message) => !(m.role === 'assistant' && m.content.trim().startsWith('{')))
+      .map((m: Message) => ({ ...m, timestamp: new Date(m.timestamp) }));
+    return {
+      messages,
+      sessionId: saved.sessionId || null,
+      extractedData: saved.extractedData || {},
+      completeness: saved.completeness || 0,
+      status: saved.status || 'idle',
+    };
+  } catch {
+    return {};
+  }
+}
+
+function saveToStorage(state: ChatState) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify({
+      messages: state.messages,
+      sessionId: state.sessionId,
+      extractedData: state.extractedData,
+      completeness: state.completeness,
+      status: state.status,
+    }));
+  } catch {}
+}
+
+function clearStorage() {
+  try {
+    localStorage.removeItem(LS_KEY);
+    // Also clear legacy key
+    localStorage.removeItem('st_browser_session');
+  } catch {}
+}
 
 function chatReducer(state: ChatState, action: ChatAction): ChatState {
   switch (action.type) {
@@ -54,13 +98,13 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
       return {
         ...state,
         messages: [...state.messages, { role: 'user', content: action.content, timestamp: new Date() }],
-        error: null
+        error: null,
       };
     case 'START_STREAMING':
       return {
         ...state,
         isStreaming: true,
-        messages: [...state.messages, { role: 'assistant', content: '', timestamp: new Date() }]
+        messages: [...state.messages, { role: 'assistant', content: '', timestamp: new Date() }],
       };
     case 'APPEND_TOKEN': {
       const msgs = [...state.messages];
@@ -77,10 +121,17 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
         sessionId: action.data.conversationId,
         extractedData: action.data.extractedData,
         completeness: action.data.completeness,
-        status: action.data.status as ChatState['status']
+        status: action.data.status as ChatState['status'],
       };
-    case 'SET_ERROR':
-      return { ...state, isStreaming: false, error: action.error };
+    case 'SET_ERROR': {
+      const msgs = state.messages;
+      const lastMsg = msgs[msgs.length - 1];
+      const cleanedMsgs =
+        lastMsg?.role === 'assistant' && lastMsg.content === ''
+          ? msgs.slice(0, -1)
+          : msgs;
+      return { ...state, isStreaming: false, error: action.error, messages: cleanedMsgs };
+    }
     case 'RESTORE_CONVERSATION':
       return {
         ...state,
@@ -88,7 +139,7 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
         sessionId: action.sessionId,
         extractedData: action.extractedData,
         completeness: action.completeness,
-        status: action.status as ChatState['status']
+        status: action.status as ChatState['status'],
       };
     case 'RESET':
       return { ...initialState, isOpen: state.isOpen };
@@ -98,24 +149,41 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
 }
 
 export function useChatStore() {
-  const [state, dispatch] = useReducer(chatReducer, initialState);
+  const [state, dispatch] = useReducer(chatReducer, initialState, (base) => ({
+    ...base,
+    ...loadFromStorage(),
+  }));
+
+  // Persist to localStorage whenever conversation state changes
+  useEffect(() => {
+    if (state.messages.length > 0 || state.sessionId) {
+      saveToStorage(state);
+    }
+  }, [state.messages, state.sessionId, state.extractedData, state.completeness, state.status]);
 
   const sendMessage = useCallback(async (content: string) => {
     dispatch({ type: 'ADD_USER_MESSAGE', content });
     dispatch({ type: 'START_STREAMING' });
 
-    const browserSessionId = localStorage.getItem('st_browser_session')
-      || (() => { const id = crypto.randomUUID(); localStorage.setItem('st_browser_session', id); return id; })();
+    // Re-read sessionId from state via closure isn't reliable after dispatch;
+    // we use a ref-like approach — read latest value from localStorage
+    const saved = (() => { try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch { return {}; } })();
+    const sessionId = saved.sessionId || null;
+
+    // Generate/persist a stable browser session id
+    const browserSessionId =
+      localStorage.getItem('st_browser_session') ||
+      (() => {
+        const id = crypto.randomUUID();
+        localStorage.setItem('st_browser_session', id);
+        return id;
+      })();
 
     try {
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId: state.sessionId,
-          browserSessionId,
-          message: content
-        })
+        body: JSON.stringify({ sessionId, browserSessionId, message: content }),
       });
 
       if (!res.ok) {
@@ -150,6 +218,8 @@ export function useChatStore() {
                 dispatch({ type: 'APPEND_TOKEN', text: data.text });
               } else if (data.conversationId) {
                 dispatch({ type: 'STREAM_DONE', data });
+              } else if (data.error) {
+                dispatch({ type: 'SET_ERROR', error: 'একটু সমস্যা হচ্ছে, আবার চেষ্টা করুন।' });
               }
             } catch {}
           }
@@ -158,27 +228,12 @@ export function useChatStore() {
     } catch {
       dispatch({ type: 'SET_ERROR', error: 'Network error — please try again' });
     }
-  }, [state.sessionId]);
-
-  const resumeConversation = useCallback(async () => {
-    const browserSessionId = localStorage.getItem('st_browser_session');
-    if (!browserSessionId) return;
-
-    try {
-      const res = await fetch(`/api/ai/chat/${browserSessionId}`);
-      const data = await res.json();
-      if (data.conversation) {
-        dispatch({
-          type: 'RESTORE_CONVERSATION',
-          messages: data.conversation.messages,
-          sessionId: data.conversation.sessionId,
-          extractedData: data.conversation.extractedData || {},
-          completeness: data.conversation.completeness || 0,
-          status: data.conversation.status
-        });
-      }
-    } catch {}
   }, []);
 
-  return { state, dispatch, sendMessage, resumeConversation };
+  const startNewChat = useCallback(() => {
+    clearStorage();
+    dispatch({ type: 'RESET' });
+  }, []);
+
+  return { state, dispatch, sendMessage, startNewChat };
 }

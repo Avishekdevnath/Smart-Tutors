@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
 import { dbConnect } from '@/lib/mongodb';
 import Conversation from '@/models/Conversation';
 import Tuition from '@/models/Tuition';
+import { verifyAdminToken } from '@/lib/adminAuth';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]/route';
 
-// Helper: verify admin session
+// Accept either the custom admin-token cookie OR a NextAuth admin session
 async function requireAdmin(request: NextRequest) {
+  const custom = await verifyAdminToken(request);
+  if (custom) return custom;
   const session = await getServerSession(authOptions);
   const user = session?.user as any;
-  if (!session || !user || user.role !== 'admin') {
-    return null;
-  }
-  return user;
+  if (user?.isAdmin || user?.userType === 'admin') return user;
+  return null;
 }
 
 // GET /api/conversations — list conversations (admin only)

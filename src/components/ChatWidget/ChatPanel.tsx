@@ -21,7 +21,10 @@ interface ChatPanelProps {
   extractedData: Record<string, unknown>;
   error: string | null;
   isMobile: boolean;
+  isExpanded: boolean;
   onClose: () => void;
+  onToggleExpand: () => void;
+  onNewChat: () => void;
   onSend: (message: string) => void;
   onEdit: () => void;
   onConfirm: () => void;
@@ -35,7 +38,10 @@ export default function ChatPanel({
   extractedData,
   error,
   isMobile,
+  isExpanded,
   onClose,
+  onToggleExpand,
+  onNewChat,
   onSend,
   onEdit,
   onConfirm,
@@ -49,11 +55,13 @@ export default function ChatPanel({
 
   const panelClass = isMobile
     ? 'fixed inset-0 z-50 flex flex-col bg-white'
-    : 'fixed bottom-6 right-6 z-40 flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden';
+    : 'fixed bottom-6 right-6 z-40 flex flex-col bg-white rounded-xl shadow-2xl overflow-hidden transition-all duration-300';
 
   const panelStyle = isMobile
     ? {}
-    : { width: '400px', height: '600px' };
+    : isExpanded
+      ? { width: '720px', height: '85vh', maxHeight: '800px' }
+      : { width: '400px', height: '600px' };
 
   return (
     <div className={panelClass} style={panelStyle}>
@@ -62,6 +70,9 @@ export default function ChatPanel({
         agentName={agentName}
         onClose={onClose}
         isMobile={isMobile}
+        isExpanded={isExpanded}
+        onToggleExpand={onToggleExpand}
+        onNewChat={onNewChat}
       />
 
       {/* Messages area */}

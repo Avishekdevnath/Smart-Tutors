@@ -4,7 +4,7 @@ import Conversation from '@/models/Conversation';
 import SiteSettings from '@/models/SiteSettings';
 import Guardian from '@/models/Guardian';
 import Tuition from '@/models/Tuition';
-import { streamMessage, ChatResponse } from '@/lib/ai-chat';
+import { processMessage, ChatResponse } from '@/lib/ai-chat';
 
 // In-memory rate limiting
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
@@ -94,42 +94,34 @@ export async function POST(request: NextRequest) {
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          let aiResponse: ChatResponse | null = null;
-          let replyText = '';
+          // Get full AI response first so we can apply overrides before streaming
+          let aiResponse: ChatResponse = await processMessage(
+            message, config, conversationHistory, currentExtractedData
+          );
 
-          for await (const chunk of streamMessage(message, config, conversationHistory, currentExtractedData)) {
-            if (typeof chunk === 'string') {
-              replyText += chunk;
+          // Handle escalation — override reply with contact info BEFORE streaming
+          if (aiResponse.shouldEscalate) {
+            const wpNum = config.whatsappNumber;
+            const contactLines: string[] = [];
+            if (wpNum) {
+              contactLines.push(`📱 WhatsApp: https://wa.me/${wpNum}`);
+              contactLines.push(`📞 কল করুন: ${wpNum}`);
+            }
+            aiResponse.reply = contactLines.length > 0
+              ? `আমাদের টিমের সাথে সরাসরি যোগাযোগ করুন:\n\n${contactLines.join('\n')}`
+              : 'আমাদের টিম শীঘ্রই আপনার সাথে যোগাযোগ করবে।';
+            conversationRef.status = 'escalated';
+            conversationRef.escalationReason = 'User requested real person';
+          }
+
+          // Stream reply word-by-word
+          const chunks = aiResponse.reply.split(/(\s+)/);
+          for (const chunk of chunks) {
+            if (chunk) {
               controller.enqueue(
                 encoder.encode(`event: token\ndata: ${JSON.stringify({ text: chunk })}\n\n`)
               );
-            } else {
-              // Final ChatResponse object
-              aiResponse = chunk;
             }
-          }
-
-          if (!aiResponse) {
-            // Fallback: build a minimal response from accumulated text
-            aiResponse = {
-              reply: replyText,
-              intent: null,
-              extractedData: currentExtractedData,
-              completeness: 0,
-              confirmedByUser: false,
-              shouldEscalate: false,
-              shouldCreateDraft: false,
-            };
-          }
-
-          // Handle escalation — add WhatsApp link
-          if (aiResponse.shouldEscalate) {
-            const wpNum = config.whatsappNumber;
-            if (wpNum) {
-              aiResponse.reply += `\n\nসরাসরি কথা বলতে চাইলে: https://wa.me/${wpNum}?text=Smart+Tutor+Help+${conversationRef.sessionId}`;
-            }
-            conversationRef.status = 'escalated';
-            conversationRef.escalationReason = 'User requested real person';
           }
 
           // Add assistant reply to conversation

@@ -17,9 +17,9 @@ function shouldHide(pathname: string): boolean {
 export default function ChatWidget() {
   const pathname = usePathname();
   const { config, loading: configLoading } = useChatConfig();
-  const { state, dispatch, sendMessage, resumeConversation } = useChatStore();
+  const { state, dispatch, sendMessage, startNewChat } = useChatStore();
   const [isMobile, setIsMobile] = useState(false);
-  const [hasTriedResume, setHasTriedResume] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Detect mobile
   useEffect(() => {
@@ -36,25 +36,9 @@ export default function ChatWidget() {
     return () => window.removeEventListener('open-chat-widget', handler);
   }, [dispatch]);
 
-  // On first open: try to resume conversation, else show greeting
-  const handleOpen = useCallback(async () => {
+  const handleOpen = useCallback(() => {
     dispatch({ type: 'OPEN' });
-
-    if (!hasTriedResume) {
-      setHasTriedResume(true);
-      try {
-        await resumeConversation();
-      } catch {
-        // resumeConversation is silent on error; fall through to greeting
-      }
-
-      // After resume attempt: if still no messages, inject greeting
-      // We use a timeout to let state settle after resumeConversation
-      setTimeout(() => {
-        // Check via a custom event approach — greeting injected in effect below
-      }, 50);
-    }
-  }, [dispatch, hasTriedResume, resumeConversation]);
+  }, [dispatch]);
 
   // Inject greeting when panel opens and there are no messages
   useEffect(() => {
@@ -93,10 +77,18 @@ export default function ChatWidget() {
 
   const handleClose = useCallback(() => {
     dispatch({ type: 'CLOSE' });
+    setIsExpanded(false);
   }, [dispatch]);
 
+  const handleToggleExpand = useCallback(() => {
+    setIsExpanded(prev => !prev);
+  }, []);
+
+  const handleNewChat = useCallback(() => {
+    startNewChat();
+  }, [startNewChat]);
+
   const handleEdit = useCallback(() => {
-    // Send a message to signal the user wants to edit
     sendMessage('আমি পরিবর্তন করতে চাই');
   }, [sendMessage]);
 
@@ -121,7 +113,10 @@ export default function ChatWidget() {
           extractedData={state.extractedData}
           error={state.error}
           isMobile={isMobile}
+          isExpanded={isExpanded}
           onClose={handleClose}
+          onToggleExpand={handleToggleExpand}
+          onNewChat={handleNewChat}
           onSend={sendMessage}
           onEdit={handleEdit}
           onConfirm={handleConfirm}

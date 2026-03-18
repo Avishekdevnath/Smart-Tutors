@@ -1,12 +1,8 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import OpenAI from 'openai';
 import { dbConnect } from '@/lib/mongodb';
 import Tuition from '@/models/Tuition';
 
-// ---------------------------------------------------------------------------
-// Initialisation
-// ---------------------------------------------------------------------------
-
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY || '');
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
 
 // ---------------------------------------------------------------------------
 // Types
@@ -76,36 +72,35 @@ const MEDIUM_MAP: Record<string, string> = {
  */
 export async function parseSearchQuery(query: string): Promise<SearchParams> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
-    const prompt = `
-You are a search query parser for a Bangladeshi tuition-finding platform.
-
-Extract structured parameters from the user query below and return ONLY valid JSON.
-All keys are optional – omit any key you cannot determine from the query.
-
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      temperature: 0,
+      max_tokens: 256,
+      messages: [{
+        role: 'system',
+        content: `You are a search query parser for a Bangladeshi tuition-finding platform.
+Extract structured parameters from the user query and return ONLY valid JSON.
+All keys are optional – omit any key you cannot determine.
 JSON schema:
 {
-  "subjects":  string[],   // e.g. ["Math","Physics"]
-  "class":     string,     // e.g. "Class 9", "HSC", "O Level"
-  "location":  string,     // area / neighbourhood
-  "district":  string,     // e.g. "Dhaka"
-  "division":  string,     // e.g. "Dhaka"
-  "salaryMin": number,     // BDT
-  "salaryMax": number,     // BDT
-  "medium":    string,     // one of: "Bangla Medium" | "English Medium" | "English Version" | "Others"
-  "gender":    string      // "Male" | "Female" | "Any"
+  "subjects": string[],
+  "class": string,
+  "location": string,
+  "district": string,
+  "division": string,
+  "salaryMin": number,
+  "salaryMax": number,
+  "medium": "Bangla Medium" | "English Medium" | "English Version" | "Others",
+  "gender": "Male" | "Female" | "Any"
 }
+Return ONLY the JSON object, no markdown.`
+      }, {
+        role: 'user',
+        content: query
+      }]
+    });
 
-User query: "${query.replace(/"/g, '\\"')}"
-
-Return ONLY the JSON object, no markdown, no explanation.
-`;
-
-    const result = await model.generateContent(prompt);
-    const text = result.response.text().trim();
-
-    // Strip possible markdown fences
+    const text = (completion.choices[0]?.message?.content || '').trim();
     const jsonText = text.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
 
     const parsed: SearchParams = JSON.parse(jsonText);

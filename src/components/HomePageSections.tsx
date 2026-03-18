@@ -166,7 +166,7 @@ export function TopTutorsSection() {
         <div className="text-center mt-10">
           <Link href="/tutors">
             <button className="bg-[#006A4E] hover:bg-[#005540] text-white px-10 py-3.5 rounded-xl font-semibold text-base transition-colors duration-200 shadow-md hover:shadow-lg cursor-pointer">
-              সব টিউটর দেখুন — View All Tutors
+              View All Tutors
             </button>
           </Link>
         </div>
@@ -355,7 +355,7 @@ export function LatestTuitionsSection() {
         <div className="text-center mt-10">
           <Link href="/tuitions">
             <button className="bg-[#006A4E] hover:bg-[#005540] text-white px-10 py-3.5 rounded-xl font-semibold text-base transition-colors duration-200 shadow-md hover:shadow-lg cursor-pointer">
-              সব টিউশন দেখুন — Explore All Tuitions
+              Explore All Tuitions
             </button>
           </Link>
         </div>

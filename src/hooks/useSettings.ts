@@ -49,6 +49,20 @@ export interface SiteSettings {
   searchConfig: {
     weights: { location: number; subject: number; class: number; salary: number; medium: number; gender: number };
   };
+  tutorProfileVisibility: {
+    showPhone: boolean;
+    showEmail: boolean;
+    showFatherInfo: boolean;
+    showDocuments: boolean;
+    showAddress: boolean;
+    showSubjects: boolean;
+    showLocations: boolean;
+    showAcademics: boolean;
+    showResults: boolean;
+    showExperience: boolean;
+    showStats: boolean;
+    enableTutorRequest: boolean;
+  };
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -93,10 +107,10 @@ const DEFAULT_SETTINGS: SiteSettings = {
       personality: 'তুমি কামরুল, একজন বড় ভাইয়ের মতো কথা বলো। casual এবং friendly tone রাখো। বাংলা, English, Banglish সব ভাষায় কথা বলতে পারো।',
     },
     tuitionQuestions: [
-      { field: 'studentClass',  question: 'আপনার সন্তান কোন ক্লাসে পড়ে?',           required: true,  order: 1, validationHint: 'class 1-12, HSC, Honours, Masters' },
-      { field: 'subjects',      question: 'কোন কোন সাবজেক্টে টিউটর চান?',           required: true,  order: 2, validationHint: 'Math, English, Physics, Chemistry, etc.' },
-      { field: 'location',      question: 'আপনার বাসা কোন এলাকায়?',                required: true,  order: 3, validationHint: 'এলাকার নাম এবং জেলা' },
-      { field: 'medium',        question: 'English Medium না Bangla Medium?',        required: true,  order: 4, validationHint: 'Bangla Medium, English Medium, English Version' },
+      { field: 'studentClass',  question: 'আপনার সন্তান কোন ক্লাসে পড়ে?',                      required: true,  order: 1, validationHint: 'class 1-12, HSC, Honours, Masters' },
+      { field: 'medium',        question: 'English Medium, Bangla Medium না English Version?', required: true,  order: 2, validationHint: 'Bangla Medium, English Medium, English Version' },
+      { field: 'subjects',      question: 'কোন কোন সাবজেক্টে টিউটর চান?',                    required: true,  order: 3, validationHint: 'Math, English, Physics, Chemistry, etc.' },
+      { field: 'location',      question: 'আপনার বাসা কোন এলাকায়?',                           required: true,  order: 4, validationHint: 'এলাকার নাম এবং জেলা' },
       { field: 'daysPerWeek',   question: 'সপ্তাহে কয়দিন পড়াতে চান?',             required: true,  order: 5, validationHint: '1-7 days' },
       { field: 'salary',        question: 'মাসে বেতন কত দিতে চাইবেন?',             required: true,  order: 6, validationHint: 'amount or range like 3000-5000' },
       { field: 'tutorGender',   question: 'ছেলে না মেয়ে টিউটর পছন্দ করবেন?',       required: false, order: 7, validationHint: 'male, female, or any' },
@@ -115,6 +129,20 @@ const DEFAULT_SETTINGS: SiteSettings = {
   },
   searchConfig: {
     weights: { location: 0.30, subject: 0.25, class: 0.20, salary: 0.15, medium: 0.05, gender: 0.05 },
+  },
+  tutorProfileVisibility: {
+    showPhone: false,
+    showEmail: false,
+    showFatherInfo: false,
+    showDocuments: false,
+    showAddress: true,
+    showSubjects: true,
+    showLocations: true,
+    showAcademics: true,
+    showResults: true,
+    showExperience: true,
+    showStats: true,
+    enableTutorRequest: true,
   },
 };
 

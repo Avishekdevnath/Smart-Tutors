@@ -26,7 +26,7 @@ export async function generateTutorDescription(
   qualifications: string[]
 ): Promise<string> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     const prompt = `
       Generate a professional tutor profile description for:
@@ -62,7 +62,7 @@ export async function generateTuitionDescription(
   location: string
 ): Promise<string> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     const prompt = `
       Generate a compelling tuition posting description for:
@@ -106,7 +106,7 @@ export async function analyzeTutorMatch(
   }
 ): Promise<AIAnalysisResult> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     const prompt = `
       Analyze the match between a tutor and tuition opportunity:
@@ -165,7 +165,7 @@ export async function generateRecommendations(
   userData: any
 ): Promise<string[]> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     let prompt = '';
     
@@ -223,7 +223,7 @@ export async function generateMarketingContent(
   options: ContentGenerationOptions = {}
 ): Promise<string> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     const { tone = 'professional', length = 'medium', language = 'English' } = options;
 
@@ -257,7 +257,7 @@ export async function analyzeFeedback(feedback: string): Promise<{
   suggestions: string[];
 }> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     const prompt = `
       Analyze this feedback and provide insights:
@@ -315,7 +315,7 @@ export async function generateTuitionPost(
   format: 'detailed' | 'short' = 'detailed'
 ): Promise<{ detailedPost: string; shortPost: string }> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     const prompt = `
       Generate Facebook tuition posts for a tutoring platform. Use the exact format provided below.

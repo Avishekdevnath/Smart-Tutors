@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { TopTutorsSection, LatestTuitionsSection } from '@/components/HomePageSections';
 import ReviewsSection from '@/components/ReviewsSection';
+import HeroCTA from '@/components/HeroCTA';
 
 export default function HomePage() {
   return (
@@ -100,20 +101,7 @@ export default function HomePage() {
             </div>
 
             {/* Dual CTA */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-              <button
-                onClick={() => window.dispatchEvent(new Event('open-chat-widget'))}
-                className="px-8 py-4 bg-[#006A4E] hover:bg-[#005a40] text-white rounded-xl font-semibold text-lg transition-colors shadow-lg border border-white/20"
-              >
-                কামরুলের সাথে কথা বলুন
-              </button>
-              <a
-                href="/post-tuition"
-                className="px-8 py-4 bg-[#E07B2A] hover:bg-[#c96a1f] text-white rounded-xl font-semibold text-lg transition-colors shadow-lg text-center"
-              >
-                ফর্ম পূরণ করুন
-              </a>
-            </div>
+            <HeroCTA />
 
           </div>
         </div>
@@ -138,15 +126,13 @@ export default function HomePage() {
               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                 <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
               </svg>
-              শেয়ার করুন ও আবেদন করুন — Share &amp; Apply
+              Share &amp; Apply
             </span>
             <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#1C1917] mb-4">
-              টিউশন লিংক যেকারো সাথে শেয়ার করুন
+              Share Tuition Links with Anyone
             </h2>
-            <p className="text-[#78716C] text-base font-medium mb-1">Share Tuition Links with Anyone</p>
             <p className="text-[#78716C] text-base max-w-2xl mx-auto">
-              প্রতিটি টিউশনের একটি পাবলিক পেজ আছে। SMS বা সোশ্যাল মিডিয়ায় শেয়ার করুন —
-              টিউটররা সরাসরি আবেদন করতে পারবেন।
+              Every tuition has a public page. Share via SMS or social media — tutors can apply directly.
             </p>
           </div>
 
@@ -159,9 +145,8 @@ export default function HomePage() {
                   </svg>
                 ),
                 bg: 'bg-green-50',
-                title: 'সহজ শেয়ারিং',
-                en: 'Easy Sharing',
-                desc: 'WhatsApp, Facebook বা SMS-এ টিউশন লিংক শেয়ার করুন।',
+                title: 'Easy Sharing',
+                desc: 'Share tuition links via WhatsApp, Facebook, or SMS.',
               },
               {
                 icon: (
@@ -170,9 +155,8 @@ export default function HomePage() {
                   </svg>
                 ),
                 bg: 'bg-orange-50',
-                title: 'সম্পূর্ণ তথ্য',
-                en: 'Detailed Information',
-                desc: 'Subject, Schedule, Salary — সব তথ্য এক পেজে।',
+                title: 'Detailed Information',
+                desc: 'Subject, schedule, and salary — all details on one page.',
               },
               {
                 icon: (
@@ -181,12 +165,11 @@ export default function HomePage() {
                   </svg>
                 ),
                 bg: 'bg-green-50',
-                title: 'দ্রুত আবেদন',
-                en: 'Quick Application',
-                desc: 'এক ক্লিকে আবেদন — কোনো Account ছাড়াই।',
+                title: 'Quick Application',
+                desc: 'Apply in one click — no account required.',
               },
             ].map((item) => (
-              <div key={item.en} className="flex flex-col items-center text-center p-6 rounded-2xl border border-[#E8DDD0] bg-[#FFFDF7] hover:shadow-card-hover transition-shadow duration-200">
+              <div key={item.title} className="flex flex-col items-center text-center p-6 rounded-2xl border border-[#E8DDD0] bg-[#FFFDF7] hover:shadow-card-hover transition-shadow duration-200">
                 <div className={`w-14 h-14 ${item.bg} rounded-2xl flex items-center justify-center mb-4`}>
                   {item.icon}
                 </div>
@@ -234,13 +217,10 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#1C1917] mb-3">
-              টিউটর ও টিউশন খোঁজার সম্পূর্ণ সমাধান
-            </h2>
-            <p className="text-[#006A4E] font-semibold text-sm uppercase tracking-widest mb-3">
               Complete Tuition Management Platform
-            </p>
+            </h2>
             <p className="text-[#78716C] text-base max-w-2xl mx-auto">
-              Tutor management থেকে tuition assignment — সব কিছু এক জায়গায়।
+              From tutor management to tuition assignment — everything in one place.
             </p>
           </div>
 
@@ -254,7 +234,6 @@ export default function HomePage() {
                 ),
                 iconBg: 'bg-green-50',
                 title: 'Tutor Management',
-                subtitle: 'টিউটর ব্যবস্থাপনা',
                 desc: 'Comprehensive tutor profiles with academic qualifications, experience tracking, and performance monitoring.',
                 items: ['Academic Qualification Tracking', 'Experience & Skill Management', 'Performance Analytics', 'Document Management'],
               },
@@ -266,7 +245,6 @@ export default function HomePage() {
                 ),
                 iconBg: 'bg-orange-50',
                 title: 'Tuition Management',
-                subtitle: 'টিউশন ব্যবস্থাপনা',
                 desc: 'Streamlined tuition assignment process with guardian matching and application tracking.',
                 items: ['Smart Tutor-Guardian Matching', 'Application Tracking System', 'Schedule Management', 'Payment Tracking'],
               },
@@ -278,7 +256,6 @@ export default function HomePage() {
                 ),
                 iconBg: 'bg-green-50',
                 title: 'Guardian Portal',
-                subtitle: 'অভিভাবক পোর্টাল',
                 desc: 'Dedicated portal for guardians to find tutors, track progress, and manage communications.',
                 items: ['Tutor Search & Filtering', 'Progress Tracking', 'Direct Communication', 'Payment Management'],
               },
@@ -287,8 +264,7 @@ export default function HomePage() {
                 <div className={`w-12 h-12 ${feature.iconBg} rounded-xl flex items-center justify-center mb-5`}>
                   {feature.icon}
                 </div>
-                <h3 className="font-heading text-xl font-bold text-[#1C1917] mb-0.5">{feature.title}</h3>
-                <p className="text-[#006A4E] text-xs font-semibold uppercase tracking-wide mb-3">{feature.subtitle}</p>
+                <h3 className="font-heading text-xl font-bold text-[#1C1917] mb-3">{feature.title}</h3>
                 <p className="text-[#78716C] text-sm leading-relaxed mb-5">{feature.desc}</p>
                 <ul className="space-y-2">
                   {feature.items.map((item) => (
@@ -310,23 +286,20 @@ export default function HomePage() {
       <section className="py-20 bg-[#006A4E]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl sm:text-4xl font-bold text-white mb-3">
-            আজই শুরু করুন
-          </h2>
-          <p className="text-green-200 font-semibold text-sm uppercase tracking-widest mb-4">
             Ready to Transform Your Tuition Business?
-          </p>
+          </h2>
           <p className="text-green-100 text-base mb-10 max-w-xl mx-auto">
-            শত শত সফল টিউশন সেন্টার Smart Tutors-এর উপর আস্থা রাখছে তাদের কার্যক্রম পরিচালনার জন্য।
+            Hundreds of successful tuition centers trust Smart Tutors to manage their operations.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/tutors">
               <button className="w-full sm:w-auto bg-[#E07B2A] hover:bg-[#C96A1A] text-white px-8 py-3.5 rounded-lg font-bold text-base shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer">
-                Tutors দেখুন — Browse Tutors
+                Browse Tutors
               </button>
             </Link>
             <Link href="/contact">
               <button className="w-full sm:w-auto border-2 border-white/40 text-white hover:bg-white hover:text-[#006A4E] px-8 py-3.5 rounded-lg font-semibold text-base transition-colors duration-200 cursor-pointer">
-                Demo নিন — Schedule Demo
+                Schedule Demo
               </button>
             </Link>
           </div>
