@@ -1,6 +1,6 @@
 # Smart Tutors - Tuition Management Platform
 
-A comprehensive tuition management platform built with Next.js 15, connecting tutors, guardians, and students for personalized educational services.
+A comprehensive tuition management platform built with Next.js 15, connecting tutors, guardians, and students for personalized educational services. With a modern, mobile-first design and powerful admin dashboard, Smart Tutors streamlines the process of finding and managing tuition opportunities.
 
 ## 🚀 Quick Start
 
